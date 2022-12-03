@@ -1,0 +1,66 @@
+@{
+    String id = ViewData["id"].ToString();
+}
+<!-- Begin Index.Partial.Xem-->
+<div class="modal fade" id="@id" tabindex="-1" role="dialog" aria-labelledby="@(id)--label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="@(id)-label">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <label for="@(id)--name">Tên</label>
+                    <input type="text" class="form-control" id="@(id)--name" disabled>
+                </div>
+
+                <div class="form-group">
+                    <label for="@(id)--order">Thứ tự</label>
+                    <input type="number" class="form-control" id="@(id)--order" disabled>
+                </div>
+
+                <div class="form-group">
+                    <label for="@(id)--url">URL</label>
+                    <input type="number" class="form-control" id="@(id)--url" disabled>
+                </div>
+
+                <div class="form-group">
+                    <label for="@(id)--action">Action</label>
+                    <input type="number" class="form-control" id="@(id)--action" disabled>
+                </div>
+
+                <div class="form-group">
+                    <label for="@(id)--controller">Controller</label>
+                    <input type="number" class="form-control" id="@(id)--controller" disabled>
+                </div>
+
+                <div class="form-group">
+                    <label for="@(id)--area">Area</label>
+                    <input type="number" class="form-control" id="@(id)--area" disabled>
+                </div>
+
+                <div class="form-group">
+                    <label for="@(id)--icon">Area</label>
+                    <input type="number" class="form-control" id="@(id)--icon" disabled>
+                </div>
+
+                <div class="form-group">
+                    <label for="@(id)--active">Kích hoạt</label>
+                    <br>
+                    <input type="checkbox" id="@(id)--active" checked data-bootstrap-switch>
+                </div>
+                
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Index.Partial.Xem-->

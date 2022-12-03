@@ -1,0 +1,59 @@
+@inject IOptions<Client.ThietLap.MayChuApi> MayChuApi
+<script>
+    window.addEventListener('load', function () {
+        $("input[data-bootstrap-switch]").each(function () {
+            $(this).bootstrapSwitch('state', $(this).prop('checked'));
+        })
+
+        let modalXem = document.getElementById('modal-xem');
+        function lenhXoa(id) {
+            fetch(`@(MayChuApi.Value.DiaChi)/api/khoamoc?id=${id}`)
+                .then(res => {
+                    switch (res.status) {
+                        case 200: {
+                            $('#@ViewData["bang-id"]').DataTable().ajax.reload();
+                        }
+                    }
+                })
+        }
+
+        $('#@(@ViewData["bang-id"])').DataTable({
+            responsive: true,
+            autoWidth: false,
+            ajax: {
+                url: '@(MayChuApi.Value.DiaChi)/api/khoahoc',
+                type: 'GET',
+                dataSrc: ''
+            },
+            columns: [
+                {
+                    data: "ten"
+                },
+                {
+                    data: "mieuTa"
+                },
+                {
+                    data: null,
+                    createdCell: function (td, cellData, rowData, rowIndex, colIndex) {
+                        td.style.width = '1%';
+                        td.style.whiteSpace = 'nowrap';
+                    },
+                    render: function (data, _, row, _) {
+                        return `
+                            <button class="btn btn-info" data-toggle="modal" data-target="#@ViewData["modal-xem-id"]" onclick="window['obj-@ViewData["modal-xem-id"]'].nap('${data.id}');">
+                                <i class="fa fa-eye"></i>
+                            </button>
+                            <button class="btn btn-primary" data-toggle="modal" data-target="#@ViewData["modal-sua-id"]" onclick="window['obj-@ViewData["modal-sua-id"]'].nap('${data.id}');">
+                                <i class="fa fa-pen"></i>
+                            </button>
+                            <button class="btn btn-danger" data-toggle="modal" data-target="#@ViewData["modal-xoa-id"]" onclick="window['obj-@ViewData["modal-xoa-id"]'].nap('${data.id}');">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            `;
+                    }
+                }
+            ]
+        });
+
+    });
+</script>

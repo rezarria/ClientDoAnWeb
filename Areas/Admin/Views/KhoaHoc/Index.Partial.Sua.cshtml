@@ -1,0 +1,78 @@
+@inject IOptions<Client.ThietLap.MayChuApi> MayChuApi
+@{
+    String id = ViewData["modal-sua-id"].ToString();
+}
+<!-- Begin Index.Partial.Xem-->
+<div class="modal fade" id="@id" tabindex="-1" role="dialog" aria-labelledby="@(id)--label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="@(id)-label">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="@(id)--form">
+                <input type="hidden" name="id" id="@(id)--id">
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="@(id)--ten">Tên môn</label>
+                        <input type="text" name="ten" class="form-control" id="@(id)--ten">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="@(id)--mieuTa">Miêu tả</label>
+                        <input type="text" name="mieuTa" class="form-control" id="@(id)--mieuTa">
+                    </div>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" id="@(id)--submit" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.addEventListener('load', function () {
+        let dom = document.getElementById('@id');
+        dom.data = {
+            id: document.getElementById('@(id)--id'),
+            ten: document.getElementById('@(id)--ten'),
+            mieuTa: document.getElementById('@(id)--mieuTa'),
+            submit: document.getElementById('@(id)--submit'),
+            close: document.getElementById('@(id)--close'),
+            form: document.getElementById('@(id)--form'),
+            old: null
+        };
+        dom.nap = function (id) {
+            let datas = $('#@ViewData["bang-id"]').DataTable().data();
+            data = datas.filter(x => x.id == id)[0];
+            dom.data.old = data;
+            this.data.id.value = data.id;
+            this.data.ten.value = data.ten;
+            this.data.mieuTa.value = data.mieuTa;
+        }
+        dom.data.submit.addEventListener('click', function () {
+            let newObj = Object.fromEntries(new FormData(dom.data.form).entries());
+            var diff = jsonpatch.compare(dom.data.old, newObj);
+            fetch(`@(MayChuApi.Value.DiaChi)/api/khoahoc?id=${dom.data.old.id}`, {
+                method: 'PATCH',
+                body: JSON.stringify(diff),
+                headers: new Headers({ 'content-type': 'application/json' })
+            })
+                .then(res => {
+                    switch (res.status) {
+                        case 200:
+                            $('#@(ViewData["bang-id"])').DataTable().ajax.reload();
+                            $(dom).modal('hide');
+                            break;
+                    }
+                });
+        });
+        this['obj-@id'] = dom;
+    });
+</script>
+<!-- End Index.Partial.Xem-->
