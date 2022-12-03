@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Admin\Data\**" />
+    <Content Remove="Areas\Admin\Data\**" />
+    <EmbeddedResource Remove="Areas\Admin\Data\**" />
+    <None Remove="Areas\Admin\Data\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="7.0.0" />
@@ -32,8 +39,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas/Admin/Data/" />
     <Folder Include="Areas/Admin/Models/" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="Areas\Admin\Views\PhongHoc\Index.cshtml" />
+    <AdditionalFiles Include="Areas\Admin\Views\PhongHoc\Index.Partial.Sua.cshtml" />
+    <AdditionalFiles Include="Areas\Admin\Views\PhongHoc\Index.Partial.Them.cshtml" />
+    <AdditionalFiles Include="Areas\Admin\Views\PhongHoc\Index.Partial.Xem.cshtml" />
+    <AdditionalFiles Include="Areas\Admin\Views\PhongHoc\Index.Partial.Xoa.cshtml" />
+    <AdditionalFiles Include="Areas\Admin\Views\PhongHoc\Index.Script.cshtml" />
   </ItemGroup>
 
 </Project>
