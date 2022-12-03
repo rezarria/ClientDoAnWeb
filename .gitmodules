@@ -1,0 +1,3 @@
+[submodule "wwwroot/vendor/AdminLTE"]
+	path = wwwroot/vendor/AdminLTE
+	url = https://github.com/ColorlibHQ/AdminLTE
