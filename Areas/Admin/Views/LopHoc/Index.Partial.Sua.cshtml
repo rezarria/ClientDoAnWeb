@@ -12,21 +12,25 @@
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-			<form id="@(id)--form">
-				<input type="hidden" name="id" id="@(id)--id">
-				<div class="modal-body">
+			<div class="modal-body">
+				<form id="@(id)--form">
+					<input type="hidden" name="id" id="@(id)--id">
+					<div class="modal-body">
 
-					<div class="form-group">
-						<label for="@(id)--ten">Tên môn</label>
-						<input type="text" name="ten" class="form-control" id="@(id)--ten">
-					</div>
+						<div class="form-group">
+							<label for="@(id)--ten">Tên môn</label>
+							<input type="text" name="ten" class="form-control" id="@(id)--ten">
+						</div>
 
-					<div class="form-group">
-						<label for="@(id)--mieuTa">Miêu tả</label>
-						<input type="text" name="mieuTa" class="form-control" id="@(id)--mieuTa">
+						<div class="form-group">
+							<label for="@(id)--mieuTa">Miêu tả</label>
+							<input type="text" name="mieuTa" class="form-control" id="@(id)--mieuTa">
+						</div>
 					</div>
-				</div>
-			</form>
+				</form>
+
+				<partial name="Index.Partial.Sua.HocSinh" />
+			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 				<button type="button" id="@(id)--submit" class="btn btn-primary">Save changes</button>
