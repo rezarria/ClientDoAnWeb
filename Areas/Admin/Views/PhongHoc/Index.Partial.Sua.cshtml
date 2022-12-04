@@ -22,8 +22,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="@(id)--mieuTa">Miêu tả</label>
-                        <input type="text" name="mieuTa" class="form-control" id="@(id)--mieuTa">
+                        <label for="@(id)--viTri">Vị trí</label>
+                        <input type="text" name="viTri" class="form-control" id="@(id)--viTri">
                     </div>
                 </div>
             </form>
@@ -41,7 +41,7 @@
         dom.data = {
             id: document.getElementById('@(id)--id'),
             ten: document.getElementById('@(id)--ten'),
-            mieuTa: document.getElementById('@(id)--mieuTa'),
+            viTri: document.getElementById('@(id)--viTri'),
             submit: document.getElementById('@(id)--submit'),
             close: document.getElementById('@(id)--close'),
             form: document.getElementById('@(id)--form'),
@@ -53,12 +53,12 @@
             dom.data.old = data;
             this.data.id.value = data.id;
             this.data.ten.value = data.ten;
-            this.data.mieuTa.value = data.mieuTa;
+            this.data.viTri.value = data.viTri;
         }
         dom.data.submit.addEventListener('click', function () {
             let newObj = Object.fromEntries(new FormData(dom.data.form).entries());
             var diff = jsonpatch.compare(dom.data.old, newObj);
-            fetch(`@(MayChuApi.Value.DiaChi)/api/mon?id=${dom.data.old.id}`, {
+            fetch(`@(MayChuApi.Value.DiaChi)/api/phonghoc?id=${dom.data.old.id}`, {
                 method: 'PATCH',
                 body: JSON.stringify(diff),
                 headers: new Headers({ 'content-type': 'application/json' })

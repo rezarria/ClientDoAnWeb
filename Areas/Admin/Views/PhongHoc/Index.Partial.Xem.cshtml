@@ -20,8 +20,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="@(id)--mieuTa">Miêu tả</label>
-                        <input type="text" name="mieuTa" class="form-control" id="@(id)--mieuTa" disabled>
+                        <label for="@(id)--viTri">Vị trí</label>
+                        <input type="text" name="mieuTa" class="form-control" id="@(id)--viTri" disabled>
                     </div>
                 </div>
             </form>
@@ -38,13 +38,13 @@
         let dom = document.getElementById('@id');
         dom.data = {
             ten: document.getElementById('@(id)--ten'),
-            mieuTa: document.getElementById('@(id)--mieuTa')
+            viTri: document.getElementById('@(id)--viTri')
         };
         dom.nap = function (id) {
             let datas = $('#@ViewData["bang-id"]').DataTable().data();
             data = datas.filter(x => x.id == id)[0];
             this.data.ten.value = data.ten;
-            this.data.mieuTa.value = data.mieuTa;
+            this.data.viTri.value = data.viTri;
         }
         this['obj-@id'] = dom;
     });
