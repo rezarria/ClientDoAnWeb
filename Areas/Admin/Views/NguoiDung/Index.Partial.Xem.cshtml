@@ -1,6 +1,6 @@
 @inject IOptions<Client.ThietLap.MayChuApi> MayChuApi
 @{
-	String id = ViewData["modal-xem-id"]?.ToString() ?? throw new NullReferenceException();
+	string id = ViewData["modal-xem-id"]?.ToString() ?? throw new NullReferenceException();
 }
 <!-- Begin Index.Partial.Xem-->
 <div class="modal fade" id="@id" tabindex="-1" role="dialog" aria-labelledby="@(id)--label" aria-hidden="true">

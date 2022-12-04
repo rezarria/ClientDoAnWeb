@@ -1,6 +1,6 @@
 @inject IOptions<Client.ThietLap.MayChuApi> MayChuApi
 @{
-	String id = ViewData["modal-sua-id"]?.ToString() ?? throw new Exception();
+	string id = ViewData["modal-sua-id"]?.ToString() ?? throw new NullReferenceException();
 }
 <!-- Begin Index.Partial.Sua-->
 <div class="modal fade" id="@id" tabindex="-1" role="dialog" aria-labelledby="@(id)--label" aria-hidden="true">
@@ -95,7 +95,7 @@
 		};
 
 		let kichHoat = function (id) {
-			dom.querySelectorAll('.phu-them').forEach((obj, index) => {
+			dom.querySelectorAll('.phu-them').forEach(obj => {
 				obj.classList.add('d-none');
 			});
 
@@ -105,16 +105,15 @@
 		let cacheDetails = {};
 
 		dom.nap = async function (id) {
-			let datas = $('#@ViewData["bang-id"]').DataTable().data();
-			data = datas.filter(x => x.id === id)[0];
+			let data = $('#@ViewData["bang-id"]').DataTable().data().filter(x => x.id === id)[0];
 			dom.data.old = data;
 			dom.data.phanLoai = data.phanLoai;
-			this.data.hoVaTen.value = data.soYeuLyLich.hoVaTen;
-			this.data.email.value = data.soYeuLyLich.email;
-			this.data.soDienThoai.value = data.soYeuLyLich.dienThoai;
-			this.data.sinhNgay.value = data.soYeuLyLich.sinhNgay.substring(0, 10);
+			dom.data.hoVaTen.value = data.soYeuLyLich.hoVaTen;
+			dom.data.email.value = data.soYeuLyLich.email;
+			dom.data.soDienThoai.value = data.soYeuLyLich.dienThoai;
+			dom.data.sinhNgay.value = data.soYeuLyLich.sinhNgay.substring(0, 10);
 
-			if (cacheDetails[data.id] == null && data.phanLoai != 'QuanTri')
+			if (cacheDetails[data.id] == null && data.phanLoai !== 'QuanTri')
 				cacheDetails[data.id] = await fetch(`@(MayChuApi.Value.DiaChi)/api/${data.phanLoai}/chitiet?id=${data.id}`, {})
 					.then(res => res.json());
 

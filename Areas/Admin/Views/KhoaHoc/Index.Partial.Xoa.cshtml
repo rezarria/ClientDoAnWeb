@@ -1,6 +1,6 @@
 @inject IOptions<Client.ThietLap.MayChuApi> MayChuApi
 @{
-    String id = ViewData["modal-xoa-id"].ToString();
+    string id = ViewData["modal-xoa-id"]?.ToString() ?? throw new NullReferenceException();
 }
 <!-- Begin Index.Partial.Xoa-->
 <div class="modal fade" id="@id" tabindex="-1" role="dialog" aria-labelledby="@(id)--label" aria-hidden="true">
@@ -33,10 +33,9 @@
             id: null
         };
         dom.nap = function (id) {
-            let datas = $('#@ViewData["bang-id"]').DataTable().data();
-            data = datas.filter(x => x.id == id)[0];
+            let data = $('#@ViewData["bang-id"]').DataTable().data().filter(x => x.id === id)[0];
             dom.data.id = data.id;
-            this.data.ten.textContent = data.ten;
+            dom.data.ten.textContent = data.ten;
         }
         dom.data.submit.addEventListener('click', function () {
             fetch(`@(MayChuApi.Value.DiaChi)/api/khoahoc?id=${dom.data.id}`,
