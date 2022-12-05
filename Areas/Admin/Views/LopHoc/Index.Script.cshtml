@@ -21,7 +21,7 @@
             responsive: true,
             autoWidth: false,
             ajax: {
-                url: '@(MayChuApi.Value.DiaChi)/api/mon',
+                url: '@(MayChuApi.Value.DiaChi)/api/lophoc',
                 type: 'GET',
                 dataSrc: ''
             },
@@ -30,8 +30,14 @@
                     data: "ten"
                 },
                 {
-                    data: "mieuTa"
+                    data: "soBuoi"
                 },
+				{
+					data: "thoiGianBatDau"
+				},
+				{
+					data: "thoiGianKetThuc"
+				},
                 {
                     data: null,
                     createdCell: function (td, cellData, rowData, rowIndex, colIndex) {
