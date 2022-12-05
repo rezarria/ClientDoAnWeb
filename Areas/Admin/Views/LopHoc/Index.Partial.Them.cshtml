@@ -21,14 +21,14 @@
 					</div>
 
 					<div class="form-group">
-						<label for="@(id)--soBuoi">Miêu tả</label>
+						<label for="@(id)--soBuoi">Số buổi</label>
 						<input type="number" name="soBuoi" class="form-control" id="@(id)--soBuoi">
 					</div>
 				</div>
 			</form>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				<button type="button" id="@(id)--submit" class="btn btn-primary">Save changes</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+				<button type="button" id="@(id)--submit" class="btn btn-primary">Tạo</button>
 			</div>
 		</div>
 	</div>
@@ -43,7 +43,7 @@
 		let modal = $('#@(id)');
 		submit.onclick = function () {
 			let data = Object.fromEntries(new FormData(form).entries());
-			fetch('@(MayChuApi.Value.DiaChi)/api/mon', {
+			fetch('@(MayChuApi.Value.DiaChi)/api/lophoc', {
 				method: 'POST',
 				body: JSON.stringify(data),
 				headers: new Headers({ 'content-type': 'application/json' })
