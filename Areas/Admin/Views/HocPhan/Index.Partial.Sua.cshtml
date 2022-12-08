@@ -2,7 +2,7 @@
 @{
     string id = ViewData["modal-sua-id"]?.ToString() ?? throw new NullReferenceException();
 }
-<!-- Begin Index.Partial.Xem-->
+<!-- Begin Index.Partial.Sua-->
 <div class="modal fade" id="@id" tabindex="-1" role="dialog" aria-labelledby="@(id)--label" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -75,4 +75,4 @@
         this['obj-@id'] = dom;
     });
 </script>
-<!-- End Index.Partial.Xem-->
+<!-- End Index.Partial.Sua-->
