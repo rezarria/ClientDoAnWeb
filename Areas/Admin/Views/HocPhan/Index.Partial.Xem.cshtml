@@ -56,22 +56,25 @@
 			idMonHoc: document.getElementById('@(id)--IdMonHoc')
 
 		};
-		dom.nap = function (id) {
+		let cache = [];
+		dom.nap = async function (id) {
 			let datas = $('#@ViewData["bang-id"]').DataTable().data();
 			data = datas.filter(x => x.id == id)[0];
 			dom.data.ten.value = data.ten;
 			dom.data.mieuTa.value = data.mieuTa;
 			dom.data.soBuoi.value = data.soBuoi;
-			fetch(`@(MayChuApi.Value.DiaChi)/api/mon?ids=${data.monId}`)
-				.then(res => res.json())
-				.then(data => {
-					let option = document.createElement('option');
-					option.textContent = data.ten;
-					dom.data.idMonHoc.options.add(option);
-					dom.data.idMonHoc.selectedIndex = 0;
-				});
+			if (cache[datas.monId] is null) 
+			{
+				cache[datas.monId] = await fetch(`@(MayChuApi.Value.DiaChi)/api/mon?ids=${data.monId}`).then(res => res.json())[0];
+				let hocPhan = cache[datas.monId];
+				let option = document.createElement('option');
+				option.value = hocPhan.id;
+				option.textContent = hocPhan.ten;
+				dom.data.idMonHoc.options.add(option);
+			}
+			dom.data.idMonHoc.selectedIndex = 0;
 		}
-		this['obj-@id'] = dom;
+	this['obj-@id'] = dom;
 	});
 </script>
 <!-- End Index.Partial.Xem-->
