@@ -1,0 +1,19 @@
+@using Client.ThietLap
+@inject IOptions<MayChuApi> MayChuApi
+@{
+    string id = ViewData["modal-them-id"]?.ToString() ?? throw new NullReferenceException();
+}
+<!-- Begin Index.Partial.Them.PhanChia -->
+<div class="tab-content" id="@(id)--truong-gia-tri">
+    
+</div>
+
+<script>
+    window.onload('load', function () {
+        let truongGiaTri = document.getElementById('@(id)--truong-gia-tri');
+        function nap(id) {
+            fetch(`@(MayChuApi.Value.DiaChi)/kieunguoidung/truongthongtinnguoidung?id=${id}`);
+        }
+    });
+</script>
+<!-- End Index.Partial.Them.PhanChia -->
