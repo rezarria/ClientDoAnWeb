@@ -43,13 +43,13 @@
 				{
 					method: 'DELETE',
 					body: JSON.stringify([dom.data.id]),
-					headers : {
-						"Content-Type" : "Application/Json"
+					headers: {
+						"Content-Type": "application/json"
 					}
 				})
 				.then(res => {
 					switch (res.status) {
-						case 204:
+						case 200:
 							$('#@ViewData["bang-id"]').DataTable().ajax.reload();
 							$(dom).modal('hide');
 							break;
