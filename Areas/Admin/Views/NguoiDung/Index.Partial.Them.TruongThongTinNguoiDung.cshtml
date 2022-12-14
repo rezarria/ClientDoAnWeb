@@ -9,75 +9,80 @@
 
 <div class="form-group">
 	<label>Kiểu người dùng</label>
-	<select id="@(id)--chon-kieu-nguoi-dung" class="form-control" style="width: 100%;">
+	<select id="@(id)--idKieuNguoiDung" class="form-control" style="width: 100%;">
+		<option value="">Chọn kiểu người dùng</option>
 	</select>
 </div>
 
-<div class="tab-content" id="@(id)--truong-gia-tri">
+<div id="@(id)--truong-gia-tri">
 </div>
 
 <script>
-
 	window.addEventListener('load', function () {
 		let id = '@(id)--truong-gia-tri';
 		let obj = document.getElementById(id);
+		/**@@type {HTMLSelectElement}*/
+		let select = document.getElementById('@(id)--idKieuNguoiDung');
+		let truongGiaTri = document.getElementById('@(id)--truong-gia-tri');
+		let cache = [];
 
-		let select = document.getElementById('@(id)--chon-kieu-nguoi-dung');
-
-		select.nap = function (id) {
-			fetch('@(MayChuApi.Value.DiaChi)/kieunguoidung/truongthongtinnguoidung')
+		select.nap = function () {
+			fetch('@(MayChuApi.Value.DiaChi)/api/kieunguoidung/toithieu')
 				.then(res => res.json())
 				.then(data => {
 					data.forEach(x => {
-
+						let option = document.createElement('option');
+						option.value = x.id;
+						option.textContent = x.ten;
+						select.options.add(option);
 					});
 				});
 		};
 
+		select.oninput = function () {
+			obj.nap(select.value);
+		};
 
-
-
-		let truongGiaTri = document.getElementById('@(id)--truong-gia-tri');
-		let cache = [];
-		function xoa() {
-			this.childNodes.forEach(node => node.remove());
+		obj.xoa = function () {
+			while (this.childNodes.length != 1)
+				this.childNodes[this.childNodes.length - 1].remove();
 		}
 
-		function nap(id) {
+		obj.nap = function (id) {
 			this.xoa();
+			if (id == null || id.length == 0) return;
 			this.lay(id).then(this.ve);
 		}
 
-		async function lay(id) {
+		obj.lay = async function (id) {
 			if (cache[id] == null)
-				await fetch(`@(MayChuApi.Value.DiaChi)/kieunguoidung/truongthongtinnguoidung?id=${id}`)
+				await fetch(`@(MayChuApi.Value.DiaChi)/api/danhsachtruongthongtinnguoidungthuockieunguoidung/theokieunguoidung?id=${id}`)
 					.then(res => res.json())
 					.then(data => cache[id] = data);
 			return id;
 		}
 
-		function ve(id) {
-			data.forEach(x => {
-				let div = document.createElement('div');
-				div.classList.add('form-group');
-				let label = document.createElement('label');
-				label.setAttribute('for', '@(id)--${data.id}');
-				label.textContent = data.ten;
-				let input = document.createElement('input');
-				input.id = '@(id)--${data.id}';
-				input.type = data.KieuDuLieu;
-				input.name = data.id;
-				input.classList.add('form-control');
-				div.appendChild(label);
-				div.appendChild(input);
-				this.appendChild(div);
-			});
+		obj.ve = function (id) {
+			if (cache[id] != null)
+				cache[id].forEach(x => {
+					let div = document.createElement('div');
+					div.classList.add('form-group');
+					let label = document.createElement('label');
+					label.setAttribute('for', `@(id)--${x.id}`);
+					label.textContent = x.ten;
+					let input = document.createElement('input');
+					input.id = `@(id)--${x.id}`;
+					input.type = x.kieuDuLieu;
+					input.name = x.id;
+					input.classList.add('form-control');
+					div.appendChild(label);
+					div.appendChild(input);
+					obj.appendChild(div);
+				});
 		}
 
-		obj.xoa = xoa;
-		obj.lay = lay;
-		obj.nap = nap;
-		obj.ve = ve;
+		select.nap();
+		select.oninput();
 	});
 </script>
 <!-- End Index.Partial.Them.PhanChia -->

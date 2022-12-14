@@ -1,98 +1,94 @@
 @inject IOptions<Client.ThietLap.MayChuApi> MayChuApi
 @{
-    string id = ViewData["modal-them-id"]?.ToString() ?? throw new NullReferenceException();
+	string id = ViewData["modal-them-id"]?.ToString() ?? throw new NullReferenceException();
 }
 <!-- Begin Index.Partial.Them-->
 <div class="modal fade" id="@id" tabindex="-1" role="dialog" aria-labelledby="@(id)--label" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="@(id)-label">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form id="@(id)--form">
-                <div class="modal-body">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="@(id)-label">Modal title</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form id="@(id)--form">
+				<div class="modal-body">
 
-                    <div class="form-group">
-                        <label for="@(id)--hoVaTen">Họ và tên</label>
-                        <input type="text" name="soYeuLyLich.hoVaTen" class="form-control" id="@(id)--hoVaTen">
-                    </div>
+					<div class="form-group">
+						<label for="@(id)--hoVaTen">Họ và tên</label>
+						<input type="text" name="soYeuLyLich.hoVaTen" class="form-control" id="@(id)--hoVaTen">
+					</div>
 
-                    <div class="form-group">
-                        <label for="@(id)--sinhNgay">Ngày sinh</label>
-                        <input type="date" name="soYeuLyLich.sinhNgay" class="form-control" id="@(id)--sinhNgay">
-                    </div>
+					<div class="form-group">
+						<label for="@(id)--sinhNgay">Ngày sinh</label>
+						<input type="date" name="soYeuLyLich.sinhNgay" class="form-control" id="@(id)--sinhNgay">
+					</div>
 
-                    <div class="form-group">
-                        <label for="@(id)--email">Email</label>
-                        <input type="text" name="soYeuLyLich.email" class="form-control" id="@(id)--email">
-                    </div>
+					<div class="form-group">
+						<label for="@(id)--email">Email</label>
+						<input type="text" name="soYeuLyLich.email" class="form-control" id="@(id)--email">
+					</div>
 
-                    <div class="form-group">
-                        <label for="@(id)--dienThoai">Số điện thoại</label>
-                        <input type="text" name="soYeuLyLich.dienThoai" class="form-control" id="@(id)--dienThoai">
-                    </div>
+					<div class="form-group">
+						<label for="@(id)--dienThoai">Số điện thoại</label>
+						<input type="text" name="soYeuLyLich.dienThoai" class="form-control" id="@(id)--dienThoai">
+					</div>
 
-                    <partial name="Index.Partial.Them.TruongThongTinNguoiDung" />
+					<partial name="Index.Partial.Them.TruongThongTinNguoiDung" />
 
-                </div>
-            </form>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                <button type="button" id="@(id)--submit" class="btn btn-primary">Tạo</button>
-            </div>
-        </div>
-    </div>
+				</div>
+			</form>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+				<button type="button" id="@(id)--submit" class="btn btn-primary">Tạo</button>
+			</div>
+		</div>
+	</div>
 </div>
 <!-- End Index.Partial.Them-->
 
 <script>
-    window.addEventListener('load', function () {
-        let submit = document.getElementById('@(id)--submit');
-        let modal = $('#@(id)');
-        submit.onclick = function () {
-            let data = {
-                soYeuLyLich: {
-                    hoVaTen: document.getElementById('@(id)--hoVaTen').value,
-                    email: document.getElementById('@(id)--email').value,
-                    dienThoai: document.getElementById('@(id)--dienThoai').value,
-                    sinhNgay: document.getElementById('@(id)--sinhNgay').value
-                }
-            }
+	window.addEventListener('load', function () {
+		let submit = document.getElementById('@(id)--submit');
+		let modal = $('#@(id)');
+		submit.onclick = function () {
+			let data = {
+				soYeuLyLich: {
+					hoVaTen: document.getElementById('@(id)--hoVaTen').value,
+					email: document.getElementById('@(id)--email').value,
+					dienThoai: document.getElementById('@(id)--dienThoai').value,
+					sinhNgay: document.getElementById('@(id)--sinhNgay').value
+				},
+				idKieuNguoiDung: document.getElementById('@(id)--idKieuNguoiDung').value,
+				truongGiaTri: []
+			}
 
-            let loai = document.querySelector('#@(id)--nav-tab .nav-link.active').id;
-            let doiTuong = 'nguoidung';
+			let truongGiaTri = document.querySelectorAll('#@(id)--truong-gia-tri input')
 
-            switch (loai) {
-                case '@(id)--nav-quantri':
-                    doiTuong = 'quantri';
-                    break;
-                case '@(id)--nav-giangvien':
-                    data.donViCongTac = document.getElementById('@(id)--donViCongTac').value;
-                    data.trinhDo = document.getElementById('@(id)--trinhDo').value;
-                    doiTuong = 'giangvien';
-                    break;
-                case '@(id)--nav-hocvien':
-                    data.truong = document.getElementById('@(id)--truong').value;
-                    data.phuHuynh = document.getElementById('@(id)--phuHuynh').value;
-                    doiTuong = 'hocvien';
-                    break;
-            }
+			if (truongGiaTri.length != 0) {
+				var list = truongGiaTri.children;
+				for (var item of truongGiaTri) {
+					data.truongGiaTri.push({
+						id: item.id.split('--')[1],
+						giaTri: item.value
+					});
+				}
+			}
 
-            fetch(`@(MayChuApi.Value.DiaChi)/api/${doiTuong}`, {
-                method: 'POST',
-                body: JSON.stringify(data),
-                headers: new Headers({ 'content-type': 'application/json' })
-            }).then(res => {
-                switch (res.status) {
-                    case 201:
-                        $('#table').DataTable().ajax.reload();
-                        modal.modal('hide');
-                        break;
-                }
-            });
-        }
-    });
+
+			fetch(`@(MayChuApi.Value.DiaChi)/api/nguoidung`, {
+				method: 'POST',
+				body: JSON.stringify(data),
+				headers: new Headers({ 'content-type': 'application/json' })
+			}).then(res => {
+				switch (res.status) {
+					case 201:
+						$('#table').DataTable().ajax.reload();
+						modal.modal('hide');
+						break;
+				}
+			});
+		}
+	});
 </script>

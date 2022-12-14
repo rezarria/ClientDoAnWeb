@@ -34,32 +34,9 @@
 						<input type="text" name="soYeuLyLich.email" class="form-control" id="@(id)--soDienThoai" disabled>
 					</div>
 
-					<div id="@(id)--hocVien" class="phu-them">
-						<div class="form-group">
-							<label for="@(id)--truong">Trường</label>
-							<input type="text" name="truong" class="form-control" id="@(id)--truong" disabled>
-						</div>
 
-						<div class="form-group">
-							<label for="@(id)--phuHuynh">Phụ huynh</label>
-							<input type="text" name="phuHuynh" class="form-control" id="@(id)--phuHuynh" disabled>
-						</div>
-					</div>
+					<div id="truongGiaTri"></div>
 
-					<div id="@(id)--quanTri" class="phu-them">
-					</div>
-
-					<div id="@(id)--giangVien" class="phu-them">
-						<div class="form-group">
-							<label for="@(id)--trinhDo">Trình độ</label>
-							<input type="text" name="trinhDo" id="@(id)--trinhDo" class="form-control" disabled>
-						</div>
-
-						<div class="form-group">
-							<label for="@(id)--donViCongTac">Đơn vị công tác</label>
-							<input type="text" name="donViCongTac" id="@(id)--donViCongTac" class="form-control" disabled>
-						</div>
-					</div>
 
 				</div>
 			</form>
@@ -85,15 +62,36 @@
 			truong: document.getElementById('@(id)--truong')
 		};
 
-		let kichHoat = function (id) {
-			dom.querySelectorAll('.phu-them').forEach((obj, index) => {
-				obj.classList.add('d-none');
-			});
-
-			document.getElementById(id).classList.remove('d-none');
-		}
-
 		let cacheDetails = {};
+
+		let cacheTruongTheoKieuNguoiDung = {};
+
+		dom.napTruong = async function (id) {
+			if (cacheTruongTheoKieuNguoiDung[id] == null)
+				cacheTruongTheoKieuNguoiDung[id] = await fetch(`@(MayChuApi.Value.DiaChi)/api/danhsachtruongthongtinnguoidungthuockieunguoidung/theokieunguoidung?id=${id}`)
+					.then(res => res.json());
+
+			let truongGiaTri = document.getElementById('truongGiaTri');
+
+			let data = cacheTruongTheoKieuNguoiDung[id];
+
+			data.forEach(truong => {
+				let div = document.createElement('div');
+				let label = document.createElement('label');
+				let input = document.createElement('input');
+				label.setAttribute('for', `@(id)--${truong.id}`);
+				label.textContent = truong.ten;
+				input.id = `@(id)--${truong.id}`;
+				input.type = truong.kieuDuLieu;
+				input.name = truong.id;
+				input.classList.add('form-control');
+				div.classList.add('form-group');
+				div.appendChild(label);
+				div.appendChild(input);
+				div.setAttribute('disable');
+				truongGiaTri.appendChild(div);
+			});
+		};
 
 		dom.nap = async function (id) {
 			let datas = $('#@ViewData["bang-id"]').DataTable().data();
@@ -103,33 +101,26 @@
 			this.data.dienThoai.value = data.soYeuLyLich.dienThoai;
 			this.data.sinhNgay.value = data.soYeuLyLich.sinhNgay.substring(0, 10);
 
-			if (cacheDetails[data.id] == null && data.phanLoai != 'QuanTri'
+			if (cacheDetails[data.id] == null
 				||
 				(
 					globalThis.flags != null &&
 					globalThis.flags.includes(data.id)
 				)
 			) {
-				cacheDetails[data.id] = await fetch(`@(MayChuApi.Value.DiaChi)/api/${data.phanLoai}/chitiet?id=${data.id}`, {})
+				cacheDetails[data.id] = await fetch(`@(MayChuApi.Value.DiaChi)/api/giatritruongthongtinnguoidung/phutro?id=${data.id}`)
 					.then(res => res.json());
 				if (globalThis.flags != null)
 					globalThis.flags.pop(data.id);
 			}
 
-			switch (data.phanLoai) {
-				case 'QuanTri':
-					break;
-				case 'GiangVien':
-					this.data.trinhDo.value = cacheDetails[data.id].trinhDo;
-					this.data.donViCongTac.value = cacheDetails[data.id].donViCongTac;
-					break;
-				case 'HocVien':
-					this.data.truong.value = cacheDetails[data.id].truong;
-					this.data.phuHuynh.value = cacheDetails[data.id].phuHuynh;
-					break;
-			}
-			let tenDoiTuong = data.phanLoai.charAt(0).toLowerCase() + data.phanLoai.slice(1);
-			kichHoat(`@(id)--${tenDoiTuong}`);
+			data = truongGiaTri = cacheDetails[id];
+
+			truongGiaTri.forEach(x => {
+				let dom = document.getElementById(`@(id)--${x.idTruongGiaTri}`)
+			});
+
+
 		}
 		this['obj-@id'] = dom;
 	});
