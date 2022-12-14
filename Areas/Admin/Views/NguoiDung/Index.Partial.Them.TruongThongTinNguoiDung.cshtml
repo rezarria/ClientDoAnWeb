@@ -1,19 +1,83 @@
 @using Client.ThietLap
 @inject IOptions<MayChuApi> MayChuApi
 @{
-    string id = ViewData["modal-them-id"]?.ToString() ?? throw new NullReferenceException();
+	string id = ViewData["modal-them-id"]?.ToString() ?? throw new NullReferenceException();
 }
 <!-- Begin Index.Partial.Them.PhanChia -->
+
+
+
+<div class="form-group">
+	<label>Kiểu người dùng</label>
+	<select id="@(id)--chon-kieu-nguoi-dung" class="form-control" style="width: 100%;">
+	</select>
+</div>
+
 <div class="tab-content" id="@(id)--truong-gia-tri">
-    
 </div>
 
 <script>
-    window.onload('load', function () {
-        let truongGiaTri = document.getElementById('@(id)--truong-gia-tri');
-        function nap(id) {
-            fetch(`@(MayChuApi.Value.DiaChi)/kieunguoidung/truongthongtinnguoidung?id=${id}`);
-        }
-    });
+
+	window.addEventListener('load', function () {
+		let id = '@(id)--truong-gia-tri';
+		let obj = document.getElementById(id);
+
+		let select = document.getElementById('@(id)--chon-kieu-nguoi-dung');
+
+		select.nap = function (id) {
+			fetch('@(MayChuApi.Value.DiaChi)/kieunguoidung/truongthongtinnguoidung')
+				.then(res => res.json())
+				.then(data => {
+					data.forEach(x => {
+
+					});
+				});
+		};
+
+
+
+
+		let truongGiaTri = document.getElementById('@(id)--truong-gia-tri');
+		let cache = [];
+		function xoa() {
+			this.childNodes.forEach(node => node.remove());
+		}
+
+		function nap(id) {
+			this.xoa();
+			this.lay(id).then(this.ve);
+		}
+
+		async function lay(id) {
+			if (cache[id] == null)
+				await fetch(`@(MayChuApi.Value.DiaChi)/kieunguoidung/truongthongtinnguoidung?id=${id}`)
+					.then(res => res.json())
+					.then(data => cache[id] = data);
+			return id;
+		}
+
+		function ve(id) {
+			data.forEach(x => {
+				let div = document.createElement('div');
+				div.classList.add('form-group');
+				let label = document.createElement('label');
+				label.setAttribute('for', '@(id)--${data.id}');
+				label.textContent = data.ten;
+				let input = document.createElement('input');
+				input.id = '@(id)--${data.id}';
+				input.type = data.KieuDuLieu;
+				input.name = data.id;
+				input.classList.add('form-control');
+				div.appendChild(label);
+				div.appendChild(input);
+				this.appendChild(div);
+			});
+		}
+
+		obj.xoa = xoa;
+		obj.lay = lay;
+		obj.nap = nap;
+		obj.ve = ve;
+	});
 </script>
 <!-- End Index.Partial.Them.PhanChia -->
