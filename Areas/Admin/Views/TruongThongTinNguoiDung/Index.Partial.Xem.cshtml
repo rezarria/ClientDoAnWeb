@@ -1,0 +1,62 @@
+@inject IOptions<Client.ThietLap.MayChuApi> MayChuApi
+@{
+	string id = ViewData["modal-xem-id"]?.ToString() ?? throw new NullReferenceException();
+}
+<!-- Begin Index.Partial.Xem-->
+<div class="modal fade" id="@id" tabindex="-1" role="dialog" aria-labelledby="@(id)--label" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="@(id)-label">Modal title</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form id="@(id)--form">
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="@(id)--ten">Tên trường</label>
+						<input type="text" name="ten" class="form-control" id="@(id)--ten" disabled>
+					</div>
+
+					<div class="form-group">
+						<label for="@(id)--alias">Alias</label>
+						<input type="text" name="alias" class="form-control" id="@(id)--alias" disabled>
+					</div>
+
+					<div class="form-group">
+						<label for="@(id)--kieuDuLieu">Kiểu dữ liệu</label>
+						<input type="text" name="kieuDuLieu" class="form-control" id="@(id)--kieuDuLieu" disabled>
+					</div>
+
+				</div>
+			</form>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+				<button type="button" id="@(id)--submit" class="btn btn-primary">Lưu</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	window.addEventListener('load', function () {
+		let dom = document.getElementById('@id');
+		dom.data = {
+			ten: document.getElementById('@(id)--ten'),
+			alias: document.getElementById('@(id)--alias'),
+			kieuDuLieu: document.getElementById('@(id)--kieuDuLieu')
+		};
+
+		dom.nap = function (id) {
+			let datas = $('#@ViewData["bang-id"]').DataTable().data();
+			data = datas.filter(x => x.id == id)[0];
+			this.data.ten.value = data.ten;
+			this.data.alias.value = data.alias;
+			this.data.kieuDuLieu.value = data.kieuDuLieu;
+		};
+
+		this['obj-@id'] = dom;
+	});
+</script>
+<!-- End Index.Partial.Xem-->

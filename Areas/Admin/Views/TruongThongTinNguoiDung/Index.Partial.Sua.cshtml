@@ -1,0 +1,96 @@
+@inject IOptions<Client.ThietLap.MayChuApi> MayChuApi
+@{
+	string id = ViewData["modal-sua-id"]?.ToString() ?? throw new NullReferenceException();
+}
+<!-- Begin Index.Partial.Sua-->
+<div class="modal fade" id="@id" tabindex="-1" role="dialog" aria-labelledby="@(id)--label" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="@(id)-label">Modal title</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form id="@(id)--form">
+				<input type="hidden" name="id" id="@(id)--id">
+				<div class="modal-body">
+
+
+					<div class="form-group">
+						<label for="@(id)--ten">Tên trường</label>
+						<input type="text" name="ten" class="form-control" id="@(id)--ten">
+					</div>
+
+					<div class="form-group">
+						<label for="@(id)--alias">Alias</label>
+						<input type="text" name="alias" class="form-control" id="@(id)--alias">
+					</div>
+
+					<div class="form-group">
+						<label for="@(id)--kieuDuLieu">Kiểu dữ liệu</label>
+						<input type="text" name="kieuDuLieu" class="form-control" id="@(id)--kieuDuLieu">
+					</div>
+
+
+
+				</div>
+			</form>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+				<button type="button" id="@(id)--submit" class="btn btn-primary">Lưu</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	window.addEventListener('load', function () {
+		let dom = document.getElementById('@id');
+		dom.data = {
+			ten: document.getElementById('@(id)--ten'),
+			alias: document.getElementById('@(id)--alias'),
+			kieuDuLieu: document.getElementById('@(id)--kieuDuLieu'),
+			submit: document.getElementById('@(id)--submit')
+		};
+
+
+		let cacheDetails = {};
+
+		dom.nap = async function (id) {
+			let data = $('#@ViewData["bang-id"]').DataTable().data().filter(x => x.id === id)[0];
+			dom.data.old = data;
+			dom.data.ten.value = data.ten;
+			dom.data.alias.value = data.alias;
+			dom.data.kieuDuLieu.value = data.kieuDuLieu;
+
+			dom.data.newObj = JSON.parse(JSON.stringify(dom.data.old));
+		}
+
+		dom.data.submit.addEventListener('click', function () {
+			dom.data.newObj.ten = dom.data.ten.value;
+			dom.data.newObj.alias = dom.data.alias.value;
+			dom.data.newObj.kieuDuLieu = dom.data.kieuDuLieu.value;
+
+			var diff = jsonpatch.compare(dom.data.old, dom.data.newObj);
+			fetch(`@(MayChuApi.Value.DiaChi)/api/truongthongtinnguoidung?id=${dom.data.old.id}`, {
+				method: 'PATCH',
+				body: JSON.stringify(diff),
+				headers: { 'content-type': 'application/json' }
+			})
+				.then(res => {
+					switch (res.status) {
+						case 200:
+							$('#@(ViewData["bang-id"])').DataTable().ajax.reload();
+							$(dom).modal('hide');
+							cacheDetails[dom.data.old.id] = null;
+							if (globalThis.flags == null) globalThis.flags = [];
+							globalThis.flags.push(dom.data.old.id);
+							break;
+					}
+				});
+		});
+		this['obj-@id'] = dom;
+	});
+</script>
+<!-- End Index.Partial.Sua-->
