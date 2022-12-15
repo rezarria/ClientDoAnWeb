@@ -1,0 +1,88 @@
+@using Client.ThietLap
+@inject IOptions<MayChuApi> MayChuApi
+@{
+	string id = ViewData["modal-them-id"]?.ToString() ?? throw new NullReferenceException();
+}
+<!-- Begin Index.Partial.Them.PhanChia -->
+
+
+
+<div class="form-group">
+	<label>Kiểu người dùng</label>
+	<select id="@(id)--idKieuNguoiDung" class="form-control" style="width: 100%;">
+		<option value="">Chọn kiểu người dùng</option>
+	</select>
+</div>
+
+<div id="@(id)--truong-gia-tri">
+</div>
+
+<script>
+	window.addEventListener('load', function () {
+		let id = '@(id)--truong-gia-tri';
+		let obj = document.getElementById(id);
+		/**@@type {HTMLSelectElement}*/
+		let select = document.getElementById('@(id)--idKieuNguoiDung');
+		let truongGiaTri = document.getElementById('@(id)--truong-gia-tri');
+		let cache = [];
+
+		select.nap = function () {
+			fetch('@(MayChuApi.Value.DiaChi)/api/kieunguoidung/toithieu')
+				.then(res => res.json())
+				.then(data => {
+					data.forEach(x => {
+						let option = document.createElement('option');
+						option.value = x.id;
+						option.textContent = x.ten;
+						select.options.add(option);
+					});
+				});
+		};
+
+		select.oninput = function () {
+			obj.nap(select.value);
+		};
+
+		obj.xoa = function () {
+			while (this.childNodes.length != 1)
+				this.childNodes[this.childNodes.length - 1].remove();
+		}
+
+		obj.nap = function (id) {
+			this.xoa();
+			if (id == null || id.length == 0) return;
+			this.lay(id).then(this.ve);
+		}
+
+		obj.lay = async function (id) {
+			if (cache[id] == null)
+				await fetch(`@(MayChuApi.Value.DiaChi)/api/danhsachtruongthongtinnguoidungthuockieunguoidung/theokieunguoidung?id=${id}`)
+					.then(res => res.json())
+					.then(data => cache[id] = data);
+			return id;
+		}
+
+		obj.ve = function (id) {
+			if (cache[id] != null)
+				cache[id].forEach(x => {
+					let div = document.createElement('div');
+					div.classList.add('form-group');
+					let label = document.createElement('label');
+					label.setAttribute('for', `@(id)--${x.id}`);
+					label.textContent = x.ten;
+					let input = document.createElement('input');
+					input.id = `@(id)--${x.id}`;
+					input.type = x.kieuDuLieu;
+					input.name = x.id;
+					input.classList.add('form-control');
+					div.appendChild(label);
+					div.appendChild(input);
+					obj.appendChild(div);
+				});
+		}
+
+		select.nap();
+		select.oninput();
+	});
+</script>
+<!-- End Index.Partial.Them.PhanChia -->

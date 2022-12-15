@@ -1,5 +1,5 @@
 @{
-	ViewData["Title"] = "Môn học";
+	ViewData["Title"] = "Trường thông tin người dùng";
 	ViewData["modal-them-id"] = "modal-them";
 	ViewData["modal-xoa-id"] = "modal-xoa";
 	ViewData["modal-xem-id"] = "modal-xem";
@@ -31,9 +31,9 @@
 <script src="~/lib/fast-json-patch/fast-json-patch.min.js" asp-append-version="true"></script>
 }
 
-<partial name="Index.Partial.Sua" />
-<partial name="Index.Partial.Xem" />
-<partial name="Index.Partial.Xoa" />
+@* <partial name="Index.Partial.Sua" /> *@
+@* <partial name="Index.Partial.Xem" /> *@
+@* <partial name="Index.Partial.Xoa" /> *@
 <partial name="Index.Partial.Them" />
 <partial name="Index.Script" />
 
@@ -48,8 +48,10 @@
 				<table id='@ViewData["bang-id"]' class="table table-striped">
 					<thead>
 						<tr>
-							<th>Tên môn</th>
-							<th>Miêu tả</th>
+							<th>Thứ tự</th>
+							<th>Tên</th>
+							<th>Alias</th>
+							<th>Kiểu</th>
 							<th></th>
 						</tr>
 					</thead>
@@ -58,7 +60,5 @@
 				</table>
 			</div>
 		</div>
-
-
 	</div>
 </div>

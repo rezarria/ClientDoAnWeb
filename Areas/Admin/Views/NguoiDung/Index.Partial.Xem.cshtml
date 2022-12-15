@@ -117,7 +117,8 @@
 			data = truongGiaTri = cacheDetails[id];
 
 			truongGiaTri.forEach(x => {
-				let dom = document.getElementById(`@(id)--${x.idTruongGiaTri}`)
+				let dom = document.getElementById(`@(id)--${x.idTruongGiaTri}`);
+				dom.value = x.giaTri;
 			});
 
 

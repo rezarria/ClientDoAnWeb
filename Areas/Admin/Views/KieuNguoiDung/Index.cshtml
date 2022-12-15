@@ -1,5 +1,5 @@
 @{
-	ViewData["Title"] = "Môn học";
+	ViewData["Title"] = "Kiểu người dùng";
 	ViewData["modal-them-id"] = "modal-them";
 	ViewData["modal-xoa-id"] = "modal-xoa";
 	ViewData["modal-xem-id"] = "modal-xem";
@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="~/vendor/AdminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css" asp-append-version="true">
 <link rel="stylesheet" href="~/vendor/AdminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css" asp-append-version="true">
 <link rel="stylesheet" href="~/vendor/AdminLTE/plugins/datatables-buttons/css/buttons.bootstrap4.min.css" asp-append-version="true">
+<link rel="stylesheet" href="~/vendor/AdminLTE/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css" asp-append-version="true">
 <link rel="stylesheet" href="~/lib/bootstrap-switch/dist/css/bootstrap-switch.min.css" asp-append-version="true">
 }
 
@@ -27,13 +28,14 @@
 <script src="~/vendor/AdminLTE/plugins/datatables-buttons/js/buttons.html5.min.js" asp-append-version="true"></script>
 <script src="~/vendor/AdminLTE/plugins/datatables-buttons/js/buttons.print.min.js" asp-append-version="true"></script>
 <script src="~/vendor/AdminLTE/plugins/datatables-buttons/js/buttons.colVis.min.js" asp-append-version="true"></script>
+<script src="~/vendor/AdminLTE/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js" asp-append-version="true"></script>
 <script src="~/lib/bootstrap-switch/dist/js/bootstrap-switch.min.js" asp-append-version="true"></script>
 <script src="~/lib/fast-json-patch/fast-json-patch.min.js" asp-append-version="true"></script>
 }
 
-<partial name="Index.Partial.Sua" />
-<partial name="Index.Partial.Xem" />
-<partial name="Index.Partial.Xoa" />
+@* <partial name="Index.Partial.Sua" /> *@
+@* <partial name="Index.Partial.Xem" /> *@
+@* <partial name="Index.Partial.Xoa" /> *@
 <partial name="Index.Partial.Them" />
 <partial name="Index.Script" />
 
@@ -48,8 +50,8 @@
 				<table id='@ViewData["bang-id"]' class="table table-striped">
 					<thead>
 						<tr>
-							<th>Tên môn</th>
-							<th>Miêu tả</th>
+							<th>Thứ tự</th>
+							<th>Tên</th>
 							<th></th>
 						</tr>
 					</thead>
@@ -58,7 +60,5 @@
 				</table>
 			</div>
 		</div>
-
-
 	</div>
 </div>

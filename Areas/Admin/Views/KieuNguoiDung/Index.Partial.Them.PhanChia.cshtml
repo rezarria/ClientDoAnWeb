@@ -1,0 +1,42 @@
+@{
+    string id = ViewData["modal-them-id"]?.ToString() ?? throw new NullReferenceException();
+}
+<!-- Begin Index.Partial.Them.PhanChia -->
+<nav>
+    <div class="nav nav-tabs" id="@(id)--nav-tab" role="tablist">
+        <button class="nav-link" id="@(id)--nav-hocvien" data-toggle="tab" data-target="#@(id)--nav-tab-hocvien" type="button" role="tab" aria-controls="nav-home" aria-selected="false">Học viên</button>
+        <button class="nav-link" id="@(id)--nav-quantri" data-toggle="tab" data-target="#@(id)--nav-tab-quantri" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Quản trị</button>
+        <button class="nav-link active" id="@(id)--nav-giangvien" data-toggle="tab" data-target="#@(id)--nav-tab-giangvien" type="button" role="tab" aria-controls="nav-contact" aria-selected="true">Giảng viên</button>
+    </div>
+</nav>
+
+<div class="tab-content" id="@(id)--nav-tabContent">
+    <div class="tab-pane fade" id="@(id)--nav-tab-hocvien" role="tabpanel" aria-labelledby="nav-home-tab">
+        <div class="form-group">
+            <label for="@(id)--truong">Trường</label>
+            <input type="text" name="truong" class="form-control" id="@(id)--truong">
+        </div>
+
+        <div class="form-group">
+            <label for="@(id)--phuHuynh">Phụ huynh</label>
+            <input type="text" name="phuHuynh" class="form-control" id="@(id)--phuHuynh">
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="@(id)--nav-tab-quantri" role="tabpanel" aria-labelledby="nav-profile-tab">
+
+    </div>
+
+    <div class="tab-pane fade show active" id="@(id)--nav-tab-giangvien" role="tabpanel" aria-labelledby="nav-contact-tab">
+        <div class="form-group">
+            <label for="@(id)--trinhDo">Trình độ</label>
+            <input type="text" name="trinhDo" id="@(id)--trinhDo" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="@(id)--donViCongTac">Đơn vị công tác</label>
+            <input type="text" name="donViCongTac" id="@(id)--donViCongTac" class="form-control">
+        </div>
+    </div>
+</div>
+<!-- End Index.Partial.Them.PhanChia -->
