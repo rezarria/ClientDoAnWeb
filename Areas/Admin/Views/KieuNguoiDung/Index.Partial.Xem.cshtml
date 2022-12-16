@@ -15,12 +15,20 @@
 			<form id="@(id)--form">
 				<div class="modal-body">
 					<div class="form-group">
-						<label for="@(id)--ten">Tên trường</label>
+						<label for="@(id)--ten">Tên kiểu người dùng</label>
 						<input type="text" name="ten" class="form-control" id="@(id)--ten" disabled>
 					</div>
 
-					<div id="@(id)--truongGiaTri"></div>
-
+					<table id="@(id)--bang" class="table table-bordered">
+						<thead>
+							<tr>
+								<th>Tên trường</th>
+								<th>Kiểu dữ liệu</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
 
 				</div>
 			</form>
@@ -37,7 +45,7 @@
 		let dom = document.getElementById('@id');
 		dom.data = {
 			ten: document.getElementById('@(id)--ten'),
-			cacTruong: document.getElementById('@(id)--truongGiaTri')
+			bang: document.getElementById('@(id)--bang')
 		};
 
 		let cacheDanhSachTruongTheoId = [];
@@ -48,36 +56,34 @@
 		}
 
 		dom.xoa = function () {
-			this.childNodes.forEach(item => item.remove());
+			/**@@type {HTMLTableElement}*/
+			let cacHangCanXoa = dom.data.bang.querySelectorAll('tbody tr');
+			for (let item of cacHangCanXoa)
+				item.remove();
 		};
 
 		dom.ve = function (id) {
-			let data = cacheDanhSachTruongTheoId[id];
-			for (var item of data) {
-				let div = document.createElement('div');
-				let label = document.createElement('label');
-				let input = document.createElement('input');
+			let cacTruongCuaKieuTaiKhoan = cacheDanhSachTruongTheoId[id];
+			console.log(cacTruongCuaKieuTaiKhoan);
+			for (let item of cacTruongCuaKieuTaiKhoan) {
+				let tr = dom.data.bang.tBodies[0].insertRow(-1);
+				let td = document.createElement('td');
+				td.textContent = item.ten;
 
-				div.classList.add('form-group');
-				label.htmlFor = `@(id)--${item.id}`;
-				label.textContent = item.ten;
-				input.id = `@(id)--${item.id}`;
-				input.type = item.kieuDuLieu;
-				input.classList.add('form-control');
+				tr.appendChild(td);
 
-				div.appendChild(label);
-				div.appendChild(input);
+				td = document.createElement('td');
+				td.textContent = item.kieuDuLieu;
 
-				<div class="form-group">
-					<label for="@(id)--ten">Tên trường</label>
-					<input type="text" name="ten" class="form-control" id="@(id)--ten" disabled>
-				</div>
+				tr.appendChild(td);
 			}
-		};
+		}
 
-		dom.nap = function (id) {
-			this.layDanhSachTruongTheoId(id);
-
+		dom.nap = async function (id) {
+			dom.xoa();
+			await dom.layDanhSachTruongTheoId(id).then(_ => dom.ve(id));
+			let data = $('#@ViewData["bang-id"]').DataTable().data().filter(x => x.id === id)[0];
+			dom.data.ten.value = data.ten;
 		};
 
 		this['obj-@id'] = dom;

@@ -16,58 +16,29 @@
 				<input type="hidden" name="id" id="@(id)--id">
 				<div class="modal-body">
 
-
 					<div class="form-group">
-						<label for="@(id)--hoVaTen">Họ và tên</label>
-						<input type="text" name="soYeuLyLich.hoVaTen" class="form-control" id="@(id)--hoVaTen">
-					</div>
-
-					<div class="form-group">
-						<label for="@(id)--sinhNgay">Ngày sinh</label>
-						<input type="date" name="soYeuLyLich.sinhNgay" class="form-control" id="@(id)--sinhNgay">
+						<label for="@(id)--ten">Tên trường</label>
+						<input type="text" name="ten" class="form-control" id="@(id)--ten">
 					</div>
 
 					<div class="form-group">
-						<label for="@(id)--email">Email</label>
-						<input type="text" name="soYeuLyLich.email" class="form-control" id="@(id)--email">
+						<label>Trường thông tin người dùng</label>
+						<select id="@(id)--idTruongThongTinNguoiDung" multiple="multiple">
+						</select>
 					</div>
 
 					<div class="form-group">
-						<label for="@(id)--soDienThoai">Số điện thoại</label>
-						<input type="text" name="soYeuLyLich.email" class="form-control" id="@(id)--soDienThoai">
+						<label>Kiểu người dùng</label>
+						<select id="@(id)--idKieuNguoiDung" class="form-control" style="width: 100%;">
+							<option value="">Chọn kiểu người dùng</option>
+						</select>
 					</div>
 
-					<div id="@(id)--hocVien" class="phu-them">
-						<div class="form-group">
-							<label for="@(id)--truong">Trường</label>
-							<input type="text" name="truong" class="form-control" id="@(id)--truong">
-						</div>
-
-						<div class="form-group">
-							<label for="@(id)--phuHuynh">Phụ huynh</label>
-							<input type="text" name="phuHuynh" class="form-control" id="@(id)--phuHuynh">
-						</div>
-					</div>
-
-					<div id="@(id)--quanTri" class="phu-them">
-					</div>
-
-					<div id="@(id)--giangVien" class="phu-them">
-						<div class="form-group">
-							<label for="@(id)--trinhDo">Trình độ</label>
-							<input type="text" name="trinhDo" id="@(id)--trinhDo" class="form-control">
-						</div>
-
-						<div class="form-group">
-							<label for="@(id)--donViCongTac">Đơn vị công tác</label>
-							<input type="text" name="donViCongTac" id="@(id)--donViCongTac" class="form-control">
-						</div>
-					</div>
 				</div>
 			</form>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				<button type="button" id="@(id)--submit" class="btn btn-primary">Save changes</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+				<button type="button" id="@(id)--submit" class="btn btn-primary">Lưu</button>
 			</div>
 		</div>
 	</div>
@@ -75,32 +46,19 @@
 
 <script>
 	window.addEventListener('load', function () {
+		let select = document.getElementById('@(id)--idKieuNguoiDung');
+
 		let dom = document.getElementById('@id');
 		dom.data = {
 			id: document.getElementById('@(id)--id'),
-			hoVaTen: document.getElementById('@(id)--hoVaTen'),
-			email: document.getElementById('@(id)--email'),
-			soDienThoai: document.getElementById('@(id)--soDienThoai'),
-			sinhNgay: document.getElementById('@(id)--sinhNgay'),
-			donViCongTac: document.getElementById('@(id)--donViCongTac'),
-			trinhDo: document.getElementById('@(id)--trinhDo'),
-			phuHuynh: document.getElementById('@(id)--phuHuynh'),
-			truong: document.getElementById('@(id)--truong'),
-			submit: document.getElementById('@(id)--submit'),
+			hoVaTen: document.getElementById('@(id)--ten'),
+			idTruongThongTinNguoiDung: document.getElementById('@(id)--idTruongThongTinNguoiDung'),
 			close: document.getElementById('@(id)--close'),
 			form: document.getElementById('@(id)--form'),
 			old: null,
 			newObj: null,
 			phanLoai: null
 		};
-
-		let kichHoat = function (id) {
-			dom.querySelectorAll('.phu-them').forEach(obj => {
-				obj.classList.add('d-none');
-			});
-
-			document.getElementById(id).classList.remove('d-none');
-		}
 
 		let cacheDetails = {};
 
@@ -114,65 +72,56 @@
 			dom.data.sinhNgay.value = data.soYeuLyLich.sinhNgay.substring(0, 10);
 
 			if (cacheDetails[data.id] == null && data.phanLoai !== 'QuanTri')
-				cacheDetails[data.id] = await fetch(`@(MayChuApi.Value.DiaChi)/api/${data.phanLoai}/chitiet?id=${data.id}`, {})
+				cacheDetails[data.id] = await fetch(`@@(MayChuApi.Value.DiaChi)/Api/DanhSachTruongThongTinNguoiDungThuocKieuNguoiDung/TheoKieuNguoiDung?id=${data.id}`, {})
 					.then(res => res.json());
-
-			switch (data.phanLoai) {
-				case 'QuanTri':
-					break;
-				case 'GiangVien':
-					dom.data.old.donViCongTac = cacheDetails[data.id].donViCongTac;
-					dom.data.old.trinhDo = cacheDetails[data.id].trinhDo;
-					break;
-				case 'HocVien':
-					dom.data.old.truong = cacheDetails[data.id].truong;
-					dom.data.old.phuHuynh = cacheDetails[data.id].phuHuynh;
-					break;
-			}
 
 			dom.data.newObj = JSON.parse(JSON.stringify(dom.data.old));
 
-			switch (data.phanLoai) {
-				case 'QuanTri':
-					break;
-				case 'GiangVien':
-					this.data.trinhDo.value = cacheDetails[data.id].trinhDo;
-					this.data.donViCongTac.value = cacheDetails[data.id].donViCongTac;
-					break;
-				case 'HocVien':
-					this.data.truong.value = cacheDetails[data.id].truong;
-					this.data.phuHuynh.value = cacheDetails[data.id].phuHuynh;
-					break;
-			}
-			let tenDoiTuong = data.phanLoai.charAt(0).toLowerCase() + data.phanLoai.slice(1);
-			kichHoat(`@(id)--${tenDoiTuong}`);
+		}
 
+		let cacheTruongTheoId = [];
+		let cacheTruong = null;
+		dom.napSelect = async function (id) {
+			let task = (async () => {
+				if (cacheTruong == null)
+					cacheTruong = await fetch().then(res => res.json());
+			})();
+
+			let task2 = (async () => {
+				if (cacheTruongTheoId[id] == null)
+					cacheTruongTheoId[id] = await fetch().then(res = res.json());
+			})();
+
+			Promise.all([task, task2])
+				.then(() => {
+					let data = cacheTruongTheoId[id];
+
+					/**@@type {HTMLSelectElement}*/
+					let select = dom.data.idTruongThongTinNguoiDung;
+
+					cacheTruong.forEach(item => {
+						let option = document.createElement('option');
+						option.value = item.value;
+						if (data.some(x => x.id === item.id))
+							option.selected = true;
+						select.options.add(option);
+					})
+				});
 		}
 
 		dom.data.submit.addEventListener('click', function () {
-			dom.data.newObj.soYeuLyLich.hoVaTen = dom.data.hoVaTen.value;
-			dom.data.newObj.soYeuLyLich.email = dom.data.email.value;
-			dom.data.newObj.soYeuLyLich.dienThoai = dom.data.soDienThoai.value;
-			dom.data.newObj.soYeuLyLich.sinhNgay = dom.data.sinhNgay.value + dom.data.old.soYeuLyLich.sinhNgay.slice(10);
+			dom.data.newObj.ten = dom.data.ten.value;
+			dom.data.newObj.idTruongThongTinNguoiDung = [];
 
-			switch (dom.data.phanLoai) {
-				case 'QuanTri':
-					break;
-				case 'GiangVien':
-					dom.data.newObj.donViCongTac = document.getElementById('@(id)--donViCongTac').value;
-					dom.data.newObj.trinhDo = document.getElementById('@(id)--trinhDo').value;
-					break;
-				case 'HocVien':
-					dom.data.newObj.truong = document.getElementById('@(id)--truong').value;
-					dom.data.newObj.phuHuynh = document.getElementById('@(id)--phuHuynh').value;
-					break;
+			for (var item of select.selectedOptions) {
+				dom.data.newObj.idTruongThongTinNguoiDung.push(item.value);
 			}
 
 			var diff = jsonpatch.compare(dom.data.old, dom.data.newObj);
-			fetch(`@(MayChuApi.Value.DiaChi)/api/${dom.data.phanLoai}?id=${dom.data.old.id}`, {
+			fetch('@(MayChuApi.Value.DiaChi)/api/kieutaikhoan?id=${dom.data.old.id}', {
 				method: 'PATCH',
 				body: JSON.stringify(diff),
-				headers: new Headers({ 'content-type': 'application/json' })
+				headers: { 'content-type': 'application/json' }
 			})
 				.then(res => {
 					switch (res.status) {
@@ -180,9 +129,7 @@
 							$('#@(ViewData["bang-id"])').DataTable().ajax.reload();
 							$(dom).modal('hide');
 							cacheDetails[dom.data.old.id] = null;
-
 							if (globalThis.flags == null) globalThis.flags = [];
-
 							globalThis.flags.push(dom.data.old.id);
 							break;
 					}

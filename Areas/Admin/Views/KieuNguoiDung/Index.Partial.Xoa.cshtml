@@ -13,11 +13,11 @@
                 </button>
             </div>
             <div class="modal-body">
-                Xoá môn <span id="@(id)--ten"></span>
+                Xoá kiểu tài khoản <span id="@(id)--ten"></span>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" id="@(id)--submit" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" id="@(id)--submit" class="btn btn-primary">Xóa</button>
             </div>
         </div>
     </div>
@@ -36,12 +36,16 @@
             let datas = $('#@ViewData["bang-id"]').DataTable().data();
             data = datas.filter(x => x.id === id)[0];
             dom.data.id = data.id;
-            this.data.ten.textContent = data.soYeuLyLich.hoVaTen;
+            this.data.ten.textContent = data.ten;
         }
         dom.data.submit.addEventListener('click', function () {
-            fetch(`@(MayChuApi.Value.DiaChi)/api/nguoidung?id=${dom.data.id}`,
+            fetch('@(MayChuApi.Value.DiaChi)/api/kieutaikhoan',
                 {
-                    method: 'DELETE'
+                    method: 'DELETE',
+                    body: JSON.stringify([dom.data.id]),
+                    headers: {
+                        'content-type':'application/json'
+                    }
                 })
                 .then(res => {
                     switch (res.status) {
