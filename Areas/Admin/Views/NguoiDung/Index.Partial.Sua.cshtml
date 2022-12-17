@@ -37,7 +37,9 @@
                         <label for="@(id)--soDienThoai">Số điện thoại</label>
                         <input type="text" name="soYeuLyLich.soDienThoai" class="form-control" id="@(id)--soDienThoai">
                     </div>
-
+					
+	                <div id="@(id)--truongGiaTri"></div>
+	                
                 </div>
             </form>
             <div class="modal-footer">
@@ -56,26 +58,13 @@
 			hoVaTen: document.getElementById('@(id)--hoVaTen'),
 			email: document.getElementById('@(id)--email'),
 			soDienThoai: document.getElementById('@(id)--soDienThoai'),
-			sinhNgay: document.getElementById('@(id)--sinhNgay'),
-			donViCongTac: document.getElementById('@(id)--donViCongTac'),
-			trinhDo: document.getElementById('@(id)--trinhDo'),
-			phuHuynh: document.getElementById('@(id)--phuHuynh'),
-			truong: document.getElementById('@(id)--truong'),
+			ngaySinh: document.getElementById('@(id)--ngaySinh'),
 			submit: document.getElementById('@(id)--submit'),
 			close: document.getElementById('@(id)--close'),
 			form: document.getElementById('@(id)--form'),
 			old: null,
 			newObj: null,
-			phanLoai: null
 		};
-
-		let kichHoat = function (id) {
-			dom.querySelectorAll('.phu-them').forEach(obj => {
-				obj.classList.add('d-none');
-			});
-
-			document.getElementById(id).classList.remove('d-none');
-		}
 
 		let cacheDetails = {};
 
@@ -86,41 +75,9 @@
 			dom.data.hoVaTen.value = data.soYeuLyLich.hoVaTen;
 			dom.data.email.value = data.soYeuLyLich.email;
 			dom.data.soDienThoai.value = data.soYeuLyLich.dienThoai;
-			dom.data.sinhNgay.value = data.soYeuLyLich.sinhNgay.substring(0, 10);
-
-			if (cacheDetails[data.id] == null && data.phanLoai !== 'QuanTri')
-				cacheDetails[data.id] = await fetch(`@(MayChuApi.Value.DiaChi)/api/${data.phanLoai}/chitiet?id=${data.id}`, {})
-					.then(res => res.json());
-
-			switch (data.phanLoai) {
-				case 'QuanTri':
-					break;
-				case 'GiangVien':
-					dom.data.old.donViCongTac = cacheDetails[data.id].donViCongTac;
-					dom.data.old.trinhDo = cacheDetails[data.id].trinhDo;
-					break;
-				case 'HocVien':
-					dom.data.old.truong = cacheDetails[data.id].truong;
-					dom.data.old.phuHuynh = cacheDetails[data.id].phuHuynh;
-					break;
-			}
+			dom.data.ngaySinh.value = data.soYeuLyLich.ngaySinh.substring(0, 10);
 
 			dom.data.newObj = JSON.parse(JSON.stringify(dom.data.old));
-
-			switch (data.phanLoai) {
-				case 'QuanTri':
-					break;
-				case 'GiangVien':
-					this.data.trinhDo.value = cacheDetails[data.id].trinhDo;
-					this.data.donViCongTac.value = cacheDetails[data.id].donViCongTac;
-					break;
-				case 'HocVien':
-					this.data.truong.value = cacheDetails[data.id].truong;
-					this.data.phuHuynh.value = cacheDetails[data.id].phuHuynh;
-					break;
-			}
-			let tenDoiTuong = data.phanLoai.charAt(0).toLowerCase() + data.phanLoai.slice(1);
-			kichHoat(`@(id)--${tenDoiTuong}`);
 
 		}
 
@@ -128,20 +85,7 @@
 			dom.data.newObj.soYeuLyLich.hoVaTen = dom.data.hoVaTen.value;
 			dom.data.newObj.soYeuLyLich.email = dom.data.email.value;
 			dom.data.newObj.soYeuLyLich.dienThoai = dom.data.soDienThoai.value;
-			dom.data.newObj.soYeuLyLich.sinhNgay = dom.data.sinhNgay.value + dom.data.old.soYeuLyLich.sinhNgay.slice(10);
-
-			switch (dom.data.phanLoai) {
-				case 'QuanTri':
-					break;
-				case 'GiangVien':
-					dom.data.newObj.donViCongTac = document.getElementById('@(id)--donViCongTac').value;
-					dom.data.newObj.trinhDo = document.getElementById('@(id)--trinhDo').value;
-					break;
-				case 'HocVien':
-					dom.data.newObj.truong = document.getElementById('@(id)--truong').value;
-					dom.data.newObj.phuHuynh = document.getElementById('@(id)--phuHuynh').value;
-					break;
-			}
+			dom.data.newObj.soYeuLyLich.ngaySinh = dom.data.ngaySinh.value + dom.data.old.soYeuLyLich.ngaySinh.slice(10);
 
 			var diff = jsonpatch.compare(dom.data.old, dom.data.newObj);
 			fetch(`@(MayChuApi.Value.DiaChi)/api/${dom.data.phanLoai}?id=${dom.data.old.id}`, {
