@@ -20,8 +20,8 @@
 					</div>
 
 					<div class="form-group">
-						<label for="@(id)--sinhNgay">Ngày sinh</label>
-						<input type="date" name="soYeuLyLich.sinhNgay" class="form-control" id="@(id)--sinhNgay" disabled>
+						<label for="@(id)--ngaySinh">Ngày sinh</label>
+						<input type="date" name="soYeuLyLich.ngaySinh" class="form-control" id="@(id)--ngaySinh" disabled>
 					</div>
 
 					<div class="form-group">
@@ -31,7 +31,7 @@
 
 					<div class="form-group">
 						<label for="@(id)--soDienThoai">Số điện thoại</label>
-						<input type="text" name="soYeuLyLich.email" class="form-control" id="@(id)--soDienThoai" disabled>
+						<input type="text" name="soYeuLyLich.soDienThoai" class="form-control" id="@(id)--soDienThoai" disabled>
 					</div>
 
 
@@ -54,12 +54,8 @@
 		dom.data = {
 			hoVaTen: document.getElementById('@(id)--hoVaTen'),
 			email: document.getElementById('@(id)--email'),
-			dienThoai: document.getElementById('@(id)--soDienThoai'),
-			sinhNgay: document.getElementById('@(id)--sinhNgay'),
-			donViCongTac: document.getElementById('@(id)--donViCongTac'),
-			trinhDo: document.getElementById('@(id)--trinhDo'),
-			phuHuynh: document.getElementById('@(id)--phuHuynh'),
-			truong: document.getElementById('@(id)--truong')
+			soDienThoai: document.getElementById('@(id)--soDienThoai'),
+			ngaySinh: document.getElementById('@(id)--ngaySinh'),
 		};
 
 		let cacheDetails = {};
