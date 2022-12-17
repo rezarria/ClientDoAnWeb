@@ -37,6 +37,7 @@
     <!-- <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.175" /> -->
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0-alpha.1" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Design" Version="1.1.2" />
+    <PackageReference Include="WebMarkupMin.AspNetCore7" Version="2.13.5" />
   </ItemGroup>
 
   <ItemGroup>

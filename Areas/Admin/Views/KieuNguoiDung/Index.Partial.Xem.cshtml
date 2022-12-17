@@ -50,8 +50,18 @@
 
 		let cacheDanhSachTruongTheoId = [];
 		dom.layDanhSachTruongTheoId = async function (id) {
-			if (cacheDanhSachTruongTheoId[id] == null)
+			if (cacheDanhSachTruongTheoId[id] == null
+				||
+				(
+					globalThis.flags != null
+					&&
+					globalThis.flags.includes(id)
+				)
+			) {
 				cacheDanhSachTruongTheoId[id] = await fetch(`@(MayChuApi.Value.DiaChi)/Api/DanhSachTruongThongTinNguoiDungThuocKieuNguoiDung/TheoKieuNguoiDung?id=${id}`).then(response => response.json());
+				if (globalThis.flags != null)
+					globalThis.flags.pop(id);
+			}
 			return cacheDanhSachTruongTheoId[id];
 		}
 

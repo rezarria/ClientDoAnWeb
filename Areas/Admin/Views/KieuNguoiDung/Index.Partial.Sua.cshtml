@@ -23,14 +23,7 @@
 
 					<div class="form-group">
 						<label>Trường thông tin người dùng</label>
-						<select id="@(id)--idTruongThongTinNguoiDung" multiple="multiple">
-						</select>
-					</div>
-
-					<div class="form-group">
-						<label>Kiểu người dùng</label>
-						<select id="@(id)--idKieuNguoiDung" class="form-control" style="width: 100%;">
-							<option value="">Chọn kiểu người dùng</option>
+						<select id="@(id)--truongThongTinNguoiDung" multiple="multiple">
 						</select>
 					</div>
 
@@ -46,13 +39,16 @@
 
 <script>
 	window.addEventListener('load', function () {
-		let select = document.getElementById('@(id)--idKieuNguoiDung');
+		/**@@type {HTMLSelectElement}*/
+		let select = document.getElementById('@(id)--truongThongTinNguoiDung');
+		let selectDualList = $(select).bootstrapDualListbox();
 
 		let dom = document.getElementById('@id');
 		dom.data = {
 			id: document.getElementById('@(id)--id'),
-			hoVaTen: document.getElementById('@(id)--ten'),
-			idTruongThongTinNguoiDung: document.getElementById('@(id)--idTruongThongTinNguoiDung'),
+			ten: document.getElementById('@(id)--ten'),
+			truongThongTinNguoiDung: document.getElementById('@(id)--truongThongTinNguoiDung'),
+			submit: document.getElementById('@(id)--submit'),
 			close: document.getElementById('@(id)--close'),
 			form: document.getElementById('@(id)--form'),
 			old: null,
@@ -60,23 +56,20 @@
 			phanLoai: null
 		};
 
-		let cacheDetails = {};
+		dom.xoa = function () {
+			let options = select.options;
+			for (let item of options)
+				item.selected = false;
+		};
 
+		let cacheDetails = {};
 		dom.nap = async function (id) {
 			let data = $('#@ViewData["bang-id"]').DataTable().data().filter(x => x.id === id)[0];
 			dom.data.old = data;
-			dom.data.phanLoai = data.phanLoai;
-			dom.data.hoVaTen.value = data.soYeuLyLich.hoVaTen;
-			dom.data.email.value = data.soYeuLyLich.email;
-			dom.data.soDienThoai.value = data.soYeuLyLich.dienThoai;
-			dom.data.sinhNgay.value = data.soYeuLyLich.sinhNgay.substring(0, 10);
-
-			if (cacheDetails[data.id] == null && data.phanLoai !== 'QuanTri')
-				cacheDetails[data.id] = await fetch(`@@(MayChuApi.Value.DiaChi)/Api/DanhSachTruongThongTinNguoiDungThuocKieuNguoiDung/TheoKieuNguoiDung?id=${data.id}`, {})
-					.then(res => res.json());
-
+			dom.data.ten.value = data.ten;
+			dom.xoa();
+			dom.napSelect(id);
 			dom.data.newObj = JSON.parse(JSON.stringify(dom.data.old));
-
 		}
 
 		let cacheTruongTheoId = [];
@@ -84,56 +77,64 @@
 		dom.napSelect = async function (id) {
 			let task = (async () => {
 				if (cacheTruong == null)
-					cacheTruong = await fetch().then(res => res.json());
+					cacheTruong = await fetch('@(MayChuApi.Value.DiaChi)/api/truongthongtinnguoidung').then(res => res.json());
+				if (select.options.length != cacheTruong.length) {
+					cacheTruong.forEach(item => {
+						let option = document.createElement('option');
+						option.value = item.id;
+						option.textContent = item.ten;
+						select.options.add(option);
+					});
+				}
 			})();
 
 			let task2 = (async () => {
 				if (cacheTruongTheoId[id] == null)
-					cacheTruongTheoId[id] = await fetch().then(res = res.json());
+					cacheTruongTheoId[id] = await fetch(`@(MayChuApi.Value.DiaChi)/Api/DanhSachTruongThongTinNguoiDungThuocKieuNguoiDung/TheoKieuNguoiDung?id=${id}`).then(res => res.json());
 			})();
 
 			Promise.all([task, task2])
 				.then(() => {
 					let data = cacheTruongTheoId[id];
 
-					/**@@type {HTMLSelectElement}*/
-					let select = dom.data.idTruongThongTinNguoiDung;
+					data.forEach(x => {
+						select.querySelector(`option[value="${x.id}"]`).selected = true;
+					});
 
-					cacheTruong.forEach(item => {
-						let option = document.createElement('option');
-						option.value = item.value;
-						if (data.some(x => x.id === item.id))
-							option.selected = true;
-						select.options.add(option);
-					})
+					selectDualList.bootstrapDualListbox('refresh');
 				});
 		}
 
 		dom.data.submit.addEventListener('click', function () {
 			dom.data.newObj.ten = dom.data.ten.value;
-			dom.data.newObj.idTruongThongTinNguoiDung = [];
 
-			for (var item of select.selectedOptions) {
-				dom.data.newObj.idTruongThongTinNguoiDung.push(item.value);
-			}
+			let danhSachTruongDaChon = [];
+			for (var item of select.selectedOptions)
+				danhSachTruongDaChon.push(item.value);
 
 			var diff = jsonpatch.compare(dom.data.old, dom.data.newObj);
-			fetch('@(MayChuApi.Value.DiaChi)/api/kieutaikhoan?id=${dom.data.old.id}', {
+
+			let capNhat1 = fetch(`@(MayChuApi.Value.DiaChi)/api/kieunguoidung?id=${dom.data.old.id}`, {
 				method: 'PATCH',
 				body: JSON.stringify(diff),
 				headers: { 'content-type': 'application/json' }
-			})
-				.then(res => {
-					switch (res.status) {
-						case 200:
-							$('#@(ViewData["bang-id"])').DataTable().ajax.reload();
-							$(dom).modal('hide');
-							cacheDetails[dom.data.old.id] = null;
-							if (globalThis.flags == null) globalThis.flags = [];
-							globalThis.flags.push(dom.data.old.id);
-							break;
-					}
-				});
+			}).then(res => res.status);
+
+			let capNhat2 = fetch(`@(MayChuApi.Value.DiaChi)/api/kieunguoidung/truongthongtinnguoidung?id=${dom.data.old.id}`, {
+				method: 'PATCH',
+				body: JSON.stringify(danhSachTruongDaChon),
+				headers: { 'content-type': 'application/json' }
+			}).then(res => res.status);
+
+			Promise.all([capNhat1, capNhat2]).then(res => {
+				if (res[0] = 200) {
+					$('#@(ViewData["bang-id"])').DataTable().ajax.reload();
+					$(dom).modal('hide');
+					cacheTruongTheoId[dom.data.old.id] = null;
+					if (globalThis.flags == null) globalThis.flags = [];
+					globalThis.flags.push(dom.data.old.id);
+				}
+			});
 		});
 		this['obj-@id'] = dom;
 	});

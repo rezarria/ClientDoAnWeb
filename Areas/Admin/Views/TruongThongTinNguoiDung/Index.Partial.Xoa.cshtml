@@ -49,7 +49,7 @@
 				})
 				.then(res => {
 					switch (res.status) {
-						case 201:
+						case 200:
 							$('#@ViewData["bang-id"]').DataTable().ajax.reload();
 							$(dom).modal('hide');
 							break;
