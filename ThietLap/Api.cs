@@ -8,16 +8,14 @@ public static partial class ThietLap
     /// </summary>
     /// <param name="services"></param>
     public static void ThietLapApiMayChu(this WebApplicationBuilder builder)
-    {
-        builder.Services.Configure<MayChuApi>(
-             builder.Configuration.GetSection("MayChuApi")
-         );
-
-    }
-
+	{
+		builder.Services.Configure<MayChuApi>(
+			builder.Configuration.GetSection("MayChuApi")
+		);
+	}
 }
 
 public class MayChuApi
 {
-    public string DiaChi { get; init; } = String.Empty;
+	public string DiaChi { get; init; } = string.Empty;
 }

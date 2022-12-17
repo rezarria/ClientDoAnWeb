@@ -1,50 +1,51 @@
-@inject IOptions<Client.ThietLap.MayChuApi> MayChuApi
+@using Client.ThietLap
+@inject IOptions<MayChuApi> MayChuApi
 @{
-	string id = ViewData["modal-them-id"]?.ToString() ?? throw new NullReferenceException();
+    string id = ViewData["modal-them-id"]?.ToString() ?? throw new NullReferenceException();
 }
 <!-- Begin Index.Partial.Them-->
 <div class="modal fade" id="@id" tabindex="-1" role="dialog" aria-labelledby="@(id)--label" aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="@(id)-label">Modal title</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<form id="@(id)--form">
-				<div class="modal-body">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="@(id)-label">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="@(id)--form">
+                <div class="modal-body">
 
-					<div class="form-group">
-						<label for="@(id)--hoVaTen">Họ và tên</label>
-						<input type="text" name="soYeuLyLich.hoVaTen" class="form-control" id="@(id)--hoVaTen">
-					</div>
+                    <div class="form-group">
+                        <label for="@(id)--hoVaTen">Họ và tên</label>
+                        <input type="text" name="soYeuLyLich.hoVaTen" class="form-control" id="@(id)--hoVaTen">
+                    </div>
 
-					<div class="form-group">
-						<label for="@(id)--sinhNgay">Ngày sinh</label>
-						<input type="date" name="soYeuLyLich.sinhNgay" class="form-control" id="@(id)--sinhNgay">
-					</div>
+                    <div class="form-group">
+                        <label for="@(id)--sinhNgay">Ngày sinh</label>
+                        <input type="date" name="soYeuLyLich.sinhNgay" class="form-control" id="@(id)--sinhNgay">
+                    </div>
 
-					<div class="form-group">
-						<label for="@(id)--email">Email</label>
-						<input type="text" name="soYeuLyLich.email" class="form-control" id="@(id)--email">
-					</div>
+                    <div class="form-group">
+                        <label for="@(id)--email">Email</label>
+                        <input type="text" name="soYeuLyLich.email" class="form-control" id="@(id)--email">
+                    </div>
 
-					<div class="form-group">
-						<label for="@(id)--dienThoai">Số điện thoại</label>
-						<input type="text" name="soYeuLyLich.dienThoai" class="form-control" id="@(id)--dienThoai">
-					</div>
+                    <div class="form-group">
+                        <label for="@(id)--dienThoai">Số điện thoại</label>
+                        <input type="text" name="soYeuLyLich.dienThoai" class="form-control" id="@(id)--dienThoai">
+                    </div>
 
-					<partial name="Index.Partial.Them.TruongThongTinNguoiDung" />
+                    <partial name="Index.Partial.Them.TruongThongTinNguoiDung"/>
 
-				</div>
-			</form>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-				<button type="button" id="@(id)--submit" class="btn btn-primary">Tạo</button>
-			</div>
-		</div>
-	</div>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" id="@(id)--submit" class="btn btn-primary">Tạo</button>
+            </div>
+        </div>
+    </div>
 </div>
 <!-- End Index.Partial.Them-->
 

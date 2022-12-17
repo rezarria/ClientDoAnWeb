@@ -1,4 +1,5 @@
-@inject IOptions<Client.ThietLap.MayChuApi> MayChuApi
+@using Client.ThietLap
+@inject IOptions<MayChuApi> MayChuApi
 @{
     string id = ViewData["modal-them-id"]?.ToString() ?? throw new NullReferenceException();
 }

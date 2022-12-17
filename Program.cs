@@ -1,7 +1,11 @@
+#region
+
 using Client.Contexts;
 using Client.ThietLap;
 using Microsoft.EntityFrameworkCore;
 using WebMarkupMin.AspNetCore7;
+
+#endregion
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
@@ -28,13 +32,13 @@ app.UseAuthorization();
 app.UseResponseCaching();
 app.UseWebMarkupMin();
 app.MapControllerRoute(
-	name: "default",
-	pattern: "{controller=Home}/{action=Index}/{id?}");
+	"default",
+	"{controller=Home}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
-	  name: "areas",
-	  pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-	);
+	"areas",
+	"{area:exists}/{controller=Home}/{action=Index}/{id?}"
+);
 
 
 app.Run();

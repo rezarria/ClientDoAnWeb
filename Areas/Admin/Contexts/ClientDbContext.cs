@@ -1,11 +1,17 @@
+#region
+
 using Client.Areas.Admin.Models;
 using Microsoft.EntityFrameworkCore;
+
+#endregion
 
 namespace Client.Contexts;
 
 public class ClientDbContext : DbContext
 {
-    public ClientDbContext(DbContextOptions<ClientDbContext> options) : base(options) { }
+	public ClientDbContext(DbContextOptions<ClientDbContext> options) : base(options)
+	{
+	}
 
-    public DbSet<SidebarNavItem> SidebarNavItem { get; set; } = null!;
+	public DbSet<SidebarNavItem> SidebarNavItem { get; set; } = null!;
 }

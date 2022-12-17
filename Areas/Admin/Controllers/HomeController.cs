@@ -1,13 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿#region
+
+using Microsoft.AspNetCore.Mvc;
+
+#endregion
 
 namespace Client.Areas.Admin.Controllers
 {
-    [Area("Admin")]
-    public class HomeController : Controller
-    {
-        public IActionResult Index()
-        {
-            return View();
-        }
-    }
+	[Area("Admin")]
+	public class HomeController : Controller
+	{
+		public IActionResult Index()
+		{
+			return View();
+		}
+	}
 }

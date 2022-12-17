@@ -1,7 +1,8 @@
-@inject IOptions<Client.ThietLap.MayChuApi> MayChuApi
+@using Client.ThietLap
+@inject IOptions<MayChuApi> MayChuApi
 <script>
 	window.addEventListener('load', function () {
-		$('#@(@ViewData["bang-id"])').DataTable({
+		$('#@(ViewData["bang-id"])').DataTable({
 			responsive: true,
 			autoWidth: false,
 			ajax: {

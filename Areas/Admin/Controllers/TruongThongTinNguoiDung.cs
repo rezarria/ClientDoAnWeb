@@ -1,4 +1,8 @@
+#region
+
 using Microsoft.AspNetCore.Mvc;
+
+#endregion
 
 namespace Client.Areas.Admin.Controllers;
 
