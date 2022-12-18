@@ -2,9 +2,9 @@
 @inject IOptions<MayChuApi> MayChuApi
 <script>
 	window.addEventListener('load', function () {
-		$("input[data-bootstrap-switch]").each(function () {
+		$('input[data-bootstrap-switch]').each(function () {
 			$(this).bootstrapSwitch('state', $(this).prop('checked'));
-		})
+		});
 
 		let modalXem = document.getElementById('modal-xem');
 
@@ -19,12 +19,16 @@
 			columns: [
 				{
 					data: null,
+                    createdCell: function (td, cellData, rowData, rowIndex, colIndex) {
+                    	td.style.width = '5%';
+                    	td.style.whiteSpace = 'nowrap';
+                    },
 					render: function (_, _, _, rowIndex, colIndex) {
 						return rowIndex.row + 1;
 					}
 				},
 				{
-					data: "ten"
+					data: 'ten'
 				},
 				{
 					data: null,
@@ -33,8 +37,7 @@
 						td.style.whiteSpace = 'nowrap';
 					},
 					render: function (data, _, row, _) {
-						return
-						`<button class="btn btn-info" data-toggle="modal" data-target="#@ViewData["modal-xem-id"]" onclick="window['obj-@ViewData["modal-xem-id"]'].nap('${data.id}');"><i class="fa fa-eye"></i></button><button class="btn btn-primary" data-toggle="modal" data-target="#@ViewData["modal-sua-id"]" onclick="window['obj-@ViewData["modal-sua-id"]'].nap('${data.id}');"><i class="fa fa-pen"></i></button><button class="btn btn-danger" data-toggle="modal" data-target="#@ViewData["modal-xoa-id"]" onclick="window['obj-@ViewData["modal-xoa-id"]'].nap('${data.id}');"><i class="fa fa-trash"></i></button>`;
+						return `<button class="btn btn-info" data-toggle="modal" data-target="#@ViewData["modal-xem-id"]" onclick="window['obj-@ViewData["modal-xem-id"]'].nap('${data.id}');"><i class="fa fa-eye"></i></button><button class="btn btn-primary" data-toggle="modal" data-target="#@ViewData["modal-sua-id"]" onclick="window['obj-@ViewData["modal-sua-id"]'].nap('${data.id}');"><i class="fa fa-pen"></i></button><button class="btn btn-danger" data-toggle="modal" data-target="#@ViewData["modal-xoa-id"]" onclick="window['obj-@ViewData["modal-xoa-id"]'].nap('${data.id}');"><i class="fa fa-trash"></i></button>`;
 					}
 				}
 			]

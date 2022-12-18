@@ -1,6 +1,6 @@
-namespace Api.ThietLap;
+namespace Client.ThietLap;
 
-public static class ThietLap
+public partial  class ThietLap
 {
     /// <summary>
     /// </summary>

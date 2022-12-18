@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 #endregion
 
-namespace Client.Contexts;
+namespace Client.Areas.Admin.Contexts;
 
 public class ClientDbContext : DbContext
 {

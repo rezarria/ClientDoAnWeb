@@ -1,6 +1,6 @@
 #region
 
-using Client.Contexts;
+using Client.Areas.Admin.Contexts;
 using Client.ThietLap;
 using Microsoft.EntityFrameworkCore;
 using WebMarkupMin.AspNetCore7;
@@ -10,7 +10,7 @@ using WebMarkupMin.AspNetCore7;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ClientDbContext>(options => options.UseSqlite("DataSource=client.database"));
-builder.Services.ThietLapMVCJSON();
+builder.Services.ThietLapMvcjson();
 builder.Services.WebMarkupMin();
 builder.ThietLapApiMayChu();
 var app = builder.Build();

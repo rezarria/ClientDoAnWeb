@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 #endregion
 
-namespace Client.Areas.Admin.Components.Navbar;
+namespace Client.Areas.Admin.Views.Shared.Components.Navbar;
 
 public class Navbar : ViewComponent
 {

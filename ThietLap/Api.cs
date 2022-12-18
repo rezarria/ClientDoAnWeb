@@ -4,10 +4,9 @@ namespace Client.ThietLap;
 /// </summary>
 public static partial class ThietLap
 {
-    /// <summary>
-    /// </summary>
-    /// <param name="services"></param>
-    public static void ThietLapApiMayChu(this WebApplicationBuilder builder)
+	/// <summary>
+	/// </summary>
+	public static void ThietLapApiMayChu(this WebApplicationBuilder builder)
 	{
 		builder.Services.Configure<MayChuApi>(
 			builder.Configuration.GetSection("MayChuApi")
