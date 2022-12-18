@@ -30,7 +30,7 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthorization();
 app.UseResponseCaching();
-app.UseWebMarkupMin();
+//app.UseWebMarkupMin();
 app.MapControllerRoute(
 	"default",
 	"{controller=Home}/{action=Index}/{id?}");

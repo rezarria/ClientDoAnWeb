@@ -1,58 +1,59 @@
 @using Client.ThietLap
 @inject IOptions<MayChuApi> MayChuApi
 @{
-    string id = ViewData["modal-sua-id"]?.ToString() ?? throw new NullReferenceException();
+	string id = ViewData["modal-sua-id"]?.ToString() ?? throw new NullReferenceException();
 }
 <!-- Begin Index.Partial.Sua-->
 <div class="modal fade" id="@id" tabindex="-1" role="dialog" aria-labelledby="@(id)--label" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="@(id)-label">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form id="@(id)--form">
-                <input type="hidden" name="id" id="@(id)--id">
-                <div class="modal-body">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="@(id)-label">Sửa thông tin người dùng</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form id="@(id)--form">
+				<input type="hidden" name="id" id="@(id)--id">
+				<div class="modal-body">
 
 
-                    <div class="form-group">
-                        <label for="@(id)--hoVaTen">Họ và tên</label>
-                        <input type="text" name="soYeuLyLich.hoVaTen" class="form-control" id="@(id)--hoVaTen">
-                    </div>
+					<div class="form-group">
+						<label for="@(id)--hoVaTen">Họ và tên</label>
+						<input type="text" name="soYeuLyLich.hoVaTen" class="form-control" id="@(id)--hoVaTen">
+					</div>
 
-                    <div class="form-group">
-                        <label for="@(id)--ngaySinh">Ngày sinh</label>
-                        <input type="date" name="soYeuLyLich.ngaySinh" class="form-control" id="@(id)--ngaySinh">
-                    </div>
+					<div class="form-group">
+						<label for="@(id)--ngaySinh">Ngày sinh</label>
+						<input type="date" name="soYeuLyLich.ngaySinh" class="form-control" id="@(id)--ngaySinh">
+					</div>
 
-                    <div class="form-group">
-                        <label for="@(id)--email">Email</label>
-                        <input type="text" name="soYeuLyLich.email" class="form-control" id="@(id)--email">
-                    </div>
+					<div class="form-group">
+						<label for="@(id)--email">Email</label>
+						<input type="text" name="soYeuLyLich.email" class="form-control" id="@(id)--email">
+					</div>
 
-                    <div class="form-group">
-                        <label for="@(id)--soDienThoai">Số điện thoại</label>
-                        <input type="text" name="soYeuLyLich.soDienThoai" class="form-control" id="@(id)--soDienThoai">
-                    </div>
-					
-	                <div id="@(id)--truongGiaTri"></div>
-	                
-                </div>
-            </form>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" id="@(id)--submit" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-    </div>
+					<div class="form-group">
+						<label for="@(id)--soDienThoai">Số điện thoại</label>
+						<input type="text" name="soYeuLyLich.soDienThoai" class="form-control" id="@(id)--soDienThoai">
+					</div>
+
+					<div id="@(id)--truongGiaTri"></div>
+
+				</div>
+			</form>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+				<button type="button" id="@(id)--submit" class="btn btn-primary">Lưu</button>
+			</div>
+		</div>
+	</div>
 </div>
 
 <script>
 	window.addEventListener('load', function () {
 		let dom = document.getElementById('@id');
+
 		dom.data = {
 			id: document.getElementById('@(id)--id'),
 			hoVaTen: document.getElementById('@(id)--hoVaTen'),
@@ -81,31 +82,123 @@
 
 		}
 
+		let cacheTruongTheoKieuNguoiDung = {};
+
+		async function layTruongThongTinNguoiDungTheoKieuNguoiDung(id) {
+			if (cacheTruongTheoKieuNguoiDung[id] == null)
+				cacheTruongTheoKieuNguoiDung[id] = await fetch(`@(MayChuApi.Value.DiaChi)/api/danhsachtruongthongtinnguoidungthuockieunguoidung/theokieunguoidung?id=${id}`)
+					.then(res => res.json());
+		}
+
+		async function veTruongThongTinNguoiDung(id) {
+			let truongGiaTri = document.getElementById('@(id)--truongGiaTri');
+			let data = cacheTruongTheoKieuNguoiDung[id];
+			for (let truong of data) {
+				let div = document.createElement('div');
+				let label = document.createElement('label');
+				let input = document.createElement('input');
+				label.setAttribute('for', `@(id)--${truong.id}`);
+				label.textContent = truong.ten;
+				input.id = `@(id)--${truong.id}`;
+				input.type = truong.kieuDuLieu;
+				input.name = truong.id;
+				input.classList.add('form-control');
+				div.classList.add('form-group');
+				div.appendChild(label);
+				div.appendChild(input);
+				truongGiaTri.appendChild(div);
+			}
+		};
+
+		let cacheTruongThongTinNguoiDung = [];
+
+		async function layDuLieuTruongThongTinNguoiDungCuaNguoiDung(id) {
+			if (cacheTruongThongTinNguoiDung[id] == null
+				||
+				(
+					globalThis.flags != null &&
+					globalThis.flags.includes(id)
+				)
+			) {
+				cacheTruongThongTinNguoiDung[id] = await fetch(`@(MayChuApi.Value.DiaChi)/api/giatritruongthongtinnguoidung?id=${id}`)
+					.then(res => res.json());
+				if (globalThis.flags != null)
+					globalThis.flags.pop(id);
+			}
+		}
+
+		async function napDuLieuTruongThongTinNguoiDung(id) {
+			let data = cacheTruongThongTinNguoiDung[id];
+			for (let x of data) {
+				let input = document.getElementById(`@(id)--${x.idTruongThongTinNguoiDung}`);
+				input.value = x.giaTri;
+				input.dataset.dataset.dataset.id = x.id;
+			}
+		}
+
+		function xoa() {
+			document.getElementById('@(id)--truongGiaTri').childNodes.forEach(node => node.remove());
+		};
+
+		dom.nap = async function (id) {
+			let datas = $('#@ViewData["bang-id"]').DataTable().data();
+			let data = datas.filter(x => x.id === id)[0];
+			this.data.hoVaTen.value = data.soYeuLyLich.hoVaTen;
+			this.data.email.value = data.soYeuLyLich.email;
+			this.data.soDienThoai.value = data.soYeuLyLich.soDienThoai;
+			this.data.ngaySinh.value = data.soYeuLyLich.ngaySinh.substring(0, 10);
+
+			xoa();
+			await layTruongThongTinNguoiDungTheoKieuNguoiDung(data.idKieuNguoiDung);
+			veTruongThongTinNguoiDung(data.idKieuNguoiDung);
+			await layDuLieuTruongThongTinNguoiDungCuaNguoiDung(id);
+			napDuLieuTruongThongTinNguoiDung(id);
+
+		}
+
 		dom.data.submit.addEventListener('click', function () {
 			dom.data.newObj.soYeuLyLich.hoVaTen = dom.data.hoVaTen.value;
 			dom.data.newObj.soYeuLyLich.email = dom.data.email.value;
 			dom.data.newObj.soYeuLyLich.dienThoai = dom.data.soDienThoai.value;
 			dom.data.newObj.soYeuLyLich.ngaySinh = dom.data.ngaySinh.value + dom.data.old.soYeuLyLich.ngaySinh.slice(10);
 
+			var truongGiaTri = [];
+			let cacInput = document.getElementById('@(id)--truongGiaTri').children;
+			for (let item of cacInput) {
+				truongGiaTri.push({
+					id: item.dataset.id.split("--")[0],
+					giaTri: item.value
+				});
+			}
+
 			var diff = jsonpatch.compare(dom.data.old, dom.data.newObj);
-			fetch(`@(MayChuApi.Value.DiaChi)/api/${dom.data.phanLoai}?id=${dom.data.old.id}`, {
+			var task1 = fetch(`@(MayChuApi.Value.DiaChi)/api/nguoidung?id=${dom.data.old.id}`, {
 				method: 'PATCH',
 				body: JSON.stringify(diff),
 				headers: new Headers({ 'content-type': 'application/json' })
-			})
-				.then(res => {
-					switch (res.status) {
-						case 200:
-							$('#@(ViewData["bang-id"])').DataTable().ajax.reload();
-							$(dom).modal('hide');
-							cacheDetails[dom.data.old.id] = null;
+			}).then(res => res.status);
 
-							if (globalThis.flags == null) globalThis.flags = [];
+			var task2 = fetch(`@(MayChuApi.Value.DiaChi)/api/giatritruongthongtinnguoidung/capnhatnho`, {
+				method: 'PATCH',
+				body: JSON.stringify(truongGiaTri),
+				headers: {
+					'context-type': 'application/json'
+				}
+			}).then(res => res.status);
 
-							globalThis.flags.push(dom.data.old.id);
-							break;
-					}
-				});
+
+			Promise.all([task1, task2]).then(res => {
+				if (res[0] === res[1] === 200) {
+					$('#@(ViewData["bang-id"])').DataTable().ajax.reload();
+					$(dom).modal('hide');
+					cacheTruongTheoKieuNguoiDung[dom.data.old.id] = null;
+
+					if (globalThis.flags == null) globalThis.flags = [];
+
+					globalThis.flags.push(dom.data.old.id);
+				}
+			});
+
 		});
 		this['obj-@id'] = dom;
 	});
