@@ -67,21 +67,6 @@
 			newObj: null,
 		};
 
-		let cacheDetails = {};
-
-		dom.nap = async function (id) {
-			let data = $('#@ViewData["bang-id"]').DataTable().data().filter(x => x.id === id)[0];
-			dom.data.old = data;
-			dom.data.phanLoai = data.phanLoai;
-			dom.data.hoVaTen.value = data.soYeuLyLich.hoVaTen;
-			dom.data.email.value = data.soYeuLyLich.email;
-			dom.data.soDienThoai.value = data.soYeuLyLich.dienThoai;
-			dom.data.ngaySinh.value = data.soYeuLyLich.ngaySinh.substring(0, 10);
-
-			dom.data.newObj = JSON.parse(JSON.stringify(dom.data.old));
-
-		}
-
 		let cacheTruongTheoKieuNguoiDung = {};
 
 		async function layTruongThongTinNguoiDungTheoKieuNguoiDung(id) {
@@ -120,7 +105,7 @@
 					globalThis.flags.includes(id)
 				)
 			) {
-				cacheTruongThongTinNguoiDung[id] = await fetch(`@(MayChuApi.Value.DiaChi)/api/giatritruongthongtinnguoidung?id=${id}`)
+				cacheTruongThongTinNguoiDung[id] = await fetch(`@(MayChuApi.Value.DiaChi)/api/giatritruongthongtinnguoidung/phutro?id=${id}`)
 					.then(res => res.json());
 				if (globalThis.flags != null)
 					globalThis.flags.pop(id);
@@ -132,7 +117,8 @@
 			for (let x of data) {
 				let input = document.getElementById(`@(id)--${x.idTruongThongTinNguoiDung}`);
 				input.value = x.giaTri;
-				input.dataset.dataset.dataset.id = x.id;
+				input.dataset.old = x.giaTri;
+				input.dataset.id = x.id;
 			}
 		}
 
@@ -147,6 +133,8 @@
 			this.data.email.value = data.soYeuLyLich.email;
 			this.data.soDienThoai.value = data.soYeuLyLich.soDienThoai;
 			this.data.ngaySinh.value = data.soYeuLyLich.ngaySinh.substring(0, 10);
+			this.data.newObj = JSON.parse(JSON.stringify(data));
+			this.data.old = data;
 
 			xoa();
 			await layTruongThongTinNguoiDungTheoKieuNguoiDung(data.idKieuNguoiDung);
@@ -159,42 +147,54 @@
 		dom.data.submit.addEventListener('click', function () {
 			dom.data.newObj.soYeuLyLich.hoVaTen = dom.data.hoVaTen.value;
 			dom.data.newObj.soYeuLyLich.email = dom.data.email.value;
-			dom.data.newObj.soYeuLyLich.dienThoai = dom.data.soDienThoai.value;
+			dom.data.newObj.soYeuLyLich.soDienThoai = dom.data.soDienThoai.value;
 			dom.data.newObj.soYeuLyLich.ngaySinh = dom.data.ngaySinh.value + dom.data.old.soYeuLyLich.ngaySinh.slice(10);
 
 			var truongGiaTri = [];
-			let cacInput = document.getElementById('@(id)--truongGiaTri').children;
+			let cacInput = document.getElementById('@(id)--truongGiaTri').querySelectorAll('input[data-id]');
 			for (let item of cacInput) {
-				truongGiaTri.push({
-					id: item.dataset.id.split("--")[0],
-					giaTri: item.value
-				});
+				if (item.dataset.old !== item.value)
+					truongGiaTri.push({
+						id: item.dataset.id.split("--")[0],
+						giaTri: item.value
+					});
 			}
 
 			var diff = jsonpatch.compare(dom.data.old, dom.data.newObj);
-			var task1 = fetch(`@(MayChuApi.Value.DiaChi)/api/nguoidung?id=${dom.data.old.id}`, {
-				method: 'PATCH',
-				body: JSON.stringify(diff),
-				headers: new Headers({ 'content-type': 'application/json' })
-			}).then(res => res.status);
 
-			var task2 = fetch(`@(MayChuApi.Value.DiaChi)/api/giatritruongthongtinnguoidung/capnhatnho`, {
-				method: 'PATCH',
-				body: JSON.stringify(truongGiaTri),
-				headers: {
-					'context-type': 'application/json'
-				}
-			}).then(res => res.status);
+			let task = [];
+
+			if (diff.length != 0)
+				task.push(
+					fetch(`@(MayChuApi.Value.DiaChi)/api/nguoidung?id=${dom.data.old.id}`, {
+						method: 'PATCH',
+						body: JSON.stringify(diff),
+						headers: {
+							'content-type': 'application/json'
+						}
+					}).then(res => res.status)
+				);
 
 
-			Promise.all([task1, task2]).then(res => {
-				if (res[0] === res[1] === 200) {
+			if (truongGiaTri.length != 0)
+				task.push(fetch(`@(MayChuApi.Value.DiaChi)/api/giatritruongthongtinnguoidung/capnhatnho`, {
+					method: 'PATCH',
+					body: JSON.stringify(truongGiaTri),
+					headers: {
+						'content-type': 'application/json'
+					}
+				}).then(res => res.status));
+
+
+			if (task.length == 0)
+				$(dom).modal('hide');
+
+			Promise.all(task).then(res => {
+				if (res.fill(x => x === 200).length == task.length) {
 					$('#@(ViewData["bang-id"])').DataTable().ajax.reload();
 					$(dom).modal('hide');
 					cacheTruongTheoKieuNguoiDung[dom.data.old.id] = null;
-
 					if (globalThis.flags == null) globalThis.flags = [];
-
 					globalThis.flags.push(dom.data.old.id);
 				}
 			});
