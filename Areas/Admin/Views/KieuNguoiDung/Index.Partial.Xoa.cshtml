@@ -40,7 +40,7 @@
             this.data.ten.textContent = data.ten;
         }
         dom.data.submit.addEventListener('click', function () {
-            fetch('@(MayChuApi.Value.DiaChi)/api/kieutaikhoan',
+            fetch('@(MayChuApi.Value.DiaChi)/api/kieunguoidung',
                 {
                     method: 'DELETE',
                     body: JSON.stringify([dom.data.id]),
@@ -50,7 +50,7 @@
                 })
                 .then(res => {
                     switch (res.status) {
-                        case 204:
+                        case 200:
                             $('#@ViewData["bang-id"]').DataTable().ajax.reload();
                             $(dom).modal('hide');
                             break;

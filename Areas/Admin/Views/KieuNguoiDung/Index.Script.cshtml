@@ -9,6 +9,9 @@
 		let modalXem = document.getElementById('modal-xem');
 
 		$('#@(ViewData["bang-id"])').DataTable({
+			language: {
+				url: '/vi.json'
+			},
 			responsive: true,
 			autoWidth: false,
 			ajax: {
@@ -19,10 +22,10 @@
 			columns: [
 				{
 					data: null,
-                    createdCell: function (td, cellData, rowData, rowIndex, colIndex) {
-                    	td.style.width = '5%';
-                    	td.style.whiteSpace = 'nowrap';
-                    },
+					createdCell: function (td, cellData, rowData, rowIndex, colIndex) {
+						td.style.width = '5%';
+						td.style.whiteSpace = 'nowrap';
+					},
 					render: function (_, _, _, rowIndex, colIndex) {
 						return rowIndex.row + 1;
 					}
