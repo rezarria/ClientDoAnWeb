@@ -8,7 +8,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="@(id)-label">Modal title</h5>
+                <h5 class="modal-title" id="@(id)-label">Sửa thông tin về môn</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -29,8 +29,8 @@
                 </div>
             </form>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" id="@(id)--submit" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" id="@(id)--submit" class="btn btn-primary">Lưu</button>
             </div>
         </div>
     </div>
@@ -59,7 +59,7 @@
         dom.data.submit.addEventListener('click', function () {
             let newObj = Object.fromEntries(new FormData(dom.data.form).entries());
             var diff = jsonpatch.compare(dom.data.old, newObj);
-            fetch(`@(MayChuApi.Value.DiaChi)/api/mon?id=${dom.data.old.id}`, {
+            fetch(`@(MayChuApi.Value.DiaChi)/api/monhoc?id=${dom.data.old.id}`, {
                 method: 'PATCH',
                 body: JSON.stringify(diff),
                 headers: new Headers({ 'content-type': 'application/json' })

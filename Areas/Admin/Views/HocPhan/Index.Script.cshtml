@@ -13,7 +13,7 @@
 					method: 'DELETE',
 					body: JSON.stringify([id]),
 					headers: {
-						'Content-Type' : 'application/json'
+						'Content-Type': 'application/json'
 					}
 				})
 				.then(res => {
@@ -26,6 +26,9 @@
 		}
 
 		$('#@(ViewData["bang-id"])').DataTable({
+			language: {
+				url: '/vi.json'
+			},
 			responsive: true,
 			autoWidth: false,
 			ajax: {

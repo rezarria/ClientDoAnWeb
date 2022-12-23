@@ -16,8 +16,7 @@ builder.ThietLapApiMayChu();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
+if (!app.Environment.IsDevelopment()){
 	app.UseExceptionHandler("/Home/Error");
 	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 	app.UseHsts();
@@ -30,15 +29,8 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthorization();
 app.UseResponseCaching();
-//app.UseWebMarkupMin();
-app.MapControllerRoute(
-	"default",
-	"{controller=Home}/{action=Index}/{id?}");
-
-app.MapControllerRoute(
-	"areas",
-	"{area:exists}/{controller=Home}/{action=Index}/{id?}"
-);
-
+if (!app.Environment.IsDevelopment())
+	app.UseWebMarkupMin();
+app.MapControllerRoute("default", "{area=admin}/{controller=nguoidung}/{action=index}");
 
 app.Run();

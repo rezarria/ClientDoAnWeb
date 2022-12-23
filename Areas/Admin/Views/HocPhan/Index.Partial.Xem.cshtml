@@ -1,50 +1,50 @@
 @using Client.ThietLap
 @inject IOptions<MayChuApi> MayChuApi
 @{
-    string id = ViewData["modal-xem-id"]?.ToString() ?? throw new NullReferenceException();
+	string id = ViewData["modal-xem-id"]?.ToString() ?? throw new NullReferenceException();
 }
 <!-- Begin Index.Partial.Xem-->
 <div class="modal fade" id="@id" tabindex="-1" role="dialog" aria-labelledby="@(id)--label" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="@(id)-label">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form id="@(id)--form">
-                <div class="modal-body">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="@(id)-label">Modal title</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form id="@(id)--form">
+				<div class="modal-body">
 
-                    <div class="form-group">
-                        <label for="@(id)--ten">Tên môn</label>
-                        <input type="text" name="ten" class="form-control" id="@(id)--ten" disabled>
-                    </div>
+					<div class="form-group">
+						<label for="@(id)--ten">Tên môn</label>
+						<input type="text" name="ten" class="form-control" id="@(id)--ten" disabled>
+					</div>
 
-                    <div class="form-group">
-                        <label for="@(id)--mieuTa">Miêu tả</label>
-                        <input type="text" name="mieuTa" class="form-control" id="@(id)--mieuTa" disabled>
-                    </div>
+					<div class="form-group">
+						<label for="@(id)--mieuTa">Miêu tả</label>
+						<input type="text" name="mieuTa" class="form-control" id="@(id)--mieuTa" disabled>
+					</div>
 
-                    <div class="form-group">
-                        <label for="@(id)--soBuoi">Số buổi</label>
-                        <input type="number" name="soBuoi" class="form-control" id="@(id)--soBuoi" disabled>
-                    </div>
+					<div class="form-group">
+						<label for="@(id)--soBuoi">Số buổi</label>
+						<input type="number" name="soBuoi" class="form-control" id="@(id)--soBuoi" disabled>
+					</div>
 
-                    <div class="form-group">
-                        <label for="@(id)--IdMonHoc">Môn</label>
-                        <select id="@(id)--IdMonHoc" name="IdMonHoc" class="form-control select2" disabled>
-                        </select>
-                    </div>
+					<div class="form-group">
+						<label for="@(id)--IdMonHoc">Môn</label>
+						<select id="@(id)--IdMonHoc" name="IdMonHoc" class="form-control select2" disabled>
+						</select>
+					</div>
 
-                </div>
-            </form>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" id="@(id)--submit" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-    </div>
+				</div>
+			</form>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="button" id="@(id)--submit" class="btn btn-primary">Save changes</button>
+			</div>
+		</div>
+	</div>
 </div>
 
 <script>
@@ -55,19 +55,17 @@
 			mieuTa: document.getElementById('@(id)--mieuTa'),
 			soBuoi: document.getElementById('@(id)--soBuoi'),
 			idMonHoc: document.getElementById('@(id)--IdMonHoc')
-
 		};
 		let cache = [];
 		dom.nap = async function (id) {
-			let datas = $('#@ViewData["bang-id"]').DataTable().data();
-			data = datas.filter(x => x.id == id)[0];
+			data = $('#@ViewData["bang-id"]').DataTable().data().filter(x => x.id == id)[0];
 			dom.data.ten.value = data.ten;
 			dom.data.mieuTa.value = data.mieuTa;
 			dom.data.soBuoi.value = data.soBuoi;
-			if (cache[datas.monId] is null) 
-			{
-				cache[datas.monId] = await fetch(`@(MayChuApi.Value.DiaChi)/api/mon?ids=${data.monId}`).then(res => res.json())[0];
-				let hocPhan = cache[datas.monId];
+			if (cache[data.idMonHoc] == null) {
+				let tmp = await fetch(`@(MayChuApi.Value.DiaChi)/api/monhoc?ids=${data.idMonHoc}`).then(res => res.json());
+				cache[data.idMonHoc] = tmp[0];
+				let hocPhan = cache[data.idMonHoc];
 				let option = document.createElement('option');
 				option.value = hocPhan.id;
 				option.textContent = hocPhan.ten;
@@ -75,7 +73,7 @@
 			}
 			dom.data.idMonHoc.selectedIndex = 0;
 		}
-	this['obj-@id'] = dom;
+		this['obj-@id'] = dom;
 	});
 </script>
 <!-- End Index.Partial.Xem-->
