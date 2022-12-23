@@ -117,7 +117,6 @@
 			for (let x of data) {
 				let input = document.getElementById(`@(id)--${x.idTruongThongTinNguoiDung}`);
 				input.value = x.giaTri;
-				input.dataset.old = x.giaTri;
 				input.dataset.id = x.id;
 			}
 		}
@@ -141,7 +140,6 @@
 			veTruongThongTinNguoiDung(data.idKieuNguoiDung);
 			await layDuLieuTruongThongTinNguoiDungCuaNguoiDung(id);
 			napDuLieuTruongThongTinNguoiDung(id);
-
 		}
 
 		dom.data.submit.addEventListener('click', function () {
@@ -151,13 +149,24 @@
 			dom.data.newObj.soYeuLyLich.ngaySinh = dom.data.ngaySinh.value + dom.data.old.soYeuLyLich.ngaySinh.slice(10);
 
 			var truongGiaTri = [];
-			let cacInput = document.getElementById('@(id)--truongGiaTri').querySelectorAll('input[data-id]');
+			let cacInput = document.getElementById('@(id)--truongGiaTri').querySelectorAll('input');
+			let giaTriTruongCuaNguoiDung = cacheTruongThongTinNguoiDung[dom.data.old.id];
 			for (let item of cacInput) {
-				if (item.dataset.old !== item.value)
+				if (item.dataset.hasOwnProperty('id')) {
+					let idGiaTri = item.dataset.id;
+					
+					if (item.value !== giaTriTruongCuaNguoiDung.filter(x => x.id === idGiaTri)[0].giaTri)
+						truongGiaTri.push({
+							id: idGiaTri,
+							giaTri: item.value
+						});
+				}
+				else {
 					truongGiaTri.push({
-						id: item.dataset.id.split("--")[0],
+						idTruongThongTinNguoiDung: item.id.split("--")[1],
 						giaTri: item.value
 					});
+				}
 			}
 
 			var diff = jsonpatch.compare(dom.data.old, dom.data.newObj);
@@ -177,7 +186,7 @@
 
 
 			if (truongGiaTri.length != 0)
-				task.push(fetch(`@(MayChuApi.Value.DiaChi)/api/giatritruongthongtinnguoidung/capnhatnho`, {
+				task.push(fetch(`@(MayChuApi.Value.DiaChi)/api/giatritruongthongtinnguoidung/capnhatnho?id=${dom.data.old.id}`, {
 					method: 'PATCH',
 					body: JSON.stringify(truongGiaTri),
 					headers: {

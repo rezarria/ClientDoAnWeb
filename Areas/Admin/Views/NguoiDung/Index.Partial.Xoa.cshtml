@@ -1,59 +1,63 @@
 @using Client.ThietLap
 @inject IOptions<MayChuApi> MayChuApi
 @{
-    string id = ViewData["modal-xoa-id"]?.ToString() ?? throw new NullReferenceException();
+	string id = ViewData["modal-xoa-id"]?.ToString() ?? throw new NullReferenceException();
 }
 <!-- Begin Index.Partial.Xoa-->
 <div class="modal fade" id="@id" tabindex="-1" role="dialog" aria-labelledby="@(id)--label" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content bg-danger">
-            <div class="modal-header">
-                <h5 class="modal-title" id="@(id)-label">Xoá</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Xoá môn <span id="@(id)--ten"></span>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" id="@(id)--submit" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-    </div>
+	<div class="modal-dialog" role="document">
+		<div class="modal-content bg-danger">
+			<div class="modal-header">
+				<h5 class="modal-title" id="@(id)-label">Xoá</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				Xoá người dùng <span id="@(id)--ten"></span>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+				<button type="button" id="@(id)--submit" class="btn btn-danger">Xoá</button>
+			</div>
+		</div>
+	</div>
 </div>
 
 <script>
-    window.addEventListener('load', function () {
-        let dom = document.getElementById('@id');
-        dom.data = {
-            ten: document.getElementById('@(id)--ten'),
-            submit: document.getElementById('@(id)--submit'),
-            close: document.getElementById('@(id)--close'),
-            id: null
-        };
-        dom.nap = function (id) {
-            let datas = $('#@ViewData["bang-id"]').DataTable().data();
-            data = datas.filter(x => x.id === id)[0];
-            dom.data.id = data.id;
-            this.data.ten.textContent = data.soYeuLyLich.hoVaTen;
-        }
-        dom.data.submit.addEventListener('click', function () {
-            fetch(`@(MayChuApi.Value.DiaChi)/api/nguoidung?id=${dom.data.id}`,
-                {
-                    method: 'DELETE'
-                })
-                .then(res => {
-                    switch (res.status) {
-                        case 204:
-                            $('#@ViewData["bang-id"]').DataTable().ajax.reload();
-                            $(dom).modal('hide');
-                            break;
-                    }
-                });
-        });
-        this['obj-@id'] = dom;
-    });
+	window.addEventListener('load', function () {
+		let dom = document.getElementById('@id');
+		dom.data = {
+			ten: document.getElementById('@(id)--ten'),
+			submit: document.getElementById('@(id)--submit'),
+			close: document.getElementById('@(id)--close'),
+			id: null
+		};
+		dom.nap = function (id) {
+			let datas = $('#@ViewData["bang-id"]').DataTable().data();
+			data = datas.filter(x => x.id === id)[0];
+			dom.data.id = data.id;
+			this.data.ten.textContent = data.soYeuLyLich.hoVaTen;
+		}
+		dom.data.submit.addEventListener('click', function () {
+			fetch('@(MayChuApi.Value.DiaChi)/api/nguoidung',
+				{
+					method: 'DELETE',
+					body: JSON.stringify([dom.data.id]),
+					headers: {
+						"content-type": "application/json"
+					}
+				})
+				.then(res => {
+					switch (res.status) {
+						case 200:
+							$('#@ViewData["bang-id"]').DataTable().ajax.reload();
+							$(dom).modal('hide');
+							break;
+					}
+				});
+		});
+		this['obj-@id'] = dom;
+	});
 </script>
 <!-- End Index.Partial.Xoa-->
