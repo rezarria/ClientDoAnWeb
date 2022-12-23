@@ -116,13 +116,15 @@
 			let data = cacheTruongThongTinNguoiDung[id];
 			for (let x of data) {
 				let input = document.getElementById(`@(id)--${x.idTruongThongTinNguoiDung}`);
-				input.value = x.giaTri;
-				input.dataset.id = x.id;
+				if (input != null) {
+					input.value = x.giaTri;
+					input.dataset.id = x.id;
+				}
 			}
 		}
 
 		function xoa() {
-			document.getElementById('@(id)--truongGiaTri').childNodes.forEach(node => node.remove());
+			document.getElementById('@(id)--truongGiaTri').replaceChildren();
 		};
 
 		dom.nap = async function (id) {
@@ -154,7 +156,7 @@
 			for (let item of cacInput) {
 				if (item.dataset.hasOwnProperty('id')) {
 					let idGiaTri = item.dataset.id;
-					
+
 					if (item.value !== giaTriTruongCuaNguoiDung.filter(x => x.id === idGiaTri)[0].giaTri)
 						truongGiaTri.push({
 							id: idGiaTri,
@@ -192,7 +194,16 @@
 					headers: {
 						'content-type': 'application/json'
 					}
-				}).then(res => res.status));
+				}).then(res => {
+					switch (res.status) {
+						case 200:
+							cacheTruongThongTinNguoiDung[dom.data.old.id] = null;
+							if (globalThis.flags == null) globalThis.flags = [];
+							globalThis.flags.push(dom.data.old.id);
+							break;
+					}
+					return res.status;
+				}));
 
 
 			if (task.length == 0)
@@ -202,9 +213,6 @@
 				if (res.fill(x => x === 200).length == task.length) {
 					$('#@(ViewData["bang-id"])').DataTable().ajax.reload();
 					$(dom).modal('hide');
-					cacheTruongTheoKieuNguoiDung[dom.data.old.id] = null;
-					if (globalThis.flags == null) globalThis.flags = [];
-					globalThis.flags.push(dom.data.old.id);
 				}
 			});
 

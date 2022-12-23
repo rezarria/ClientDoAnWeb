@@ -34,7 +34,7 @@
 						<label for="@(id)--soDienThoai">Số điện thoại</label>
 						<input type="text" name="soYeuLyLich.soDienThoai" class="form-control" id="@(id)--soDienThoai" disabled>
 					</div>
-					
+
 					<div id="@(id)--truongGiaTri"></div>
 
 				</div>
@@ -70,20 +70,20 @@
 			let truongGiaTri = document.getElementById('@(id)--truongGiaTri');
 			let data = cacheTruongTheoKieuNguoiDung[id];
 			for (let truong of data) {
-                let div = document.createElement('div');
-                let label = document.createElement('label');
-                let input = document.createElement('input');
-                label.setAttribute('for', `@(id)--${truong.id}`);
-                label.textContent = truong.ten;
-                input.id = `@(id)--${truong.id}`;
-                input.type = truong.kieuDuLieu;
-                input.name = truong.id;
-                input.classList.add('form-control');
-				input.setAttribute('disabled','');
-                div.classList.add('form-group');
-                div.appendChild(label);
-                div.appendChild(input);
-                truongGiaTri.appendChild(div);
+				let div = document.createElement('div');
+				let label = document.createElement('label');
+				let input = document.createElement('input');
+				label.setAttribute('for', `@(id)--${truong.id}`);
+				label.textContent = truong.ten;
+				input.id = `@(id)--${truong.id}`;
+				input.type = truong.kieuDuLieu;
+				input.name = truong.id;
+				input.classList.add('form-control');
+				input.setAttribute('disabled', '');
+				div.classList.add('form-group');
+				div.appendChild(label);
+				div.appendChild(input);
+				truongGiaTri.appendChild(div);
 			}
 		};
 
@@ -107,14 +107,16 @@
 		async function napDuLieuTruongThongTinNguoiDung(id) {
 			let data = cacheTruongTheoKieuNguoiDung[id];
 			for (let x of data) {
-				document.getElementById(`@(id)--${x.idTruongThongTinNguoiDung}`).value = x.giaTri;
+				let input = document.getElementById(`@(id)--${x.idTruongThongTinNguoiDung}`);
+				if (input != null)
+					input.value = x.giaTri;
 			}
 		}
-	
+
 		function xoa() {
-			document.getElementById('@(id)--truongGiaTri').childNodes.forEach(node=>node.remove());
+			document.getElementById('@(id)--truongGiaTri').replaceChildren();
 		};
-		
+
 		dom.nap = async function (id) {
 			let datas = $('#@ViewData["bang-id"]').DataTable().data();
 			let data = datas.filter(x => x.id === id)[0];
