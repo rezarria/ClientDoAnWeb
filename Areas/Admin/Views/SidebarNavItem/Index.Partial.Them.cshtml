@@ -1,75 +1,139 @@
+@model Client.Areas.Admin.Models.SidebarNavItem
 @{
-    string id = ViewData["id"]?.ToString() ?? throw new NullReferenceException();
+	string id = ViewData["id"]?.ToString() ?? throw new NullReferenceException();
 }
 <!-- Begin Index.Partial.Them-->
 <div class="modal fade" id="@id" tabindex="-1" role="dialog" aria-labelledby="@(id)--label" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="@(id)-label">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form id="@(id)--form">
-                <div class="modal-body">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="@(id)-label">Modal title</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form id="@(id)--form">
+				<div class="modal-body">
 
-                    <div class="form-group">
-                        <label for="@(id)--name">Tên</label>
-                        <input type="text" name="name" class="form-control" id="@(id)--name">
-                    </div>
+					<div class="form-group">
+						<label for="@(id)--name">Tên</label>
+						<input asp-for="Name" type="text" name="name" class="form-control" id="@(id)--name">
+						<span asp-validation-for="Name" data-valmsg-for="name" class="text-danger"></span>
+					</div>
 
-                    <div class="form-group">
-                        <label for="@(id)--order">Thứ tự</label>
-                        <input type="number" name="order" class="form-control" id="@(id)--order">
-                    </div>
+					<div class="form-group">
+						<label for="@(id)--order">Thứ tự</label>
+						<input asp-for"Order" type="number" name="order" class="form-control" id="@(id)--order">
+						<span asp-validation-for="Order" data-valmsg-for="order" class="text-danger"></span>
+					</div>
 
-                    <div class="form-group">
-                        <label for="@(id)--url">URL</label>
-                        <input type="number" name="url" class="form-control" id="@(id)--url">
-                    </div>
+					<div class="form-group">
+						<label for="@(id)--url">URL</label>
+						<input type="text" name="url" class="form-control" id="@(id)--url">
+						<span asp-validation-for="Url" data-valmsg-for="url" class="text-danger"></span>
+					</div>
 
-                    <div class="form-group">
-                        <label for="@(id)--action">Action</label>
-                        <input type="number" name="action" class="form-control" id="@(id)--action">
-                    </div>
+					<div class="form-group">
+						<label for="@(id)--action">Action</label>
+						<input type="text" name="action" class="form-control" id="@(id)--action">
+						<span asp-validation-for="Action" data-valmsg-for="action" class="text-danger"></span>
+					</div>
 
-                    <div class="form-group">
-                        <label for="@(id)--controller">Controller</label>
-                        <input type="number" name="controller" class="form-control" id="@(id)--controller">
-                    </div>
+					<div class="form-group">
+						<label for="@(id)--controller">Controller</label>
+						<input type="text" name="controller" class="form-control" id="@(id)--controller">
+						<span asp-validation-for="Controller" data-valmsg-for="controller" class="text-danger"></span>
+					</div>
 
-                    <div class="form-group">
-                        <label for="@(id)--area">Area</label>
-                        <input type="number" name="area" class="form-control" id="@(id)--area">
-                    </div>
+					<div class="form-group">
+						<label for="@(id)--area">Area</label>
+						<input type="text" name="area" class="form-control" id="@(id)--area">
+						<span asp-validation-for="Area" data-valmsg-for="area" class="text-danger"></span>
+					</div>
 
-                    <div class="form-group">
-                        <label for="@(id)--icon">Icon</label>
-                        <input type="text" name="icon" class="form-control" id="@(id)--icon">
-                    </div>
+					<div class="form-group">
+						<label for="@(id)--icon">Icon</label>
+						<input type="text" name="icon" class="form-control" id="@(id)--icon">
+						<span asp-validation-for="Icon" data-valmsg-for="icon" class="text-danger"></span>
+					</div>
 
-                    <div class="form-group">
-                        <label for="@(id)--active">Kích hoạt</label>
-                        <br>
-                        <input type="checkbox" name="active" id="@(id)--active" checked data-bootstrap-switch>
-                    </div>
+					<div class="form-group">
+						<label for="@(id)--active">Kích hoạt</label>
+						<br>
+						<input type="checkbox" name="active" id="@(id)--active" checked data-bootstrap-switch>
+						<span asp-validation-for="Active" data-valmsg-for="active" class="text-danger"></span>
+					</div>
 
-                </div>
-            </form>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" id="@(id)--submit" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-    </div>
+					<div class="form-group">
+						<label for="@(id)--useUrl">Dùng AAC</label>
+						<br>
+						<input type="checkbox" name="active" id="@(id)--useAAC" data-bootstrap-switch>
+						<span asp-validation-for="UseAAC" data-valmsg-for="useAAC" class="text-danger"></span>
+					</div>
+
+					<div class="form-group">
+						<label for="@(id)--useUrl">Dùng URL</label>
+						<br>
+						<input type="checkbox" name="active" id="@(id)--useUrl" data-bootstrap-switch>
+						<span asp-validation-for="UseUrl" data-valmsg-for="useUrl" class="text-danger"></span>
+					</div>
+
+				</div>
+			</form>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+				<button type="button" id="@(id)--submit" class="btn btn-primary">Tạo</button>
+			</div>
+		</div>
+	</div>
 </div>
 <!-- End Index.Partial.Them-->
 
 <script>
-    window.addEventListener('load', function () {
-        let submit = document.getElementById('@(id)-submit');
-        /**@@type {HTMLFormElement}*/
-        let form = document.getElementById('@(id)--form');
-    });
+	window.addEventListener('load', function () {
+
+		let submit = document.getElementById('@(id)--submit');
+
+		submit.addEventListener('click', function () {
+			if ($('#@(id)--form').valid()) {
+
+				let data = {
+					name: document.getElementById('@(id)--name').value,
+					order: document.getElementById('@(id)--order').value,
+					icon: document.getElementById('@(id)--icon').value,
+					active: document.getElementById('@(id)--active').checked,
+					useUrl: document.getElementById('@(id)--useUrl').checked,
+					useAAC: document.getElementById('@(id)--useAAC').checked
+				}
+
+				let url = document.getElementById('@(id)--url');
+				if (url.length !== 0)
+					data.url = url.value;
+				else {
+					data.action = document.getElementById('@(id)--action').value;
+					data.controller = document.getElementById('@(id)--controller').value;
+					data.area = document.getElementById('@(id)--area').value;
+				}
+
+				fetch('/api/sidebarnavitem', {
+					method: 'POST',
+					body: JSON.stringify(data),
+					headers: {
+						'content-type': 'application/json'
+					}
+				}).then(res => {
+					switch (res.status) {
+						case 201: {
+							$('#@id').modal('hide');
+							$('#@(ViewData["bang-id"])').dataTable().DataTable().ajax.reload();
+						}
+					}
+				});
+
+
+			}
+		});
+
+
+	})
 </script>

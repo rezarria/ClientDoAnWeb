@@ -1,5 +1,6 @@
 #region
 
+using System.Linq.Expressions;
 using Client.Areas.Admin.Contexts;
 using Client.Areas.Admin.Models;
 using Microsoft.AspNetCore.JsonPatch;
@@ -17,29 +18,35 @@ namespace Client.Areas.Api.Controllers
 	{
 		private readonly ClientDbContext _context;
 
+		private async Task<TOutputType[]> Get<TOutputType>(
+		Expression<Func<SidebarNavItem, TOutputType>> expression,
+		[FromQuery] Guid[]? ids,
+		[FromQuery] int take = -1,
+		[FromQuery] int skip = 0)
+		where TOutputType : class
+		{
+			IQueryable<SidebarNavItem> query = _context.SidebarNavItem.AsQueryable();
+
+			if (ids is not null && ids.Any())
+				query = query.Where(x => ids.Contains(x.Id));
+
+			if (take > -1)
+				query = query.Take(take);
+
+			if (skip > 0)
+				query = query.Skip(skip);
+
+			return await query.Select(expression).AsNoTracking().ToArrayAsync(HttpContext.RequestAborted);
+		}
+
 		public SidebarNavItemController(ClientDbContext context)
 		{
 			_context = context;
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> Get(Guid? id, int? skip, int? take)
-		{
-			if (id is not null)
-				return Ok(await GetById(id.Value));
-			return Ok(await GetAll(skip, take));
-		}
-
-		private async Task<IEnumerable<SidebarNavItem>> GetAll(int? skip, int? take)
-		{
-			skip ??= 0;
-			take ??= 1000;
-			return await _context.SidebarNavItem
-				.Where(x => x.ParentId == null)
-				.Skip(skip.Value)
-				.Take(take.Value)
-				.ToListAsync(HttpContext.RequestAborted);
-		}
+		public async Task<IActionResult> GetAll(Guid[]? ids, int skip = -0, int take = -1)
+		=> Ok(await Get(DTOs.SidebarNavItem.Get.Expression, ids, take, skip));
 
 		private async Task<SidebarNavItem?> GetById(Guid id)
 		{
@@ -50,6 +57,14 @@ namespace Client.Areas.Api.Controllers
 			if (sidebarNavItem == null) return null;
 
 			return sidebarNavItem;
+		}
+
+		[HttpGet]
+		[Route("single")]
+		public async Task<IActionResult> Single(Guid id)
+		{
+			_context.SidebarNavItem.Where(x => x.Id == id).Select(DTOs.SidebarNavItem.Get.Expression);
+			return Ok();
 		}
 
 		// PUT: api/SidebarNavItem/5
@@ -82,21 +97,17 @@ namespace Client.Areas.Api.Controllers
 		{
 			_context.SidebarNavItem.Attach(sidebarNavItem);
 			await _context.SaveChangesAsync();
-
-			return CreatedAtAction(nameof(Get), new { id = sidebarNavItem.Id }, sidebarNavItem);
+			return CreatedAtAction(nameof(GetAll), new { id = sidebarNavItem.Id }, sidebarNavItem);
 		}
 
 		// DELETE: api/SidebarNavItem/5
 		[HttpDelete]
-		public async Task<IActionResult> DeleteSidebarNavItem(Guid id)
+		public async Task<IActionResult> DeleteSidebarNavItem([FromBody] Guid[] id)
 		{
-			var sidebarNavItem = await _context.SidebarNavItem.FindAsync(id);
-			if (sidebarNavItem == null) return NotFound();
-
-			_context.SidebarNavItem.Remove(sidebarNavItem);
+			var sidebarNavItem = _context.SidebarNavItem.Where(x => id.Contains(x.Id));
+			_context.SidebarNavItem.RemoveRange(sidebarNavItem);
 			await _context.SaveChangesAsync();
-
-			return NoContent();
+			return Ok();
 		}
 
 		public async Task<IActionResult> Update(Guid id, JsonPatchDocument<SidebarNavItem> patchDocument)
@@ -107,6 +118,30 @@ namespace Client.Areas.Api.Controllers
 			if (!ModelState.IsValid) return BadRequest(ModelState);
 			_context.SaveChanges();
 			return Ok();
+		}
+
+		/// <summary>
+		///     Cập nhật mục theo id
+		/// </summary>
+		/// <param name="id">Guid</param>
+		/// <param name="path">theo cấu trúc fast joson patch</param>
+		/// <returns></returns>
+		/// <response code="200">Cập nhật mục thành công và trả về mục</response>
+		[HttpPatch]
+		public async Task<IActionResult> Patch([FromQuery] Guid id, [FromBody] JsonPatchDocument<SidebarNavItem> path)
+		{
+			SidebarNavItem? item = await _context.SidebarNavItem.FirstOrDefaultAsync(x => x.Id == id, HttpContext.RequestAborted);
+			if (item is null)
+				return NotFound();
+
+			path.ApplyTo(item, ModelState);
+
+			if (!ModelState.IsValid)
+				return BadRequest(ModelState);
+
+			await _context.SaveChangesAsync(HttpContext.RequestAborted);
+
+			return Ok(item);
 		}
 
 		private bool SidebarNavItemExists(Guid id)

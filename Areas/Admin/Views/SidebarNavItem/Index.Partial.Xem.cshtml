@@ -1,66 +1,118 @@
 @{
-    string id = ViewData["id"]?.ToString() ?? throw new NullReferenceException();
+	string id = ViewData["modal-xem-id"]?.ToString() ?? throw new NullReferenceException();
 }
 <!-- Begin Index.Partial.Xem-->
 <div class="modal fade" id="@id" tabindex="-1" role="dialog" aria-labelledby="@(id)--label" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="@(id)-label">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="@(id)-label">Chi tiết mục</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
 
-                <div class="form-group">
-                    <label for="@(id)--name">Tên</label>
-                    <input type="text" class="form-control" id="@(id)--name" disabled>
-                </div>
+				<div class="form-group">
+					<label for="@(id)--name">Tên</label>
+					<input type="text" name="name" class="form-control" id="@(id)--name" readonly>
+				</div>
 
-                <div class="form-group">
-                    <label for="@(id)--order">Thứ tự</label>
-                    <input type="number" class="form-control" id="@(id)--order" disabled>
-                </div>
+				<div class="form-group">
+					<label for="@(id)--order">Thứ tự</label>
+					<input type="number" name="order" class="form-control" id="@(id)--order" readonly>
+				</div>
 
-                <div class="form-group">
-                    <label for="@(id)--url">URL</label>
-                    <input type="number" class="form-control" id="@(id)--url" disabled>
-                </div>
+				<div class="form-group">
+					<label for="@(id)--url">URL</label>
+					<input type="text" name="url" class="form-control" id="@(id)--url" readonly>
+				</div>
 
-                <div class="form-group">
-                    <label for="@(id)--action">Action</label>
-                    <input type="number" class="form-control" id="@(id)--action" disabled>
-                </div>
+				<div class="form-group">
+					<label for="@(id)--action">Action</label>
+					<input type="text" name="action" class="form-control" id="@(id)--action" readonly>
+				</div>
 
-                <div class="form-group">
-                    <label for="@(id)--controller">Controller</label>
-                    <input type="number" class="form-control" id="@(id)--controller" disabled>
-                </div>
+				<div class="form-group">
+					<label for="@(id)--controller">Controller</label>
+					<input type="text" name="controller" class="form-control" id="@(id)--controller" readonly>
+				</div>
 
-                <div class="form-group">
-                    <label for="@(id)--area">Area</label>
-                    <input type="number" class="form-control" id="@(id)--area" disabled>
-                </div>
+				<div class="form-group">
+					<label for="@(id)--area">Area</label>
+					<input type="text" name="area" class="form-control" id="@(id)--area" readonly>
+				</div>
 
-                <div class="form-group">
-                    <label for="@(id)--icon">Area</label>
-                    <input type="number" class="form-control" id="@(id)--icon" disabled>
-                </div>
+				<div class="form-group">
+					<label for="@(id)--icon">Icon</label>
+					<input type="text" name="icon" class="form-control" id="@(id)--icon" readonly>
+				</div>
 
-                <div class="form-group">
-                    <label for="@(id)--active">Kích hoạt</label>
-                    <br>
-                    <input type="checkbox" id="@(id)--active" checked data-bootstrap-switch>
-                </div>
+				<div class="form-group">
+					<label for="@(id)--active">Kích hoạt</label>
+					<br>
+					<input type="checkbox" name="active" id="@(id)--active" checked data-bootstrap-switch readonly>
+				</div>
+
+				<div class="form-group">
+					<label for="@(id)--useUrl">Dùng AAC</label>
+					<br>
+					<input type="checkbox" name="active" id="@(id)--useAAC" data-bootstrap-switch readonly>
+				</div>
+
+				<div class="form-group">
+					<label for="@(id)--useUrl">Dùng URL</label>
+					<br>
+					<input type="checkbox" name="active" id="@(id)--useUrl" data-bootstrap-switch readonly>
+				</div>
 
 
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-    </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+			</div>
+		</div>
+	</div>
 </div>
+
+<script>
+	window.addEventListener('load', function () {
+		let dom = document.getElementById('@id');
+		dom.data = {
+			name: document.getElementById('@(id)--name'),
+			order: document.getElementById('@(id)--order'),
+			icon: document.getElementById('@(id)--icon'),
+			active: document.getElementById('@(id)--active'),
+			useUrl: document.getElementById('@(id)--useUrl'),
+			useAAC: document.getElementById('@(id)--useAAC'),
+			action: document.getElementById('@(id)--action'),
+			controller: document.getElementById('@(id)--controller'),
+			area: document.getElementById('@(id)--area'),
+			url: document.getElementById('@(id)--url')
+		};
+
+
+		dom.nap = async function (id) {
+			let data = $('#@ViewData["bang-id"]').DataTable().data().filter(x => x.id === id)[0];
+			dom.data.name.value = data.name;
+			dom.data.order.value = data.order;
+			dom.data.icon.value = data.icon;
+			$(dom.data.active).bootstrapSwitch('readonly', false);
+			$(dom.data.active).bootstrapSwitch('state', data.active);
+			$(dom.data.active).bootstrapSwitch('readonly', true);
+			$(dom.data.useUrl).bootstrapSwitch('readonly', false);
+			$(dom.data.useUrl).bootstrapSwitch('state', data.useUrl);
+			$(dom.data.useUrl).bootstrapSwitch('readonly', true);
+			$(dom.data.useAAC).bootstrapSwitch('readonly', false);
+			$(dom.data.useAAC).bootstrapSwitch('state', data.useAAC);
+			$(dom.data.useAAC).bootstrapSwitch('readonly', true);
+			dom.data.action.value = data.action;
+			dom.data.controller.value = data.controller;
+			dom.data.area.value = data.area;
+			dom.data.url.value = data.url;
+		};
+
+		this['obj-@id'] = dom;
+	});
+</script>
 <!-- End Index.Partial.Xem-->

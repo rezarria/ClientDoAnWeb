@@ -1,64 +1,71 @@
 <script>
-    window.addEventListener('load', function () {
-        $("input[data-bootstrap-switch]").each(function () {
-            $(this).bootstrapSwitch('state', $(this).prop('checked'));
-        })
+	window.addEventListener('load', function () {
+		$("input[data-bootstrap-switch]").each(function () {
+			$(this).bootstrapSwitch('state', $(this).prop('checked'));
+		})
 
-        let modalXem = document.getElementById('modal-xem');
+		let modalXem = document.getElementById('modal-xem');
 
 
-        $('#table').DataTable({
-            responsive: true,
-            autoWidth: false,
-            ajax: {
-                url: '/api/sidebarnavitem',
-                type: 'GET',
-                dataSrc: ''
-            },
-            columns: [
-                {
-                    data: "order"
-                },
-                {
-                    data: "name"
-                },
-                {
-                    data: "active"
-                },
-                {
-                    data: "useUrl",
-                    render: function (data, _, row, _) {
-                        if (data == false) {
-                            let url = `${row.controller}/${row.action}`;
-                            if (row.area)
-                                url = `${row.area}/` + url;
-                            return url;
-                        }
-                        return data;
-                    }
-                },
-                {
-                    data: null,
-                    createdCell: function (td, cellData, rowData, rowIndex, colIndex) {
-                        td.style.width = '1%';
-                        td.style.whiteSpace = 'nowrap';
-                    },
-                    render: function (data, _, row, _) {
-                        return `
-                            <button class="btn btn-info" data-toggle="modal" data-target="#modal-xem">
+		$('#@(ViewData["bang-id"])').DataTable({
+			responsive: true,
+			autoWidth: false,
+			ajax: {
+				url: '/api/sidebarnavitem',
+				type: 'GET',
+				dataSrc: ''
+			},
+			columns: [
+				{
+					data: "order"
+				},
+				{
+					data: "name"
+				},
+				{
+					data: null,
+					render: function (_, _, data, _) {
+						if (data.useUrl)
+							return "URL";
+						if (data.useAAC)
+							return "AAC";
+						return "NONE";
+					}
+				},
+				{
+					data: "url",
+					render: function (row, _, data, _) {
+						if (row == false) {
+							let url = `${data.controller}/${data.action}`;
+							if (data.area)
+								url = `${data.area}/` + url;
+							return url;
+						}
+						return row;
+					}
+				},
+				{
+					data: null,
+					createdCell: function (td, cellData, rowData, rowIndex, colIndex) {
+						td.style.width = '1%';
+						td.style.whiteSpace = 'nowrap';
+					},
+					render: function (data, _, row, _) {
+						return `
+                            <button class="btn btn-info" data-toggle="modal" data-target="#modal-xem" data-target="#@ViewData["modal-xem-id"]" onclick="window['obj-@ViewData["modal-xem-id"]'].nap('${data.id}');">
                                 <i class="fa fa-eye"></i>
                             </button>
-                            <button class="btn btn-primary">
+                            <button class="btn btn-primary" data-toggle="modal" data-target="#@ViewData["modal-sua-id"]" onclick="window['obj-@ViewData["modal-sua-id"]'].nap('${data.id}');">
                                 <i class="fa fa-pen"></i>
                             </button>
-                            <button class="btn btn-danger">
+                            <button class="btn btn-danger" onclick="window['obj-@ViewData["modal-xoa-id"]'].nap('${data.id}');">
                                 <i class="fa fa-trash"></i>
                             </button>
                             `;
-                    }
-                }
-            ]
-        });
+					}
+				}
+			]
+		});
 
-    });
+	});
 </script>

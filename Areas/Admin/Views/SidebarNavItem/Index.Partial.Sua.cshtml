@@ -1,0 +1,161 @@
+@model Client.Areas.Admin.Models.SidebarNavItem
+@{
+	string id = ViewData["modal-sua-id"]?.ToString() ?? throw new NullReferenceException();
+}
+<!-- Begin Index.Partial.Sua-->
+<div class="modal fade" id="@id" tabindex="-1" role="dialog" aria-labelledby="@(id)--label" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="@(id)-label">Sửa thông tin</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form id="@(id)--form">
+				<input type="hidden" name="id" id="@(id)--id">
+				<div class="modal-body">
+
+
+					<div class="form-group">
+						<label for="@(id)--name">Tên</label>
+						<input asp-for="Name" type="text" name="name" class="form-control" id="@(id)--name">
+						<span asp-validation-for="Name" data-valmsg-for="name" class="text-danger"></span>
+					</div>
+
+					<div class="form-group">
+						<label for="@(id)--order">Thứ tự</label>
+						<input asp-for"Order" type="number" name="order" class="form-control" id="@(id)--order">
+						<span asp-validation-for="Order" data-valmsg-for="order" class="text-danger"></span>
+					</div>
+
+					<div class="form-group">
+						<label for="@(id)--url">URL</label>
+						<input type="text" name="url" class="form-control" id="@(id)--url">
+						<span asp-validation-for="Url" data-valmsg-for="url" class="text-danger"></span>
+					</div>
+
+					<div class="form-group">
+						<label for="@(id)--action">Action</label>
+						<input type="text" name="action" class="form-control" id="@(id)--action">
+						<span asp-validation-for="Action" data-valmsg-for="action" class="text-danger"></span>
+					</div>
+
+					<div class="form-group">
+						<label for="@(id)--controller">Controller</label>
+						<input type="text" name="controller" class="form-control" id="@(id)--controller">
+						<span asp-validation-for="Controller" data-valmsg-for="controller" class="text-danger"></span>
+					</div>
+
+					<div class="form-group">
+						<label for="@(id)--area">Area</label>
+						<input type="text" name="area" class="form-control" id="@(id)--area">
+						<span asp-validation-for="Area" data-valmsg-for="area" class="text-danger"></span>
+					</div>
+
+					<div class="form-group">
+						<label for="@(id)--icon">Icon</label>
+						<input type="text" name="icon" class="form-control" id="@(id)--icon">
+						<span asp-validation-for="Icon" data-valmsg-for="icon" class="text-danger"></span>
+					</div>
+
+					<div class="form-group">
+						<label for="@(id)--active">Kích hoạt</label>
+						<br>
+						<input type="checkbox" name="active" id="@(id)--active" checked data-bootstrap-switch>
+						<span asp-validation-for="Active" data-valmsg-for="active" class="text-danger"></span>
+					</div>
+
+					<div class="form-group">
+						<label for="@(id)--useUrl">Dùng AAC</label>
+						<br>
+						<input type="checkbox" name="active" id="@(id)--useAAC" data-bootstrap-switch>
+						<span asp-validation-for="UseAAC" data-valmsg-for="useAAC" class="text-danger"></span>
+					</div>
+
+					<div class="form-group">
+						<label for="@(id)--useUrl">Dùng URL</label>
+						<br>
+						<input type="checkbox" name="active" id="@(id)--useUrl" data-bootstrap-switch>
+						<span asp-validation-for="UseUrl" data-valmsg-for="useUrl" class="text-danger"></span>
+					</div>
+
+
+				</div>
+			</form>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+				<button type="button" id="@(id)--submit" class="btn btn-primary">Lưu</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	window.addEventListener('load', function () {
+		let dom = document.getElementById('@id');
+		dom.data = {
+			name: document.getElementById('@(id)--name'),
+			order: document.getElementById('@(id)--order'),
+			icon: document.getElementById('@(id)--icon'),
+			active: document.getElementById('@(id)--active'),
+			useUrl: document.getElementById('@(id)--useUrl'),
+			useAAC: document.getElementById('@(id)--useAAC'),
+			action: document.getElementById('@(id)--action'),
+			controller: document.getElementById('@(id)--controller'),
+			area: document.getElementById('@(id)--area'),
+			url: document.getElementById('@(id)--url'),
+			submit: document.getElementById('@(id)--submit')
+		};
+
+
+		let cacheDetails = {};
+
+		dom.nap = async function (id) {
+			let data = $('#@ViewData["bang-id"]').DataTable().data().filter(x => x.id === id)[0];
+			dom.data.name.value = data.name;
+			dom.data.order.value = data.order;
+			dom.data.icon.value = data.icon;
+			$(dom.data.active).bootstrapSwitch('state', data.active);
+			$(dom.data.useUrl).bootstrapSwitch('state', data.useUrl);
+			$(dom.data.useAAC).bootstrapSwitch('state', data.useAAC);
+			dom.data.action.value = data.action;
+			dom.data.controller.value = data.controller;
+			dom.data.area.value = data.area;
+			dom.data.url.value = data.url;
+
+			dom.data.old = data;
+			dom.data.newObj = JSON.parse(JSON.stringify(dom.data.old));
+		}
+
+		dom.data.submit.addEventListener('click', function () {
+			dom.data.newObj.name = dom.data.name.value;
+			dom.data.newObj.order = dom.data.order.value;
+			dom.data.newObj.icon = dom.data.icon.value;
+			dom.data.newObj.active = dom.data.active.checked;
+			dom.data.newObj.useUrl = dom.data.useUrl.checked;
+			dom.data.newObj.useAAC = dom.data.useAAC.checked;
+			dom.data.newObj.action = dom.data.action.value;
+			dom.data.newObj.controller = dom.data.controller.value;
+			dom.data.newObj.area = dom.data.area.value;
+			dom.data.newObj.url = dom.data.url.value;
+
+			var diff = jsonpatch.compare(dom.data.old, dom.data.newObj);
+			fetch(`/api/sidebarnavitem?id=${dom.data.old.id}`, {
+				method: 'PATCH',
+				body: JSON.stringify(diff),
+				headers: { 'content-type': 'application/json' }
+			})
+				.then(res => {
+					switch (res.status) {
+						case 200:
+							$('#@(ViewData["bang-id"])').DataTable().ajax.reload();
+							$(dom).modal('hide');
+							break;
+					}
+				});
+		});
+		this['obj-@id'] = dom;
+	});
+</script>
+<!-- End Index.Partial.Sua-->

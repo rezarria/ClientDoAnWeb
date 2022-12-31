@@ -3,3 +3,5 @@ bin/
 Migrations/
 .*/
 /wwwroot/lib
+*-wal
+*-shm
