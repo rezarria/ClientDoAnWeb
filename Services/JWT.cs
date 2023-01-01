@@ -10,12 +10,12 @@ namespace Client.Services;
 public interface ITokenService
 {
 	Task<string> TaoToken(string key, string issuer, TaiKhoan user);
-	bool kiemTraToken(string key, string issuer, string token);
+	bool KiemTraToken(string key, string issuer, string token);
 }
 
 public class TokenService : ITokenService
 {
-	private const double EXPIRY_DURATION_MINUTES = 30;
+	private const double ExpiryDurationMinutes = 30;
 
 	private readonly UserManager<TaiKhoan> _userManager;
 
@@ -32,11 +32,11 @@ public class TokenService : ITokenService
 
 		var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
 		var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
-		var tokenDescriptor = new JwtSecurityToken(issuer, issuer, claims, expires: DateTime.Now.AddMinutes(EXPIRY_DURATION_MINUTES), signingCredentials: credentials);
+		var tokenDescriptor = new JwtSecurityToken(issuer, issuer, claims, expires: DateTime.Now.AddMinutes(ExpiryDurationMinutes), signingCredentials: credentials);
 
 		return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
 	}
-	public bool kiemTraToken(string key, string issuer, string token)
+	public bool KiemTraToken(string key, string issuer, string token)
 	{
 		var mySecret = Encoding.UTF8.GetBytes(key);
 		var mySecurityKey = new SymmetricSecurityKey(mySecret);
@@ -52,7 +52,7 @@ public class TokenService : ITokenService
 				ValidIssuer = issuer,
 				ValidAudience = issuer,
 				IssuerSigningKey = mySecurityKey,
-			}, out SecurityToken validatedToken);
+			}, out SecurityToken _);
 		}
 		catch
 		{

@@ -25,7 +25,7 @@ public class DangNhapController : ControllerBase
 
 	[HttpPost]
 	[Route("tructiep")]
-	public async Task<IActionResult> TrucTiep([FromBody] DangNhapDTO dto)
+	public async Task<IActionResult> TrucTiep([FromBody] DangNhapDto dto)
 	{
 		if (ModelState.IsValid)
 		{
@@ -53,6 +53,6 @@ public class DangNhapController : ControllerBase
 	[Authorize]
 	public string Check()
 	{
-		return string.Join("\n", User.Claims.Select(x => $"{x.Type}:{x.Value.ToString() ?? "null"}"));
+		return string.Join("\n", User.Claims.Select(x => $"{x.Type}:{x.Value.ToString()}"));
 	}
 }

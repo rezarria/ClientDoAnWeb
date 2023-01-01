@@ -31,8 +31,8 @@ public class Sidebar : ViewComponent
 
 		data.ForEach(x =>
 		{
-			x.Childs.RemoveAll(x => x.Active == false);
-			x.Childs.Sort((x, y) => x.Order - y.Order);
+			x.Childs.RemoveAll(y => y.Active == false);
+			x.Childs.Sort((a, b) => a.Order - b.Order);
 		});
 
 		List<Models.SidebarNavItem> targets = data.SelectMany(x => x.Childs).ToList();
@@ -46,7 +46,7 @@ public class Sidebar : ViewComponent
 			Task.WaitAll(jobs.ToArray(), HttpContext.RequestAborted);
 			targets.ForEach(x =>
 			{
-				x.Childs.RemoveAll(x => x.Active == false);
+				x.Childs.RemoveAll(y => y.Active == false);
 				x.Childs.Sort((a, b) => a.Order - b.Order);
 			});
 			targets = targets.SelectMany(x => x.Childs).ToList();

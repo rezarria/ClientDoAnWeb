@@ -1,7 +1,6 @@
 #region
 
 using System.Text;
-using Castle.Components.DictionaryAdapter.Xml;
 using Client.Contexts;
 using Client.Models.XacThucPhanQuyen;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -19,7 +18,7 @@ public static partial class ThietLap
 {
 	/// <summary>
 	/// </summary>
-	/// <param name="services"></param>
+	/// <param name="builder"></param>
 	public static void ThietLapXacThuc(this WebApplicationBuilder builder)
 	{
 		IServiceCollection services = builder.Services;

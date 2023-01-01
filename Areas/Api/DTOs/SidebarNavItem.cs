@@ -1,5 +1,4 @@
 using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Client.Areas.Api.DTOs;
 
@@ -61,7 +60,7 @@ public static class SidebarNavItem
 		public string? Action { get; set; }
 		public Guid? ParentId { get; set; }
 
-		public static Expression<Func<Post, Admin.Models.SidebarNavItem>> expression = dto => new()
+		public static Expression<Func<Post, Admin.Models.SidebarNavItem>> Expression { get; } = dto => new()
 		{
 			Name = dto.Name,
 			Order = dto.Order,

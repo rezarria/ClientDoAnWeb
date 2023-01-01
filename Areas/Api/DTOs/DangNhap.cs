@@ -4,7 +4,7 @@ namespace Client.Areas.Api.DTOs;
 
 public static class DangNhap
 {
-	public class DangNhapDTO
+	public class DangNhapDto
 	{
 		[Required(AllowEmptyStrings = false)]
 		public string Email { get; set; } = string.Empty;

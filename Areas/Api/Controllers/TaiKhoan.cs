@@ -19,7 +19,7 @@ public class TaiKhoan : ControllerBase
 
 	[HttpPost]
 	[Route("dangkytructiep")]
-	public async Task<IActionResult> DangKyTrucTiep([FromBody] DTOs.DangNhap.DangNhapDTO dto, string? returnUrl = null)
+	public async Task<IActionResult> DangKyTrucTiep([FromBody] DTOs.DangNhap.DangNhapDto dto, string? returnUrl = null)
 	{
 		returnUrl = returnUrl ?? Url.Content("~/");
 
@@ -29,7 +29,7 @@ public class TaiKhoan : ControllerBase
 			var result = await _userManager.CreateAsync(user, dto.Password);
 			if (result.Succeeded)
 			{
-				_logger.LogInformation("User created a new account with password.");
+				_logger.LogInformation("User created a new account with password");
 				return Ok();
 			}
 			foreach (var error in result.Errors)
