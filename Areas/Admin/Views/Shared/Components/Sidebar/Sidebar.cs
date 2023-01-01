@@ -22,14 +22,18 @@ public class Sidebar : ViewComponent
 	{
 		List<Models.SidebarNavItem> data = await (
 			from x in _context.SidebarNavItem
-			where x.ParentId == null
+			where x.ParentId == null && x.Active == true
 			select x
 		)
 		.Include(x => x.Childs)
 		.OrderBy(x => x.Order)
 		.ToListAsync(HttpContext.RequestAborted);
 
-		data.ForEach(x => x.Childs.Sort((x, y) => x.Order - y.Order));
+		data.ForEach(x =>
+		{
+			x.Childs.RemoveAll(x => x.Active == false);
+			x.Childs.Sort((x, y) => x.Order - y.Order);
+		});
 
 		List<Models.SidebarNavItem> targets = data.SelectMany(x => x.Childs).ToList();
 		List<Task> jobs = new List<Task>();
@@ -40,7 +44,11 @@ public class Sidebar : ViewComponent
 				jobs.Add(_context.Entry(x).Collection(y => y.Childs).LoadAsync(HttpContext.RequestAborted));
 			});
 			Task.WaitAll(jobs.ToArray(), HttpContext.RequestAborted);
-			targets.ForEach(x => x.Childs.Sort((a, b) => a.Order - b.Order));
+			targets.ForEach(x =>
+			{
+				x.Childs.RemoveAll(x => x.Active == false);
+				x.Childs.Sort((a, b) => a.Order - b.Order);
+			});
 			targets = targets.SelectMany(x => x.Childs).ToList();
 		}
 		return View(data);

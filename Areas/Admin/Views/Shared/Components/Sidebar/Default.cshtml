@@ -1,10 +1,32 @@
 @model List<Client.Areas.Admin.Models.SidebarNavItem>
+@functions {
+	public string kiemTra(Client.Areas.Admin.Models.SidebarNavItem item)
+	{
+		if (item.Area is not null && item.Controller is not null && item.Action is not null)
+		{
+			if (item.Area.ToLower() == Context.GetRouteValue("area").ToString().ToLower() && item.Controller.ToLower() == Context.GetRouteValue("controller").ToString().ToLower() && item.Action.ToLower() == Context.GetRouteValue("action").ToString().ToLower()
+			)
+				return "active";
+		}
+		return string.Empty;
+	}
+
+	public string taoLink(Client.Areas.Admin.Models.SidebarNavItem item)
+	{
+		if (item.UseUrl)
+			return item.Url ?? "#";
+		if (item.UseAAC)
+			return $"{item.Area}/{item.Controller}/{item.Action}";
+		return "#";
+	}
+
+}
 @{
 	Action<Client.Areas.Admin.Models.SidebarNavItem> html = null;
 	Action<Client.Areas.Admin.Models.SidebarNavItem> htmlHoa = (Client.Areas.Admin.Models.SidebarNavItem item) =>
 	{
-		<li class="nav-item">
-			<a href="/docs/3.1//components" class="nav-link">
+		<li class='nav-item'>
+			<a href="@taoLink(item)" class="nav-link @kiemTra(item)">
 				<i class="nav-icon @item.Icon"></i>
 				<p>
 					@item.Name
@@ -31,7 +53,7 @@
 }
 
 
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
+<aside id="sidebar" class="main-sidebar sidebar-dark-primary elevation-4">
 
 	<a href="#" class="brand-link">
 		@* <img src="#" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8"> *@
