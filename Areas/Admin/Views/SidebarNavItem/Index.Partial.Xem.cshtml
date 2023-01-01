@@ -19,6 +19,11 @@
 				</div>
 
 				<div class="form-group">
+					<label for="@(id)--cha">Tên</label>
+					<input type="text" name="name" class="form-control" id="@(id)--cha" readonly>
+				</div>
+
+				<div class="form-group">
 					<label for="@(id)--order">Thứ tự</label>
 					<input type="number" name="order" class="form-control" id="@(id)--order" readonly>
 				</div>
@@ -88,7 +93,8 @@
 			action: document.getElementById('@(id)--action'),
 			controller: document.getElementById('@(id)--controller'),
 			area: document.getElementById('@(id)--area'),
-			url: document.getElementById('@(id)--url')
+			url: document.getElementById('@(id)--url'),
+			cha: document.getElementById('@(id)--cha')
 		};
 
 
@@ -110,6 +116,9 @@
 			dom.data.controller.value = data.controller;
 			dom.data.area.value = data.area;
 			dom.data.url.value = data.url;
+			if (data.parentId != null && data.parentId.length != 0)
+				dom.data.cha.value = $('#@ViewData["bang-id"]').DataTable().data().filter(x => x.id === data.parentId)[0].name;
+			else dom.data.cha.value = '';
 		};
 
 		this['obj-@id'] = dom;

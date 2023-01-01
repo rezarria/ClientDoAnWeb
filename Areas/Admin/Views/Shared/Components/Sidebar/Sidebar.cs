@@ -26,19 +26,22 @@ public class Sidebar : ViewComponent
 			select x
 		)
 		.Include(x => x.Childs)
-		.AsNoTracking()
+		.OrderBy(x => x.Order)
 		.ToListAsync(HttpContext.RequestAborted);
 
-		IQueryable<Models.SidebarNavItem> targets = data.SelectMany(x => x.Childs).AsQueryable();
+		data.ForEach(x => x.Childs.Sort((x, y) => x.Order - y.Order));
+
+		List<Models.SidebarNavItem> targets = data.SelectMany(x => x.Childs).ToList();
 		List<Task> jobs = new List<Task>();
 		while (targets.Any())
 		{
-			await targets.ForEachAsync(x =>
+			targets.ForEach(x =>
 			{
 				jobs.Add(_context.Entry(x).Collection(y => y.Childs).LoadAsync(HttpContext.RequestAborted));
 			});
 			Task.WaitAll(jobs.ToArray(), HttpContext.RequestAborted);
-			targets = targets.SelectMany(x => x.Childs).AsQueryable();
+			targets.ForEach(x => x.Childs.Sort((a, b) => a.Order - b.Order));
+			targets = targets.SelectMany(x => x.Childs).ToList();
 		}
 		return View(data);
 	}

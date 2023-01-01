@@ -24,6 +24,13 @@
 					</div>
 
 					<div class="form-group">
+						<label for="@(id)--parentId">Trường cha</label>
+						<select id="@(id)--parentId" name="parentId" class="form-control select2">
+							<option value="">Chọn trường cha</option>
+						</select>
+					</div>
+
+					<div class="form-group">
 						<label for="@(id)--order">Thứ tự</label>
 						<input asp-for"Order" type="number" name="order" class="form-control" id="@(id)--order">
 						<span asp-validation-for="Order" data-valmsg-for="order" class="text-danger"></span>
@@ -93,7 +100,23 @@
 
 <script>
 	window.addEventListener('load', function () {
+		let cache = [];
+
 		let dom = document.getElementById('@id');
+
+		dom.layDuLieu = async function () {
+			let select = document.getElementById('@(id)--parentId');
+			if (cache.length == 0) {
+				cache = await fetch('/api/sidebarnavitem/danhsach').then(res => res.json());
+				cache.forEach(item => {
+					let option = document.createElement('option');
+					option.textContent = item.name;
+					option.value = item.id;
+					select.options.add(option);
+				});
+			}
+		}
+
 		dom.data = {
 			name: document.getElementById('@(id)--name'),
 			order: document.getElementById('@(id)--order'),
@@ -105,6 +128,7 @@
 			controller: document.getElementById('@(id)--controller'),
 			area: document.getElementById('@(id)--area'),
 			url: document.getElementById('@(id)--url'),
+			parentId: document.getElementById('@(id)--parentId'),
 			submit: document.getElementById('@(id)--submit')
 		};
 
@@ -112,6 +136,7 @@
 		let cacheDetails = {};
 
 		dom.nap = async function (id) {
+			await dom.layDuLieu();
 			let data = $('#@ViewData["bang-id"]').DataTable().data().filter(x => x.id === id)[0];
 			dom.data.name.value = data.name;
 			dom.data.order.value = data.order;
@@ -123,6 +148,9 @@
 			dom.data.controller.value = data.controller;
 			dom.data.area.value = data.area;
 			dom.data.url.value = data.url;
+			dom.data.parentId.selectIndex = 0;
+			if (data.parentId != null)
+				dom.data.parentId.value = data.parentId;
 
 			dom.data.old = data;
 			dom.data.newObj = JSON.parse(JSON.stringify(dom.data.old));
@@ -139,6 +167,7 @@
 			dom.data.newObj.controller = dom.data.controller.value;
 			dom.data.newObj.area = dom.data.area.value;
 			dom.data.newObj.url = dom.data.url.value;
+			dom.data.newObj.parentId = dom.data.parentId.value;
 
 			var diff = jsonpatch.compare(dom.data.old, dom.data.newObj);
 			fetch(`/api/sidebarnavitem?id=${dom.data.old.id}`, {

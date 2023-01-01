@@ -28,6 +28,13 @@
 					</div>
 
 					<div class="form-group">
+						<label for="@(id)--parentId">Trường cha</label>
+						<select id="@(id)--parentId" name="parentId" class="form-control select2">
+							<option value="">Chọn trường cha</option>
+						</select>
+					</div>
+
+					<div class="form-group">
 						<label for="@(id)--url">URL</label>
 						<input type="text" name="url" class="form-control" id="@(id)--url">
 						<span asp-validation-for="Url" data-valmsg-for="url" class="text-danger"></span>
@@ -91,6 +98,20 @@
 
 <script>
 	window.addEventListener('load', function () {
+		let cache = [];
+		$('#@(id)').on('show.bs.modal', async function (e) {
+			/**@@type {HTMLSelectElement}*/
+			let select = document.getElementById('@(id)--parentId');
+			if (cache.length == 0) {
+				cache = await fetch('/api/sidebarnavitem/danhsach').then(res => res.json());
+				cache.forEach(item => {
+					let option = document.createElement('option');
+					option.textContent = item.name;
+					option.value = item.id;
+					select.options.add(option);
+				});
+			}
+		});
 
 		let submit = document.getElementById('@(id)--submit');
 
@@ -103,7 +124,8 @@
 					icon: document.getElementById('@(id)--icon').value,
 					active: document.getElementById('@(id)--active').checked,
 					useUrl: document.getElementById('@(id)--useUrl').checked,
-					useAAC: document.getElementById('@(id)--useAAC').checked
+					useAAC: document.getElementById('@(id)--useAAC').checked,
+					parentId : document.getElementById('@(id)--parentId').value
 				}
 
 				let url = document.getElementById('@(id)--url');

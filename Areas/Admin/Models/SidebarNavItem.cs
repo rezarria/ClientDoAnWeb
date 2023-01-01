@@ -40,5 +40,5 @@ public class SidebarNavItem
 	[ForeignKey(nameof(ParentId))]
 	public virtual SidebarNavItem? Parent { get; set; }
 	[InverseProperty(nameof(Parent))]
-	public virtual ICollection<SidebarNavItem> Childs { get; set; } = new HashSet<SidebarNavItem>();
+	public virtual List<SidebarNavItem> Childs { get; set; } = new List<SidebarNavItem>();
 }

@@ -60,12 +60,23 @@ namespace Client.Areas.Api.Controllers
 		}
 
 		[HttpGet]
-		[Route("single")]
-		public async Task<IActionResult> Single(Guid id)
+		[Route("danhsach")]
+		public async Task<IActionResult> DanhSach()
 		{
-			_context.SidebarNavItem.Where(x => x.Id == id).Select(DTOs.SidebarNavItem.Get.Expression);
-			return Ok();
+			return Ok(await _context.SidebarNavItem.Select(x => new
+			{
+				x.Id,
+				x.Name
+			}).ToListAsync(HttpContext.RequestAborted));
 		}
+
+		// [HttpGet]
+		// [Route("single")]
+		// public async Task<IActionResult> Single(Guid id)
+		// {
+		// 	_context.SidebarNavItem.Where(x => x.Id == id).Select(DTOs.SidebarNavItem.Get.Expression);
+		// 	return Ok();
+		// }
 
 		// PUT: api/SidebarNavItem/5
 		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
