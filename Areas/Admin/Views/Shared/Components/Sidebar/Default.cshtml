@@ -5,7 +5,8 @@
 
 	private string KiemTra(SidebarNavItem item)
 	{
-		if (item.Area is not null && item.Controller is not null && item.Action is not null){
+		if (item.Area is not null && item.Controller is not null && item.Action is not null)
+		{
 			if (item.Area.ToLower().Equals(Context.GetRouteValue("area")?.ToString()?.ToLower()) &&
 			    item.Controller.ToLower().Equals(Context.GetRouteValue("controller")?.ToString()?.ToLower()) &&
 			    item.Action.ToLower().Equals(Context.GetRouteValue("action")?.ToString()?.ToLower()))
@@ -27,28 +28,32 @@
 
 @{
 	Action<SidebarNavItem>? html = null;
-	Action<SidebarNavItem> htmlHoa = item => {
-		<li class='nav-item'>
-			<a href="@TaoLink(item)" class="nav-link @KiemTra(item)">
-				<i class="nav-icon @item.Icon"></i>
-				<p>
-					@item.Name
-					@if (item.Childs.Any()){
-						<i class="right fas fa-angle-left"></i>
-					}
-				</p>
-			</a>
+	Action<SidebarNavItem> htmlHoa = item =>
+	                                 {
+		                                 <li class='nav-item'>
+			                                 <a href="@TaoLink(item)" class="nav-link @KiemTra(item)">
+				                                 <i class="nav-icon @item.Icon"></i>
+				                                 <p>
+					                                 @item.Name
+					                                 @if (item.Childs.Any())
+					                                 {
+						                                 <i class="right fas fa-angle-left"></i>
+					                                 }
+				                                 </p>
+			                                 </a>
 
-			@if (item.Childs.Any()){
-				<ul class="nav nav-treeview">
-					@foreach (var navItem in item.Childs){
-						html!.Invoke(navItem);
-					}
-				</ul>
-			}
+			                                 @if (item.Childs.Any())
+			                                 {
+				                                 <ul class="nav nav-treeview">
+					                                 @foreach (SidebarNavItem navItem in item.Childs)
+					                                 {
+						                                 html!.Invoke(navItem);
+					                                 }
+				                                 </ul>
+			                                 }
 
-		</li>
-	};
+		                                 </li>
+	                                 };
 	html = htmlHoa;
 }
 
@@ -85,7 +90,8 @@
 		<nav class="mt-2">
 			<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
-				@foreach (var item in Model){
+				@foreach (SidebarNavItem item in Model)
+				{
 					htmlHoa(item);
 				}
 

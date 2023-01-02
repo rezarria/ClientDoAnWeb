@@ -1,19 +1,19 @@
 namespace Client.ThietLap;
 
-public partial  class ThietLap
+public partial class ThietLap
 {
-    /// <summary>
-    /// </summary>
-    /// <param name="services"></param>
-    public static void Cors(this IServiceCollection services)
+	/// <summary>
+	/// </summary>
+	/// <param name="services"></param>
+	public static void Cors(this IServiceCollection services)
 	{
 		services.AddCors(options =>
-		{
-			options.AddPolicy("ToanBo",
-				policy =>
-				{
-					policy.WithOrigins("*").AllowAnyMethod().AllowAnyHeader().AllowCredentials().AllowAnyOrigin();
-				});
-		});
+						 {
+							 options.AddPolicy("ToanBo",
+											   configurePolicy: policy =>
+															    {
+																    policy.WithOrigins("*").AllowAnyMethod().AllowAnyHeader().AllowCredentials().AllowAnyOrigin();
+															    });
+						 });
 	}
 }

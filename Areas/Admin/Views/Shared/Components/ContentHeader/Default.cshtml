@@ -1,23 +1,23 @@
 <div class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1 class="m-0">@ViewData["Title"]</h1>
-            </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    @{
-                        string controller = Context.Request.RouteValues["controller"]?.ToString() ?? string.Empty;
-                        string action = ViewContext.RouteData.Values["action"]?.ToString() ?? string.Empty;
-                    }
-                    <li class="breadcrumb-item">
-                        <a asp-route="areas" asp-route-area="Admin" asp-route-controller="@controller" asp-route-action="index">@controller</a>
-                    </li>
-                    <li class=" breadcrumb-item active">
-                        <a asp-route="areas" asp-route-area="Admin" asp-route-controller="@controller" asp-route-action="@action">@action</a>
-                    </li>
-                </ol>
-            </div>
-        </div>
-    </div>
+	<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+				<h1 class="m-0">@ViewData["Title"]</h1>
+			</div>
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-right">
+					@{
+						string controller = Context.Request.RouteValues["controller"]?.ToString() ?? string.Empty;
+						string action = ViewContext.RouteData.Values["action"]?.ToString() ?? string.Empty;
+					}
+					<li class="breadcrumb-item">
+						<a asp-route="areas" asp-route-area="Admin" asp-route-controller="@controller" asp-route-action="index">@controller</a>
+					</li>
+					<li class=" breadcrumb-item active">
+						<a asp-route="areas" asp-route-area="Admin" asp-route-controller="@controller" asp-route-action="@action">@action</a>
+					</li>
+				</ol>
+			</div>
+		</div>
+	</div>
 </div>

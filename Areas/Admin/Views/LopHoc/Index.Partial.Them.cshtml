@@ -1,66 +1,66 @@
 @using Client.ThietLap
 @inject IOptions<MayChuApi> MayChuApi
 @{
-    string id = ViewData["modal-them-id"]?.ToString() ?? throw new NullReferenceException();
+	string id = ViewData["modal-them-id"]?.ToString() ?? throw new NullReferenceException();
 }
 <!-- Begin Index.Partial.Them-->
 <div class="modal fade" id="@id" tabindex="-1" role="dialog" aria-labelledby="@(id)--label" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="@(id)-label">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form id="@(id)--form">
-                <div class="modal-body">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="@(id)-label">Modal title</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form id="@(id)--form">
+				<div class="modal-body">
 
-                    <div class="form-group">
-                        <label for="@(id)--ten">Tên môn</label>
-                        <input type="text" name="ten" class="form-control" id="@(id)--ten">
-                    </div>
+					<div class="form-group">
+						<label for="@(id)--ten">Tên môn</label>
+						<input type="text" name="ten" class="form-control" id="@(id)--ten">
+					</div>
 
-                    <div class="form-group">
-                        <label for="@(id)--soBuoi">Số buổi</label>
-                        <input type="number" name="soBuoi" class="form-control" id="@(id)--soBuoi">
-                    </div>
+					<div class="form-group">
+						<label for="@(id)--soBuoi">Số buổi</label>
+						<input type="number" name="soBuoi" class="form-control" id="@(id)--soBuoi">
+					</div>
 
-                    <div class="form-group">
-                        <label>Thời gian:</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    <i class="far fa-calendar-alt"></i>
-                                </span>
-                            </div>
-                            <input type="text" class="form-control float-right" name="ThoiGian" id="@(id)--ThoiGian">
-                        </div>
+					<div class="form-group">
+						<label>Thời gian:</label>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text">
+									<i class="far fa-calendar-alt"></i>
+								</span>
+							</div>
+							<input type="text" class="form-control float-right" name="ThoiGian" id="@(id)--ThoiGian">
+						</div>
 
-                    </div>
-
-
-                    <div class="form-group">
-                        <label>Học phần</label>
-                        <select class="form-control select2" style="width: 100%;" id="@(id)--HocPhan.Id">
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Giảng viên</label>
-                        <select class="form-control select2" style="width: 100%;" id="@(id)--GiangVien.Id">
-                        </select>
-                    </div>
+					</div>
 
 
-                </div>
-            </form>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                <button type="button" id="@(id)--submit" class="btn btn-primary">Tạo</button>
-            </div>
-        </div>
-    </div>
+					<div class="form-group">
+						<label>Học phần</label>
+						<select class="form-control select2" style="width: 100%;" id="@(id)--HocPhan.Id">
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label>Giảng viên</label>
+						<select class="form-control select2" style="width: 100%;" id="@(id)--GiangVien.Id">
+						</select>
+					</div>
+
+
+				</div>
+			</form>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+				<button type="button" id="@(id)--submit" class="btn btn-primary">Tạo</button>
+			</div>
+		</div>
+	</div>
 </div>
 <!-- End Index.Partial.Them-->
 

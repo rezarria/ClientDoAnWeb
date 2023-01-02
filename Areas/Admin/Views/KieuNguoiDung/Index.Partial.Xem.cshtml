@@ -1,44 +1,44 @@
 @using Client.ThietLap
 @inject IOptions<MayChuApi> MayChuApi
 @{
-    string id = ViewData["modal-xem-id"]?.ToString() ?? throw new NullReferenceException();
+	string id = ViewData["modal-xem-id"]?.ToString() ?? throw new NullReferenceException();
 }
 <!-- Begin Index.Partial.Xem-->
 <div class="modal fade" id="@id" tabindex="-1" role="dialog" aria-labelledby="@(id)--label" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="@(id)-label">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form id="@(id)--form">
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="@(id)--ten">Tên kiểu người dùng</label>
-                        <input type="text" name="ten" class="form-control" id="@(id)--ten" disabled>
-                    </div>
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="@(id)-label">Modal title</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form id="@(id)--form">
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="@(id)--ten">Tên kiểu người dùng</label>
+						<input type="text" name="ten" class="form-control" id="@(id)--ten" disabled>
+					</div>
 
-                    <table id="@(id)--bang" class="table table-bordered">
-                        <thead>
-                        <tr>
-                            <th>Tên trường</th>
-                            <th>Kiểu dữ liệu</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
+					<table id="@(id)--bang" class="table table-bordered">
+						<thead>
+						<tr>
+							<th>Tên trường</th>
+							<th>Kiểu dữ liệu</th>
+						</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
 
-                </div>
-            </form>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" id="@(id)--submit" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-    </div>
+				</div>
+			</form>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="button" id="@(id)--submit" class="btn btn-primary">Save changes</button>
+			</div>
+		</div>
+	</div>
 </div>
 
 <script>

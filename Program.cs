@@ -1,6 +1,7 @@
 #region
 
 using Client.Areas.Admin.Contexts;
+using Client.BackgroundServices;
 using Client.Middlewares;
 using Client.Services;
 using Client.ThietLap;
@@ -9,7 +10,7 @@ using WebMarkupMin.AspNetCore7;
 
 #endregion
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ClientDbContext>(options => options.UseSqlite("DataSource=client.database"));
 builder.Services.ThietLapMvcjson();
@@ -18,6 +19,9 @@ builder.Services.ThietLapSession();
 builder.Services.WebMarkupMin();
 builder.ThietLapApiMayChu();
 builder.Services.AddTransient<ITokenService, TokenService>();
+builder.Services.AddSingleton<ITokenDangXuatService, TokenDangXuatService>();
+builder.Services.AddHostedService<XoaTokenBackgroundService>();
+
 WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -29,12 +33,11 @@ if (!app.Environment.IsDevelopment())
 }
 
 
+app.UseXacThuc();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 app.UseSession();
-app.UseXacThuc();
 app.UseAuthorization();
 app.UseResponseCaching();
 if (!app.Environment.IsDevelopment())

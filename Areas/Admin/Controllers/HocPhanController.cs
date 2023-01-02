@@ -9,5 +9,8 @@ namespace Client.Areas.Admin.Controllers;
 [Area("Admin")]
 public class HocPhanController : Controller
 {
-	public IActionResult Index() => View();
+	public IActionResult Index()
+	{
+		return View();
+	}
 }

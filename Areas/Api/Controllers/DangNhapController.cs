@@ -5,13 +5,14 @@ using Microsoft.AspNetCore.Mvc;
 using static Client.Areas.Api.DTOs.DangNhap;
 
 namespace Client.Areas.Api.Controllers;
+
 [Area("Api")]
 [Route("/[area]/[controller]")]
 public class DangNhapController : ControllerBase
 {
-	private readonly UserManager<Models.XacThucPhanQuyen.TaiKhoan> _userManager;
-	private readonly ITokenService _tokenService;
 	private readonly IConfiguration _configuration;
+	private readonly ITokenService _tokenService;
+	private readonly UserManager<Models.XacThucPhanQuyen.TaiKhoan> _userManager;
 
 	public DangNhapController(
 		UserManager<Models.XacThucPhanQuyen.TaiKhoan> userManager,
@@ -32,10 +33,8 @@ public class DangNhapController : ControllerBase
 			Models.XacThucPhanQuyen.TaiKhoan? user = await _userManager.FindByEmailAsync(dto.Email);
 
 			if (user is null)
-			{
 				return NotFound();
-			}
-			else if (await _userManager.CheckPasswordAsync(user, dto.Password))
+			if (await _userManager.CheckPasswordAsync(user, dto.Password))
 			{
 				string key = _configuration["jwt:Key"] ?? throw new Exception();
 				string issur = _configuration["Jwt:Issuer"] ?? throw new Exception();

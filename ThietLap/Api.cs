@@ -9,8 +9,8 @@ public static partial class ThietLap
 	public static void ThietLapApiMayChu(this WebApplicationBuilder builder)
 	{
 		builder.Services.Configure<MayChuApi>(
-			builder.Configuration.GetSection("MayChuApi")
-		);
+											  builder.Configuration.GetSection("MayChuApi")
+											 );
 	}
 }
 

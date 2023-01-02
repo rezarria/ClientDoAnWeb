@@ -1,3 +1,4 @@
+using Client.Areas.Api.DTOs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,9 +8,9 @@ namespace Client.Areas.Api.Controllers;
 [Route("/[area]/[controller]/")]
 public class TaiKhoan : ControllerBase
 {
+	private readonly ILogger _logger;
 
 	private readonly UserManager<Models.XacThucPhanQuyen.TaiKhoan> _userManager;
-	private readonly ILogger _logger;
 
 	public TaiKhoan(UserManager<Models.XacThucPhanQuyen.TaiKhoan> userManager, ILogger<TaiKhoan> logger)
 	{
@@ -19,25 +20,21 @@ public class TaiKhoan : ControllerBase
 
 	[HttpPost]
 	[Route("dangkytructiep")]
-	public async Task<IActionResult> DangKyTrucTiep([FromBody] DTOs.DangNhap.DangNhapDto dto, string? returnUrl = null)
+	public async Task<IActionResult> DangKyTrucTiep([FromBody] DangNhap.DangNhapDto dto, string? returnUrl = null)
 	{
 		returnUrl = returnUrl ?? Url.Content("~/");
 
 		if (ModelState.IsValid)
 		{
-			var user = new Models.XacThucPhanQuyen.TaiKhoan { UserName = dto.Email, Email = dto.Email };
-			var result = await _userManager.CreateAsync(user, dto.Password);
+			Models.XacThucPhanQuyen.TaiKhoan user = new Models.XacThucPhanQuyen.TaiKhoan { UserName = dto.Email, Email = dto.Email };
+			IdentityResult result = await _userManager.CreateAsync(user, dto.Password);
 			if (result.Succeeded)
 			{
 				_logger.LogInformation("User created a new account with password");
 				return Ok();
 			}
-			foreach (var error in result.Errors)
-			{
+			foreach (IdentityError error in result.Errors)
 				ModelState.AddModelError(string.Empty, error.Description);
-			}
-
-
 		}
 
 		return Problem(ModelState.ToString());

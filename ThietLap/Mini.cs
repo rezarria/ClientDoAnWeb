@@ -18,33 +18,33 @@ public static partial class ThietLap
 	{
 		services.AddResponseCaching();
 		services.AddWebMarkupMin(options =>
-			{
-				options.AllowMinificationInDevelopmentEnvironment = true;
-				options.AllowCompressionInDevelopmentEnvironment = true;
-			})
-			.AddHtmlMinification(options =>
-			{
-				HtmlMinificationSettings settings = options.MinificationSettings;
-				settings.RemoveRedundantAttributes = true;
-				settings.RemoveHttpProtocolFromAttributes = true;
-				settings.RemoveHttpsProtocolFromAttributes = true;
-			}).AddHttpCompression(options =>
-			{
-				options.CompressorFactories = new List<ICompressorFactory>
-				{
-					new BuiltInBrotliCompressorFactory(new BuiltInBrotliCompressionSettings
-					{
-						Level = CompressionLevel.Fastest
-					}),
-					new DeflateCompressorFactory(new DeflateCompressionSettings
-					{
-						Level = CompressionLevel.Fastest
-					}),
-					new GZipCompressorFactory(new GZipCompressionSettings
-					{
-						Level = CompressionLevel.Fastest
-					})
-				};
-			});
+								 {
+									 options.AllowMinificationInDevelopmentEnvironment = true;
+									 options.AllowCompressionInDevelopmentEnvironment = true;
+								 })
+				.AddHtmlMinification(options =>
+									 {
+										 HtmlMinificationSettings settings = options.MinificationSettings;
+										 settings.RemoveRedundantAttributes = true;
+										 settings.RemoveHttpProtocolFromAttributes = true;
+										 settings.RemoveHttpsProtocolFromAttributes = true;
+									 }).AddHttpCompression(options =>
+														   {
+															   options.CompressorFactories = new List<ICompressorFactory>
+																						     {
+																							     new BuiltInBrotliCompressorFactory(new BuiltInBrotliCompressionSettings
+																															        {
+																																        Level = CompressionLevel.Fastest
+																															        }),
+																							     new DeflateCompressorFactory(new DeflateCompressionSettings
+																														      {
+																															      Level = CompressionLevel.Fastest
+																														      }),
+																							     new GZipCompressorFactory(new GZipCompressionSettings
+																													       {
+																														       Level = CompressionLevel.Fastest
+																													       })
+																						     };
+														   });
 	}
 }

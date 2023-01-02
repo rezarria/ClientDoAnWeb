@@ -19,7 +19,15 @@ public class SidebarNavItem
 
 	public string? Icon { get; set; }
 
+	public Guid? ParentId { get; set; }
+
+	[ForeignKey(nameof(ParentId))]
+	public virtual SidebarNavItem? Parent { get; set; }
+	[InverseProperty(nameof(Parent))]
+	public virtual List<SidebarNavItem> Childs { get; set; } = new();
+
 	#region theo AAC
+
 	public bool UseAAC { get; set; } = false;
 
 	public string? Area { get; set; }
@@ -34,11 +42,4 @@ public class SidebarNavItem
 	public string? Url { get; set; } = "#";
 
 	#endregion
-
-	public Guid? ParentId { get; set; }
-
-	[ForeignKey(nameof(ParentId))]
-	public virtual SidebarNavItem? Parent { get; set; }
-	[InverseProperty(nameof(Parent))]
-	public virtual List<SidebarNavItem> Childs { get; set; } = new List<SidebarNavItem>();
 }

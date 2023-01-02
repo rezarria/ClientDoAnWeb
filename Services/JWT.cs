@@ -1,9 +1,9 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using Client.Models.XacThucPhanQuyen;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Client.Services;
 
@@ -11,6 +11,7 @@ public interface ITokenService
 {
 	Task<string> TaoToken(string key, string issuer, TaiKhoan user);
 	bool KiemTraToken(string key, string issuer, string token);
+	ClaimsPrincipal GiaiMaToken(string key, string issuer, string token);
 }
 
 public class TokenService : ITokenService
@@ -26,38 +27,45 @@ public class TokenService : ITokenService
 
 	public async Task<string> TaoToken(string key, string issuer, TaiKhoan user)
 	{
-		var claims = await _userManager.GetClaimsAsync(user);
+		IList<Claim> claims = await _userManager.GetClaimsAsync(user);
 
 		claims.Add(new Claim("role1", "true"));
 
-		var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-		var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
-		var tokenDescriptor = new JwtSecurityToken(issuer, issuer, claims, expires: DateTime.Now.AddMinutes(ExpiryDurationMinutes), signingCredentials: credentials);
+		SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+		SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
+		JwtSecurityToken tokenDescriptor = new JwtSecurityToken(issuer, issuer, claims, expires: DateTime.Now.AddMinutes(ExpiryDurationMinutes), signingCredentials: credentials);
 
 		return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
 	}
+
 	public bool KiemTraToken(string key, string issuer, string token)
 	{
-		var mySecret = Encoding.UTF8.GetBytes(key);
-		var mySecurityKey = new SymmetricSecurityKey(mySecret);
-		var tokenHandler = new JwtSecurityTokenHandler();
 		try
 		{
-			tokenHandler.ValidateToken(token,
-			new TokenValidationParameters
-			{
-				ValidateIssuerSigningKey = true,
-				ValidateIssuer = true,
-				ValidateAudience = true,
-				ValidIssuer = issuer,
-				ValidAudience = issuer,
-				IssuerSigningKey = mySecurityKey,
-			}, out SecurityToken _);
+			_ = GiaiMaToken(key, issuer, token);
 		}
 		catch
 		{
 			return false;
 		}
 		return true;
+	}
+
+	public ClaimsPrincipal GiaiMaToken(string key, string issuer, string token)
+	{
+		byte[] mySecret = Encoding.UTF8.GetBytes(key);
+		SymmetricSecurityKey mySecurityKey = new SymmetricSecurityKey(mySecret);
+		JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+		return tokenHandler.ValidateToken(token,
+										  new TokenValidationParameters
+										  {
+											  ValidateIssuerSigningKey = true,
+											  ValidateIssuer = true,
+											  ValidateAudience = true,
+											  ValidIssuer = issuer,
+											  ValidateLifetime = false,
+											  ValidAudience = issuer,
+											  IssuerSigningKey = mySecurityKey
+										  }, out SecurityToken _);
 	}
 }

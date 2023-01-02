@@ -7,35 +7,35 @@
 }
 
 @section Styles {
-<link rel="stylesheet" href="~/vendor/AdminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css" asp-append-version="true">
-<link rel="stylesheet" href="~/vendor/AdminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css" asp-append-version="true">
-<link rel="stylesheet" href="~/vendor/AdminLTE/plugins/datatables-buttons/css/buttons.bootstrap4.min.css" asp-append-version="true">
-<link rel="stylesheet" href="~/lib/bootstrap-switch/dist/css/bootstrap-switch.min.css" asp-append-version="true">
+	<link rel="stylesheet" href="~/vendor/AdminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css" asp-append-version="true">
+	<link rel="stylesheet" href="~/vendor/AdminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css" asp-append-version="true">
+	<link rel="stylesheet" href="~/vendor/AdminLTE/plugins/datatables-buttons/css/buttons.bootstrap4.min.css" asp-append-version="true">
+	<link rel="stylesheet" href="~/lib/bootstrap-switch/dist/css/bootstrap-switch.min.css" asp-append-version="true">
 }
 
 @section Scripts {
-<script src="~/vendor/AdminLTE/plugins/datatables/jquery.dataTables.min.js" asp-append-version="true"></script>
-<script src="~/vendor/AdminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js" asp-append-version="true"></script>
-<script src="~/vendor/AdminLTE/plugins/datatables-responsive/js/dataTables.responsive.min.js" asp-append-version="true"></script>
-<script src="~/vendor/AdminLTE/plugins/datatables-responsive/js/responsive.bootstrap4.min.js" asp-append-version="true"></script>
-<script src="~/vendor/AdminLTE/plugins/datatables-buttons/js/dataTables.buttons.min.js" asp-append-version="true"></script>
-<script src="~/vendor/AdminLTE/plugins/datatables-buttons/js/buttons.bootstrap4.min.js" asp-append-version="true"></script>
-<script src="~/vendor/AdminLTE/plugins/jszip/jszip.min.js" asp-append-version="true"></script>
-<script src="~/vendor/AdminLTE/plugins/pdfmake/pdfmake.min.js" asp-append-version="true"></script>
-<script src="~/vendor/AdminLTE/plugins/pdfmake/vfs_fonts.js" asp-append-version="true"></script>
-<script src="~/vendor/AdminLTE/plugins/datatables-buttons/js/buttons.html5.min.js" asp-append-version="true"></script>
-<script src="~/vendor/AdminLTE/plugins/datatables-buttons/js/buttons.print.min.js" asp-append-version="true"></script>
-<script src="~/vendor/AdminLTE/plugins/datatables-buttons/js/buttons.colVis.min.js" asp-append-version="true"></script>
-<script src="~/lib/bootstrap-switch/dist/js/bootstrap-switch.min.js" asp-append-version="true"></script>
-<script src="~/lib/fast-json-patch/fast-json-patch.min.js" asp-append-version="true"></script>
-<partial name="_ValidationScriptsPartial" />
+	<script src="~/vendor/AdminLTE/plugins/datatables/jquery.dataTables.min.js" asp-append-version="true"></script>
+	<script src="~/vendor/AdminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js" asp-append-version="true"></script>
+	<script src="~/vendor/AdminLTE/plugins/datatables-responsive/js/dataTables.responsive.min.js" asp-append-version="true"></script>
+	<script src="~/vendor/AdminLTE/plugins/datatables-responsive/js/responsive.bootstrap4.min.js" asp-append-version="true"></script>
+	<script src="~/vendor/AdminLTE/plugins/datatables-buttons/js/dataTables.buttons.min.js" asp-append-version="true"></script>
+	<script src="~/vendor/AdminLTE/plugins/datatables-buttons/js/buttons.bootstrap4.min.js" asp-append-version="true"></script>
+	<script src="~/vendor/AdminLTE/plugins/jszip/jszip.min.js" asp-append-version="true"></script>
+	<script src="~/vendor/AdminLTE/plugins/pdfmake/pdfmake.min.js" asp-append-version="true"></script>
+	<script src="~/vendor/AdminLTE/plugins/pdfmake/vfs_fonts.js" asp-append-version="true"></script>
+	<script src="~/vendor/AdminLTE/plugins/datatables-buttons/js/buttons.html5.min.js" asp-append-version="true"></script>
+	<script src="~/vendor/AdminLTE/plugins/datatables-buttons/js/buttons.print.min.js" asp-append-version="true"></script>
+	<script src="~/vendor/AdminLTE/plugins/datatables-buttons/js/buttons.colVis.min.js" asp-append-version="true"></script>
+	<script src="~/lib/bootstrap-switch/dist/js/bootstrap-switch.min.js" asp-append-version="true"></script>
+	<script src="~/lib/fast-json-patch/fast-json-patch.min.js" asp-append-version="true"></script>
+	<partial name="_ValidationScriptsPartial"/>
 }
 
-<partial name="Index.Partial.Sua" view-data="ViewData" view-data-id='ViewData["modal-sua-id"]' />
-<partial name="Index.Partial.Xem" view-data="ViewData" view-data-id='ViewData["modal-xem-id"]' />
-<partial name="Index.Partial.Xoa" view-data="ViewData" view-data-id='ViewData["modal-xoa-id"]' />
-<partial name="Index.Partial.Them" view-data="ViewData" view-data-id='"modal-them"' />
-<partial name="Index.Script" />
+<partial name="Index.Partial.Sua" view-data="ViewData" view-data-id='ViewData["modal-sua-id"]'/>
+<partial name="Index.Partial.Xem" view-data="ViewData" view-data-id='ViewData["modal-xem-id"]'/>
+<partial name="Index.Partial.Xoa" view-data="ViewData" view-data-id='ViewData["modal-xoa-id"]'/>
+<partial name="Index.Partial.Them" view-data="ViewData" view-data-id='"modal-them"'/>
+<partial name="Index.Script"/>
 
 <button type="button" class="btn btn-app bg-success" data-toggle="modal" data-target="#modal-them">
 	<i class="fas fa-plus"></i> Thêm
@@ -47,13 +47,13 @@
 			<div class="card-body">
 				<table id='@ViewData["bang-id"]' class="table table-striped">
 					<thead>
-						<tr>
-							<th>Thứ tự</th>
-							<th>Tên mục</th>
-							<th>Kích hoạt</th>
-							<th>Url</th>
-							<th></th>
-						</tr>
+					<tr>
+						<th>Thứ tự</th>
+						<th>Tên mục</th>
+						<th>Kích hoạt</th>
+						<th>Url</th>
+						<th></th>
+					</tr>
 					</thead>
 					<tbody>
 					</tbody>
