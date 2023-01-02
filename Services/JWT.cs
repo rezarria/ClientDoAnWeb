@@ -1,9 +1,9 @@
-using Client.Models.XacThucPhanQuyen;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Client.Models.XacThucPhanQuyen;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Client.Services;
 
@@ -29,11 +29,10 @@ public class TokenService : ITokenService
 	{
 		IList<Claim> claims = await _userManager.GetClaimsAsync(user);
 
-		claims.Add(new Claim("role1", "true"));
-
-		SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-		SigningCredentials credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
-		JwtSecurityToken tokenDescriptor = new JwtSecurityToken(issuer, issuer, claims, expires: DateTime.Now.AddMinutes(ExpiryDurationMinutes), signingCredentials: credentials);
+		claims.Add(new Claim(JwtRegisteredClaimNames.Sub, Guid.NewGuid().ToString()));
+		SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(key));
+		SigningCredentials credentials = new(securityKey, SecurityAlgorithms.HmacSha256Signature);
+		JwtSecurityToken tokenDescriptor = new(issuer, issuer, claims, expires: DateTime.Now.AddMinutes(ExpiryDurationMinutes), signingCredentials: credentials);
 
 		return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
 	}
