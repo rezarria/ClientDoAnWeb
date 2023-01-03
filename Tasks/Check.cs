@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.EntityFrameworkCore;
 
-namespace Api.Tasks;
+namespace Client.Tasks;
 
 public class CheckBackgroundService
 {
@@ -28,7 +28,7 @@ public class CheckBackgroundService
 		_logger.LogInformation("Bắt đầu kiểm tra...");
 		using IServiceScope scope = _serviceProvider.CreateScope();
 		XacThucContext xacThucContext = scope.ServiceProvider.GetRequiredService<XacThucContext>();
-		bool needShutDown = false;
+		bool needShutDown;
 
 		needShutDown = await KiemTraDatabase(xacThucContext, cancellationToken);
 
@@ -40,7 +40,7 @@ public class CheckBackgroundService
 	}
 	private async Task<bool> KiemTraDatabase(DbContext context, CancellationToken cancellationToken = default)
 	{
-		_logger.LogInformation("Kiểm tra database {0}", context.Database.GetDbConnection().Database);
+		_logger.LogInformation("Kiểm tra database {Database}", context.Database.GetDbConnection().Database);
 		bool needShutDown = false;
 
 		if (await context.Database.CanConnectAsync(cancellationToken))

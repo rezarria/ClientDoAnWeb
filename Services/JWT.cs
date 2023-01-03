@@ -1,70 +1,49 @@
-using System.IdentityModel.Tokens.Jwt;
+using Client.Utilities;
+using Microsoft.Extensions.Options;
 using System.Security.Claims;
-using System.Text;
-using Client.Models.XacThucPhanQuyen;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Client.Services;
 
 public interface ITokenService
 {
-	Task<string> TaoToken(string key, string issuer, TaiKhoan user);
-	bool KiemTraToken(string key, string issuer, string token);
-	ClaimsPrincipal GiaiMaToken(string key, string issuer, string token);
+	string TaoTokenAsync(ICollection<Claim>? themVao = null);
+	bool KiemTraToken(string token);
+	ClaimsPrincipal GiaiMaToken(string token);
+}
+
+public class TokenServiceOptions
+{
+	public double ExpiryDurationMinutes { get; set; }
+	public string Key { get; set; } = string.Empty;
+	public string Issuer { get; set; } = string.Empty;
 }
 
 public class TokenService : ITokenService
 {
-	private const double ExpiryDurationMinutes = 30;
+	private readonly double _expiryDurationMinutes;
+	private readonly string _issuer;
+	private readonly string _key;
 
-	private readonly UserManager<TaiKhoan> _userManager;
 
-	public TokenService(UserManager<TaiKhoan> userManager)
+	public TokenService(IOptions<TokenServiceOptions> options)
 	{
-		_userManager = userManager;
+		_expiryDurationMinutes = options.Value.ExpiryDurationMinutes;
+		_key = options.Value.Key;
+		_issuer = options.Value.Issuer;
 	}
 
-	public async Task<string> TaoToken(string key, string issuer, TaiKhoan user)
+	public string TaoTokenAsync(ICollection<Claim>? themVao = null)
 	{
-		IList<Claim> claims = await _userManager.GetClaimsAsync(user);
-
-		claims.Add(new Claim(JwtRegisteredClaimNames.Sub, Guid.NewGuid().ToString()));
-		SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(key));
-		SigningCredentials credentials = new(securityKey, SecurityAlgorithms.HmacSha256Signature);
-		JwtSecurityToken tokenDescriptor = new(issuer, issuer, claims, expires: DateTime.Now.AddMinutes(ExpiryDurationMinutes), signingCredentials: credentials);
-
-		return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
+		return TokenUtility.TaoTokenAsync(_key, _issuer, _expiryDurationMinutes, themVao);
 	}
 
-	public bool KiemTraToken(string key, string issuer, string token)
+	public bool KiemTraToken(string token)
 	{
-		try
-		{
-			_ = GiaiMaToken(key, issuer, token);
-		}
-		catch
-		{
-			return false;
-		}
-		return true;
+		return TokenUtility.KiemTraToken(_key, _issuer, token);
 	}
 
-	public ClaimsPrincipal GiaiMaToken(string key, string issuer, string token)
+	public ClaimsPrincipal GiaiMaToken(string token)
 	{
-		byte[] mySecret = Encoding.UTF8.GetBytes(key);
-		SymmetricSecurityKey mySecurityKey = new SymmetricSecurityKey(mySecret);
-		JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-		return tokenHandler.ValidateToken(token,
-										  new TokenValidationParameters
-										  {
-											  ValidateIssuerSigningKey = true,
-											  ValidateIssuer = true,
-											  ValidateAudience = true,
-											  ValidIssuer = issuer,
-											  ValidateLifetime = false,
-											  ValidAudience = issuer,
-											  IssuerSigningKey = mySecurityKey
-										  }, out SecurityToken _);
+		return TokenUtility.GiaiMaToken(_key, _issuer, token);
 	}
 }

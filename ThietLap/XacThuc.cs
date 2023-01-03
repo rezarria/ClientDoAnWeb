@@ -2,6 +2,7 @@
 
 using Client.Contexts;
 using Client.Models.XacThucPhanQuyen;
+using Client.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -83,5 +84,12 @@ public static partial class ThietLap
 														  {
 															  options.ValidationInterval = TimeSpan.FromSeconds(5);
 														  });
+
+		services.Configure<TokenServiceOptions>(options =>
+											    {
+												    options.ExpiryDurationMinutes = 30;
+												    options.Key = configuration["Jwt:Key"] ?? throw new Exception();
+												    options.Issuer = configuration["Jwt:Issuer"] ?? throw new Exception();
+											    });
 	}
 }

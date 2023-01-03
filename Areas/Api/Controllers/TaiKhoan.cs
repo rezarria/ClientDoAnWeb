@@ -26,12 +26,13 @@ public class TaiKhoan : ControllerBase
 
 		if (ModelState.IsValid)
 		{
-			Models.XacThucPhanQuyen.TaiKhoan user = new Models.XacThucPhanQuyen.TaiKhoan { UserName = dto.Email, Email = dto.Email };
+			Models.XacThucPhanQuyen.TaiKhoan user = new()
+													{ UserName = dto.Email, Email = dto.Email };
 			IdentityResult result = await _userManager.CreateAsync(user, dto.Password);
 			if (result.Succeeded)
 			{
 				_logger.LogInformation("User created a new account with password");
-				return Ok();
+				return Redirect(returnUrl);
 			}
 			foreach (IdentityError error in result.Errors)
 				ModelState.AddModelError(string.Empty, error.Description);

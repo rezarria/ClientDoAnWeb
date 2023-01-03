@@ -1,10 +1,10 @@
 #region
 
-using Api.Tasks;
 using Client.Areas.Admin.Contexts;
 using Client.BackgroundServices;
 using Client.Middlewares;
 using Client.Services;
+using Client.Tasks;
 using Client.ThietLap;
 using Microsoft.EntityFrameworkCore;
 using WebMarkupMin.AspNetCore7;
@@ -22,6 +22,11 @@ builder.ThietLapApiMayChu();
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddSingleton<ITokenDangXuatService, TokenDangXuatService>();
 builder.Services.AddHostedService<XoaTokenBackgroundService>();
+builder.Services.AddTransient<ICauNoiApiNguon, CauNoiApiNguon>();
+builder.Services.Configure<CauNoiApiNguonOptions>(options =>
+												  {
+													  options.UrlApi = builder.Configuration["MayChuApi:DiaChi"] ?? throw new Exception();
+												  });
 
 WebApplication app = builder.Build();
 CheckBackgroundService.Check(app.Services);

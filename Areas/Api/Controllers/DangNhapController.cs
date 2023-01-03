@@ -1,6 +1,5 @@
 using Client.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using static Client.Areas.Api.DTOs.DangNhap;
 
@@ -10,18 +9,14 @@ namespace Client.Areas.Api.Controllers;
 [Route("/[area]/[controller]")]
 public class DangNhapController : ControllerBase
 {
-	private readonly IConfiguration _configuration;
-	private readonly ITokenService _tokenService;
-	private readonly UserManager<Models.XacThucPhanQuyen.TaiKhoan> _userManager;
+	private readonly ICauNoiApiNguon _cauNoiApiNguon;
+	private readonly IQuanLyTaiKhoan _quanLyTaiKhoan;
 
 	public DangNhapController(
-		UserManager<Models.XacThucPhanQuyen.TaiKhoan> userManager,
-		ITokenService tokenService,
-		IConfiguration configuration)
+		IQuanLyTaiKhoan quanLyTaiKhoan, ICauNoiApiNguon cauNoiApiNguon)
 	{
-		_userManager = userManager;
-		_tokenService = tokenService;
-		_configuration = configuration;
+		_quanLyTaiKhoan = quanLyTaiKhoan;
+		_cauNoiApiNguon = cauNoiApiNguon;
 	}
 
 	[HttpPost]
@@ -30,22 +25,22 @@ public class DangNhapController : ControllerBase
 	{
 		if (!ModelState.IsValid)
 			return BadRequest(ModelState);
-		Models.XacThucPhanQuyen.TaiKhoan? user = await _userManager.FindByEmailAsync(dto.Email);
 
-		if (user is null)
+		if (await _quanLyTaiKhoan.KiemTraEmailAsync(dto.Email))
 			return NotFound();
-		if (!await _userManager.CheckPasswordAsync(user, dto.Password))
+		if (!await _quanLyTaiKhoan.XacThucEmailAsync(dto.Email, dto.Password, HttpContext.RequestAborted))
 			return BadRequest("Sai thông tin đăng nhập");
 
-		string key = _configuration["jwt:Key"] ?? throw new Exception();
-		string issur = _configuration["Jwt:Issuer"] ?? throw new Exception();
-		string token = await _tokenService.TaoToken(key, issur, user);
+		string token = await _quanLyTaiKhoan.DangNhapEmailAsync(dto.Email, HttpContext.RequestAborted);
 
-		HttpContext.Session.SetString("Token", token);
+		string apiToken = await _cauNoiApiNguon.LayTokenTheoEmailAsync(dto.Email, dto.Password, HttpContext.RequestAborted);
+
+		if (string.IsNullOrEmpty(apiToken)) return NoContent();
 
 		return Ok(new
 				  {
-					  jwt = token
+					  jwt = token,
+					  api = apiToken
 				  });
 	}
 
