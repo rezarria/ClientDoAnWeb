@@ -48,7 +48,7 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-8">
+					<div class="col-6">
 						<div class="icheck-primary">
 							<input type="checkbox" id="remember">
 							<label for="remember">
@@ -57,7 +57,7 @@
 						</div>
 					</div>
 
-					<div class="col-4">
+					<div class="col-6">
 						<button id="submit" type="button" class="btn btn-primary btn-block">Đăng nhập</button>
 					</div>
 
@@ -89,41 +89,7 @@
 <script src="~/vendor/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
 <script src="~/vendor/AdminLTE/plugins/sweetalert2/sweetalert2.min.js" asp-append-version="true"></script>
 <script src="~/vendor/AdminLTE/dist/js/adminlte.min.js?v=3.2.0" asp-append-version="true"></script>
-<script>
-		window.addEventListener('load', function () {
-			var Toast = Swal.mixin({
-				toast: true,
-				position: 'top-end',
-				showConfirmButton: false,
-				timer: 3000
-			});
-
-			let submit = document.getElementById('submit');
-			submit.addEventListener('click', async function () {
-				let data = {
-					email: document.getElementById('email'),
-					password: document.getElementById('password')
-				}
-				await fetch('/api/dangnhap/tructiep', {
-					method: 'POST',
-					body: JSON.stringify(data),
-					headers: {
-						'content-type': 'application/json'
-					}
-				})
-					.then(res => {
-						switch (res.status) {
-							case 200:
-								Toast.fire({
-									icon: 'success',
-									title: 'Đăng nhập thành công'
-								})
-								break;
-						}
-					});
-			});
-		});
-	</script>
+<partial name="TrucTiep.Script"/>
 </body>
 
 </html>

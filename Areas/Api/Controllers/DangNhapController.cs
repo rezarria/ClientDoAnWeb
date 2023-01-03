@@ -28,24 +28,25 @@ public class DangNhapController : ControllerBase
 	[Route("tructiep")]
 	public async Task<IActionResult> TrucTiep([FromBody] DangNhapDto dto)
 	{
-		if (ModelState.IsValid)
-		{
-			Models.XacThucPhanQuyen.TaiKhoan? user = await _userManager.FindByEmailAsync(dto.Email);
+		if (!ModelState.IsValid)
+			return BadRequest(ModelState);
+		Models.XacThucPhanQuyen.TaiKhoan? user = await _userManager.FindByEmailAsync(dto.Email);
 
-			if (user is null)
-				return NotFound();
-			if (await _userManager.CheckPasswordAsync(user, dto.Password))
-			{
-				string key = _configuration["jwt:Key"] ?? throw new Exception();
-				string issur = _configuration["Jwt:Issuer"] ?? throw new Exception();
-				string token = await _tokenService.TaoToken(key, issur, user);
+		if (user is null)
+			return NotFound();
+		if (!await _userManager.CheckPasswordAsync(user, dto.Password))
+			return BadRequest("Sai thông tin đăng nhập");
 
-				HttpContext.Session.SetString("Token", token);
+		string key = _configuration["jwt:Key"] ?? throw new Exception();
+		string issur = _configuration["Jwt:Issuer"] ?? throw new Exception();
+		string token = await _tokenService.TaoToken(key, issur, user);
 
-				return Ok(token);
-			}
-		}
-		return Problem();
+		HttpContext.Session.SetString("Token", token);
+
+		return Ok(new
+				  {
+					  jwt = token
+				  });
 	}
 
 	[HttpGet]

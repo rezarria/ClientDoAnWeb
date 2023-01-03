@@ -1,5 +1,6 @@
 #region
 
+using Api.Tasks;
 using Client.Areas.Admin.Contexts;
 using Client.BackgroundServices;
 using Client.Middlewares;
@@ -23,7 +24,7 @@ builder.Services.AddSingleton<ITokenDangXuatService, TokenDangXuatService>();
 builder.Services.AddHostedService<XoaTokenBackgroundService>();
 
 WebApplication app = builder.Build();
-
+CheckBackgroundService.Check(app.Services);
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -32,12 +33,13 @@ if (!app.Environment.IsDevelopment())
 	app.UseHsts();
 }
 
-
+app.UseKiemTraCookie();
 app.UseXacThuc();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseSession();
+app.UseAuthentication();
 app.UseAuthorization();
 app.UseResponseCaching();
 if (!app.Environment.IsDevelopment())

@@ -5,7 +5,7 @@ namespace Client.Areas.Admin.Controllers.XacThuc;
 [Area("Admin")]
 public class DangNhapController : Controller
 {
-	public IActionResult DangNhapTrucTiep()
+	public IActionResult TrucTiep()
 	{
 		return View();
 	}
