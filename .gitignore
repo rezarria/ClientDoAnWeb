@@ -5,3 +5,4 @@ Migrations/
 /wwwroot/lib
 *-wal
 *-shm
+*.log

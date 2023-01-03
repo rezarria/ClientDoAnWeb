@@ -7,10 +7,11 @@ using Client.Services;
 using Client.Tasks;
 using Client.ThietLap;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 using WebMarkupMin.AspNetCore7;
 
 #endregion
-
+Console.OutputEncoding = Encoding.UTF8;
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ClientDbContext>(options => options.UseSqlite("DataSource=client.database"));
