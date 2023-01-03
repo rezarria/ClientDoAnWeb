@@ -25,7 +25,7 @@ public class DangXuatController : ControllerBase
 	}
 
 	[HttpPost]
-	public async Task<IActionResult> YeuCau(string token)
+	public IActionResult YeuCau(string token)
 	{
 		string key = _configuration["Jwt:Key"] ?? throw new Exception();
 		string issuer = _configuration["Jwt:Issuer"] ?? throw new Exception();
