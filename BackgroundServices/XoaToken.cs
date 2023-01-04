@@ -23,6 +23,7 @@ public sealed class XoaTokenBackgroundService : BackgroundService
 
 	private async Task DoWorkAsync(CancellationToken cancellationToken)
 	{
+		Thread.CurrentThread.Name = "Xóa token";
 		_logger.LogInformation($"{nameof(XoaTokenBackgroundService)} is working.");
 		while (!cancellationToken.IsCancellationRequested)
 		{
