@@ -11,6 +11,7 @@ using System.Text;
 using WebMarkupMin.AspNetCore7;
 
 #endregion
+
 Console.OutputEncoding = Encoding.UTF8;
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();

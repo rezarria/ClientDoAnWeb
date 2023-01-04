@@ -22,7 +22,7 @@ public class TaiKhoan : ControllerBase
 	[Route("dangkytructiep")]
 	public async Task<IActionResult> DangKyTrucTiep([FromBody] DangNhap.DangNhapDto dto, string? returnUrl = null)
 	{
-		returnUrl = returnUrl ?? Url.Content("~/");
+		returnUrl ??= Url.Content("~/");
 
 		if (ModelState.IsValid)
 		{

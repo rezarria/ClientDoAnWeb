@@ -48,6 +48,6 @@ public class DangNhapController : ControllerBase
 	[Authorize]
 	public string Check()
 	{
-		return string.Join("\n", User.Claims.Select(x => $"{x.Type}:{x.Value.ToString()}"));
+		return string.Join("\n", User.Claims.Select(x => $"{x.Type}:{x.Value}"));
 	}
 }

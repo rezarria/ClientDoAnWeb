@@ -9,7 +9,7 @@ public class XacThucMiddleware
 	private readonly RequestDelegate _next;
 	private readonly ITokenDangXuatService _tokenDangXuat;
 
-	public XacThucMiddleware(RequestDelegate next, IServiceProvider serviceProvider, ILogger<XacThucMiddleware> logger, ITokenDangXuatService tokenDangXuat)
+	public XacThucMiddleware(RequestDelegate next, ILogger<XacThucMiddleware> logger, ITokenDangXuatService tokenDangXuat)
 	{
 		_next = next;
 		_logger = logger;
