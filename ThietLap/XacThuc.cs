@@ -1,5 +1,6 @@
 #region
 
+using Client.Contexts;
 using Client.Models.XacThucPhanQuyen;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -25,15 +26,14 @@ public static partial class ThietLap
 		IServiceCollection services = builder.Services;
 		ConfigurationManager configuration = builder.Configuration;
 
-		services.AddDbContext<XacThucDbContext>(options => options.UseSqlite(configuration.GetConnectionString("XacThuc")));
-		// services.AddDbContextFactory<XacThucContext>(options => options.UseSqlite(configuration.GetConnectionString("XacThuc")));
+		services.AddDbContext<IXacThucDbContext, XacThucContext>(options => options.UseSqlite(configuration.GetConnectionString("XacThuc")));
 
 		services
 			.AddIdentity<TaiKhoan, QuyenHan>()
-			.AddEntityFrameworkStores<XacThucDbContext>()
+			.AddEntityFrameworkStores<XacThucContext>()
 			.AddDefaultTokenProviders();
-
 		services
+			.AddTokenService()
 			.AddAuthentication(options =>
 							   {
 								   options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

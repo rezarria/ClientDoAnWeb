@@ -2,11 +2,12 @@ using Client.Models.XacThucPhanQuyen;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using RezUtility.Contexts;
 using RezUtility.Models;
 
 namespace Client.Contexts;
 
-public class XacThucContext : IdentityDbContext<TaiKhoan, QuyenHan, Guid>
+public class XacThucContext : IdentityDbContext<TaiKhoan, QuyenHan, Guid>, IXacThucDbContext
 {
 	public XacThucContext(DbContextOptions<XacThucContext> options) : base(options)
 	{

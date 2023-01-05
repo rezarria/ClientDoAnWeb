@@ -1,21 +1,12 @@
 using Client.Contexts;
-using Client.Models.XacThucPhanQuyen;
 using Microsoft.EntityFrameworkCore;
 using RezUtility.Contexts;
 using RezUtility.Models;
+using RezUtility.Services;
 using System.Collections.Concurrent;
 
 namespace Client.Services;
 
-public interface ITokenDangXuatService
-{
-	int SoLuongToiDa { get; set; }
-	bool SyncKhiGoi { get; set; }
-	void ThemToken(TokenDangXuat token);
-	bool KiemTra(string token);
-	Task XoaTuDongAsync(CancellationToken cancellationToken = default);
-	void LuuDatabase();
-}
 
 public class TokenDangXuatService : ITokenDangXuatService
 {

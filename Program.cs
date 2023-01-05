@@ -10,8 +10,6 @@ using RezUtility.Services;
 using RezUtility.Tasks;
 using System.Text;
 using WebMarkupMin.AspNetCore7;
-using ITokenDangXuatService=Client.Services.ITokenDangXuatService;
-using TokenDangXuatService=Client.Services.TokenDangXuatService;
 
 #endregion
 
