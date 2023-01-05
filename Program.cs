@@ -1,14 +1,17 @@
 #region
 
 using Client.Areas.Admin.Contexts;
-using Client.BackgroundServices;
 using Client.Middlewares;
 using Client.Services;
-using Client.Tasks;
 using Client.ThietLap;
 using Microsoft.EntityFrameworkCore;
+using RezUtility.BackgroundServices;
+using RezUtility.Services;
+using RezUtility.Tasks;
 using System.Text;
 using WebMarkupMin.AspNetCore7;
+using ITokenDangXuatService=Client.Services.ITokenDangXuatService;
+using TokenDangXuatService=Client.Services.TokenDangXuatService;
 
 #endregion
 
@@ -31,7 +34,7 @@ builder.Services.Configure<CauNoiApiNguonOptions>(options =>
 												  });
 
 WebApplication app = builder.Build();
-CheckBackgroundService.Check(app.Services);
+CheckTask.Check(app.Services);
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

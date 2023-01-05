@@ -1,12 +1,12 @@
 #region
 
-using Client.Contexts;
 using Client.Models.XacThucPhanQuyen;
-using Client.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using RezUtility.Contexts;
+using RezUtility.Services;
 using System.Text;
 
 #endregion
@@ -25,12 +25,12 @@ public static partial class ThietLap
 		IServiceCollection services = builder.Services;
 		ConfigurationManager configuration = builder.Configuration;
 
-		services.AddDbContext<XacThucContext>(options => options.UseSqlite(configuration.GetConnectionString("XacThuc")));
+		services.AddDbContext<XacThucDbContext>(options => options.UseSqlite(configuration.GetConnectionString("XacThuc")));
 		// services.AddDbContextFactory<XacThucContext>(options => options.UseSqlite(configuration.GetConnectionString("XacThuc")));
 
 		services
 			.AddIdentity<TaiKhoan, QuyenHan>()
-			.AddEntityFrameworkStores<XacThucContext>()
+			.AddEntityFrameworkStores<XacThucDbContext>()
 			.AddDefaultTokenProviders();
 
 		services

@@ -1,6 +1,8 @@
 using Client.Contexts;
 using Client.Models.XacThucPhanQuyen;
 using Microsoft.EntityFrameworkCore;
+using RezUtility.Contexts;
+using RezUtility.Models;
 using System.Collections.Concurrent;
 
 namespace Client.Services;
@@ -27,7 +29,7 @@ public class TokenDangXuatService : ITokenDangXuatService
 	{
 		_serviceProvider = serviceProvider;
 		using IServiceScope scope = _serviceProvider.CreateScope();
-		XacThucContext context = scope.ServiceProvider.GetRequiredService<XacThucContext>();
+		XacThucDbContext context = scope.ServiceProvider.GetRequiredService<XacThucDbContext>();
 		_danhSachBoNhoTrong = new ConcurrentStack<TokenDangXuat>();
 		_danhSachTokenTrongDatabase = new ConcurrentStack<TokenDangXuat>(context.TokenDangXuat.AsNoTracking());
 		_logger = logger;
@@ -36,7 +38,7 @@ public class TokenDangXuatService : ITokenDangXuatService
 	{
 		_logger.LogInformation("Lưu token từ ram vào database");
 		using IServiceScope scope = _serviceProvider.CreateScope();
-		XacThucContext context = scope.ServiceProvider.GetRequiredService<XacThucContext>();
+		XacThucDbContext context = scope.ServiceProvider.GetRequiredService<XacThucDbContext>();
 		lock (_danhSachBoNhoTrongLock)
 		{
 			context.AddRange(_danhSachBoNhoTrong);
