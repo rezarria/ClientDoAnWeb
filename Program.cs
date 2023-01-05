@@ -6,6 +6,7 @@ using Client.Services;
 using Client.ThietLap;
 using Microsoft.EntityFrameworkCore;
 using RezUtility.BackgroundServices;
+using RezUtility.Middlewares;
 using RezUtility.Services;
 using RezUtility.Tasks;
 using System.Text;
