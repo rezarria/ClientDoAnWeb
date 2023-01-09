@@ -4,6 +4,7 @@
 	ViewData["modal-xoa-id"] = "modal-xoa";
 	ViewData["modal-xem-id"] = "modal-xem";
 	ViewData["modal-sua-id"] = "modal-sua";
+	ViewData["elfinder-select"] = "elfinder";
 	ViewData["bang-id"] = "table";
 }
 
@@ -11,7 +12,13 @@
 	<link rel="stylesheet" href="~/vendor/AdminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css" asp-append-version="true">
 	<link rel="stylesheet" href="~/vendor/AdminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css" asp-append-version="true">
 	<link rel="stylesheet" href="~/vendor/AdminLTE/plugins/datatables-buttons/css/buttons.bootstrap4.min.css" asp-append-version="true">
+	<link rel="stylesheet" href="~/vendor/AdminLTE/plugins/jquery-ui/jquery-ui.theme.min.css" asp-append-version="true">
+	<link rel="stylesheet" href="~/vendor/AdminLTE/plugins/jquery-ui/jquery-ui.min.css" asp-append-version="true">
 	<link rel="stylesheet" href="~/lib/bootstrap-switch/dist/css/bootstrap-switch.min.css" asp-append-version="true">
+	<link rel="stylesheet" href="~/lib/elfinder/css/elfinder.full.css" asp-append-version="true">
+	<link rel="stylesheet" href="~/lib/elfinder/css/theme.css" asp-append-version="true">
+	<link rel="stylesheet" href="~/lib/elfinder-material-theme/Material/css/theme-light.min.css" asp-append-version="true">
+	@* <link rel="stylesheet" href="~/css/elfinder/themes/material/css/theme-gray.css" id="elfinder-theme"/> *@
 }
 
 @section Scripts {
@@ -27,8 +34,11 @@
 	<script src="~/vendor/AdminLTE/plugins/datatables-buttons/js/buttons.html5.min.js" asp-append-version="true"></script>
 	<script src="~/vendor/AdminLTE/plugins/datatables-buttons/js/buttons.print.min.js" asp-append-version="true"></script>
 	<script src="~/vendor/AdminLTE/plugins/datatables-buttons/js/buttons.colVis.min.js" asp-append-version="true"></script>
+	<script src="~/vendor/AdminLTE/plugins/bs-custom-file-input/bs-custom-file-input.min.js" asp-append-version="true"></script>
+	<script src="~/vendor/AdminLTE/plugins/jquery-ui/jquery-ui.min.js" asp-append-version="true"></script>
 	<script src="~/lib/bootstrap-switch/dist/js/bootstrap-switch.min.js" asp-append-version="true"></script>
 	<script src="~/lib/fast-json-patch/fast-json-patch.min.js" asp-append-version="true"></script>
+	<script src="~/lib/elfinder/js/elfinder.full.js" asp-append-version="true"></script>
 }
 
 <partial name="Index.Partial.Sua"/>
@@ -36,6 +46,7 @@
 <partial name="Index.Partial.Xoa"/>
 <partial name="Index.Partial.Them"/>
 <partial name="Index.Script"/>
+<partial name="Index.Partial.ElFinder"/>
 
 <button type="button" class="btn btn-app bg-success" data-toggle="modal" data-target='#@(ViewData["modal-them-id"])'>
 	<i class="fas fa-plus"></i> Thêm
@@ -59,7 +70,5 @@
 				</table>
 			</div>
 		</div>
-
-
 	</div>
 </div>

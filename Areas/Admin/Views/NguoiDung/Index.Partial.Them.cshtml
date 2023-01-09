@@ -2,6 +2,7 @@
 @inject IOptions<MayChuApi> MayChuApi
 @{
 	string id = ViewData["modal-them-id"]?.ToString() ?? throw new NullReferenceException();
+	string idElFinder = ViewData["elfinder-select"]?.ToString() ?? throw new Exception();
 }
 <!-- Begin Index.Partial.Them-->
 <div class="modal fade" id="@id" tabindex="-1" role="dialog" aria-labelledby="@(id)--label" aria-hidden="true">
@@ -36,6 +37,24 @@
 						<input type="text" name="soYeuLyLich.soDienThoai" class="form-control" id="@(id)--soDienThoai">
 					</div>
 
+					<div class="form-group">
+						<label for="@(id)--avatar">Avatar</label>
+
+						<div class="input-group">
+							<input id="@(id)--avatar" type="text" class="form-control">
+							<div class="input-group-append">
+								<span id="@(id)--avatar-upload" class="input-group-text btn">
+									<i class="fa fa-upload" aria-hidden="true"></i>
+								</span>
+								<span id="@(id)--avatar-elfinder" class="input-group-text btn">
+									<i class="fa fa-cloud" aria-hidden="true"></i>
+								</span>
+							</div>
+						</div>
+
+					</div>
+
+
 					<partial name="Index.Partial.Them.TruongThongTinNguoiDung"/>
 
 				</div>
@@ -51,8 +70,20 @@
 
 <script>
 	window.addEventListener('load', function () {
+		bsCustomFileInput.init();
 		let submit = document.getElementById('@(id)--submit');
 		let modal = $('#@(id)');
+		
+		document.getElementById('@(id)--avatar-elfinder').addEventListener('click', function () {
+			document.getElementById('@idElFinder').show();
+		});
+		
+		document.getElementById('@(id)--avatar-upload').addEventListener('click', function () {
+			let file = document.createElement('input');
+			file.type = 'file';
+			file.click();
+		});
+		
 		submit.onclick = function () {
 			let data = {
 				soYeuLyLich: {
@@ -63,11 +94,11 @@
 				},
 				idKieuNguoiDung: document.getElementById('@(id)--idKieuNguoiDung').value,
 				truongGiaTri: []
-			}
+			};
 
 			let truongGiaTri = document.getElementById('@(id)--truong-gia-tri').querySelectorAll('input');
 
-			if (truongGiaTri.length != 0) {
+			if (truongGiaTri.length !== 0) {
 				for (var item of truongGiaTri) {
 					data.truongGiaTri.push({
 						id: item.id.split('--')[1],
@@ -75,7 +106,6 @@
 					});
 				}
 			}
-
 
 			fetch(`@(MayChuApi.Value.DiaChi)/api/nguoidung`, {
 				method: 'POST',
@@ -89,6 +119,6 @@
 						break;
 				}
 			});
-		}
+		};
 	});
 </script>

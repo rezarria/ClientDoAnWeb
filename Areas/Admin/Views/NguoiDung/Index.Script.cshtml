@@ -1,10 +1,11 @@
 @using Client.ThietLap
 @inject IOptions<MayChuApi> MayChuApi
+
 <script>
 	window.addEventListener('load', function () {
-		$("input[data-bootstrap-switch]").each(function () {
+		$('input[data-bootstrap-switch]').each(function () {
 			$(this).bootstrapSwitch('state', $(this).prop('checked'));
-		})
+		});
 
 		let modalXem = document.getElementById('modal-xem');
 		function lenhXoa(id) {
@@ -15,7 +16,7 @@
 							$('#@ViewData["bang-id"]').DataTable().ajax.reload();
 						}
 					}
-				})
+				});
 		}
 
 		$('#@(ViewData["bang-id"])').DataTable({
@@ -37,10 +38,10 @@
 					}
 				},
 				{
-					data: "soYeuLyLich.hoVaTen"
+					data: 'soYeuLyLich.hoVaTen'
 				},
 				{
-					data: "soYeuLyLich.email"
+					data: 'soYeuLyLich.email'
 				},
 				{
 					data: null,

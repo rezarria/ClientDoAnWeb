@@ -19,6 +19,7 @@ public class DangNhapController : ControllerBase
 		_cauNoiApiNguon = cauNoiApiNguon;
 	}
 
+	//ToDo Cần xử lý việc lấy token song song
 	[HttpPost]
 	[Route("tructiep")]
 	public async Task<IActionResult> TrucTiep([FromBody] DangNhapDto dto)
@@ -26,21 +27,20 @@ public class DangNhapController : ControllerBase
 		if (!ModelState.IsValid)
 			return BadRequest(ModelState);
 
-		if (await _quanLyTaiKhoan.KiemTraEmailAsync(dto.Email))
+		if (!await _quanLyTaiKhoan.KiemTraEmailAsync(dto.Email))
 			return NotFound();
 		if (!await _quanLyTaiKhoan.XacThucEmailAsync(dto.Email, dto.Password, HttpContext.RequestAborted))
 			return BadRequest("Sai thông tin đăng nhập");
 
 		string token = await _quanLyTaiKhoan.DangNhapEmailAsync(dto.Email, HttpContext.RequestAborted);
 
-		string apiToken = await _cauNoiApiNguon.LayTokenTheoEmailAsync(dto.Email, dto.Password, HttpContext.RequestAborted);
+		//string apiToken = await _cauNoiApiNguon.LayTokenTheoEmailAsync(dto.Email, dto.Password, HttpContext.RequestAborted);
 
-		if (string.IsNullOrEmpty(apiToken)) return NoContent();
+		// if (string.IsNullOrEmpty(apiToken)) return NoContent();
 
 		return Ok(new
 				  {
 					  jwt = token,
-					  api = apiToken
 				  });
 	}
 

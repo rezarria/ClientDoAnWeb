@@ -1,0 +1,124 @@
+﻿@using Client.ThietLap
+@inject IOptions<MayChuApi> MayChuApi
+@{
+	string id = ViewData["Id"]?.ToString() ?? throw new Exception();
+	string options = ViewData["Options"]?.ToString() ?? throw new Exception();
+	string optionsName = Guid.NewGuid().ToString("N");
+}
+<script>
+	const disableContextMenu = ['hide'];
+    const contextMenu = elFinder.prototype._options.contextmenu;
+    contextMenu.navbar = contextMenu.navbar.filter(o => !disableContextMenu.includes(o));
+    contextMenu.cwd = contextMenu.cwd.filter(o => !disableContextMenu.includes(o));
+    contextMenu.files = contextMenu.files.filter(o => !disableContextMenu.includes(o));
+    const appCmds = elFinder.prototype._options.commands;
+    elFinder.prototype.i18.en.messages.TextArea = 'Edit';
+    elFinder.prototype.i18.en.messages.btnSearchFolder = 'Folder only';
+    elFinder.prototype.i18.en.messages.searchFolder = 'Search for folder only';
+                                                   
+    elFinder.prototype.i18.en.messages.errQuota ='Exceeding quota limits.<br/>Maximum: $1<br/>Usage: $2<br/>Please refresh to see the latest status';
+    let options1 = {
+		cssAutoLoad : false,
+        url: '@(MayChuApi.Value.DiaChi)/hethong/files/connector',
+        rememberLastDir: false,
+        commands: appCmds,
+        uiOptions: {
+            toolbar: [
+                ['back', 'forward'],
+                ['reload'],
+                ['home', 'up'],
+                ['mkdir', 'mkfile', 'upload'],
+                ['open', 'download'],
+                ['undo', 'redo'],
+                ['info'],
+                ['quicklook'],
+                ['copy', 'cut', 'paste'],
+                ['rm'],
+                ['duplicate', 'rename', 'edit'],
+                ['selectall', 'selectnone', 'selectinvert'],
+                ['view', 'sort'],
+                ['search']
+            ]
+        },
+        contextmenu: contextMenu,
+        requestType: 'post',
+        uploadMaxChunkSize: 1024 * 1024 * 10,
+        commandsOptions: {
+            search: {
+                searchTypes: {
+                    SearchMime: {          
+                        name: 'btnMime',   
+                        title: 'searchMime' 
+                    },
+                    FolderOnly: {
+                        name: 'btnSearchFolder',
+                        title: 'searchFolder.'
+                    }
+                }
+            }
+        }
+    };
+	
+	let @(optionsName) =  {...options1 @(string.IsNullOrEmpty(options)?string.Empty:Html.Raw($", ...{options}"))};
+    let elf = $('#@(id)').dialogelfinder(@(optionsName)).elfinder('instance');
+    let fmInstance;
+    let uploading = false;
+    let elfinderSetVolumeSize = function () {
+        const quota = elf.getUI().data('_quota') / 1024 / 1024;
+        const usage = elf.getUI().data('_usage') / 1024 / 1024;
+        let formatter = Intl.NumberFormat('en-US', {
+            style: 'decimal',
+            useGrouping: true,
+            maximumFractionDigits: 2
+        });
+        let info = $('<span class="elfinder-stat-quota"/>').html(', Quota: ' + formatter.format(quota)
+            + 'MB, Usage: ' + formatter.format(usage) + 'MB');
+        elf.getUI('stat').append(info);
+    };
+
+    elf.bind('open', function (e, fm) {
+        fmInstance = fm;
+        fm.getUI().data('_quota', e.data.quota);
+        fm.getUI().data('_usage', e.data.usage);
+    })
+	.bind('opendone', elfinderSetVolumeSize);
+
+    let sendUploadPulse = () => {
+            $.ajax({
+                method: 'POST',
+                url: '@(MayChuApi.Value.DiaChi)/hethong/files/upload-pulse',
+                success: () => console.log('Pulse success!'),
+                error: () => console.log('Pulse failed!')
+            });
+        };
+
+    elf.bind('upload', (e, fm) => {
+        if (uploading) return;
+        	uploading = true;
+        sendUploadPulse();
+        const ntfNode = fm.getUI('notify');
+        const pulseIntervalId = setInterval(() => {
+            const hasDialog = !!ntfNode.children('.elfinder-notify-upload').length;
+            if (hasDialog) {
+                sendUploadPulse();
+            } else {
+                uploading = false;
+                clearInterval(pulseIntervalId);
+            }
+        }, 700);
+    });
+                                        			
+    $('#@(id)').on('mouseover', () => {
+        $('.elfinder-cwd-file').off('mouseenter.custom').on('mouseenter.custom', (e) => {
+            const id = e.currentTarget.id;
+            const file = fmInstance.file(id);
+            if (file && file.locked === 1) {
+                fmInstance.draggable.appendTo = '';
+            } else {
+                fmInstance.draggable.appendTo = $('#@(id)');
+            }
+        });
+    }); 
+
+	console.log(@(optionsName));                       
+</script>

@@ -2,6 +2,7 @@
 
 using Client.Contexts;
 using Client.Models.XacThucPhanQuyen;
+using Client.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,7 @@ public static partial class ThietLap
 		services.AddDbContext<IXacThucDbContext, XacThucContext>(options => options.UseSqlite(configuration.GetConnectionString("XacThuc")));
 
 		services
+			.AddTransient<IQuanLyTaiKhoan, QuanLyTaiKhoan>()
 			.AddIdentity<TaiKhoan, QuyenHan>()
 			.AddEntityFrameworkStores<XacThucContext>()
 			.AddDefaultTokenProviders();

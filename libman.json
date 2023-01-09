@@ -58,6 +58,15 @@
     {
       "library": "jquery-validate@1.19.5",
       "destination": "wwwroot/lib/jquery-validate/"
+    },
+    {
+      "library": "elfinder@2.1.61",
+      "destination": "wwwroot\\lib\\elfinder"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "elfinder-material-theme@2.1.15",
+      "destination": "wwwroot\\lib\\elfinder-material-theme"
     }
   ]
 }
