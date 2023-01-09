@@ -29,6 +29,29 @@
 								});
 								res.json().then(data => {
 									document.cookie = `jwt=${data.jwt};samesite=lax;path=/`;
+									indexedDB.open('app', function (db) {
+										if (!db.objectStoreNames.contains('user')) {
+											let users = db.createObjectStore('user', {
+												keyPath: 'id'
+											});
+											
+											
+										}
+									})
+									.then(function (db) {
+										const transaction = db.transaction('user','readwrite');
+										const store = db.objectStore('user');
+										const item = {
+											id : data.id,
+											clientJwt : data.jwt,
+											apiJwt : data.apiJwt,
+											name : data.name, 
+											avatar : data.avatar
+										};
+										store.add(item);
+										return transaction.complete;
+									});
+									
 								});
 								break;
 						}

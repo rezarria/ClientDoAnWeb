@@ -34,13 +34,14 @@ public class DangNhapController : ControllerBase
 
 		string token = await _quanLyTaiKhoan.DangNhapEmailAsync(dto.Email, HttpContext.RequestAborted);
 
-		//string apiToken = await _cauNoiApiNguon.LayTokenTheoEmailAsync(dto.Email, dto.Password, HttpContext.RequestAborted);
+		string apiToken = await _cauNoiApiNguon.LayTokenTheoEmailAsync(dto.Email, dto.Password, HttpContext.RequestAborted);
 
-		// if (string.IsNullOrEmpty(apiToken)) return NoContent();
+		if (string.IsNullOrEmpty(apiToken)) return NoContent();
 
 		return Ok(new
 				  {
 					  jwt = token,
+					  apiJwt = apiToken
 				  });
 	}
 
