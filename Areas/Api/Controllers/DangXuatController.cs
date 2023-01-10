@@ -1,4 +1,3 @@
-using Client.Models.XacThucPhanQuyen;
 using IdentityModel;
 using Microsoft.AspNetCore.Mvc;
 using RezUtility.Models;

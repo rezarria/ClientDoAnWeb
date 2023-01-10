@@ -59,7 +59,7 @@
         }
     };
 	
-	let @(optionsName) =  {...options1 @(string.IsNullOrEmpty(options)?string.Empty:Html.Raw($", ...{options}"))};
+	let @(optionsName) =  {...options1 @(string.IsNullOrEmpty(options) ? string.Empty : Html.Raw($", ...{options}"))};
     let elf = $('#@(id)').dialogelfinder(@(optionsName)).elfinder('instance');
     let fmInstance;
     let uploading = false;
