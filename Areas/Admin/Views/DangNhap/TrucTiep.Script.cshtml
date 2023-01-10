@@ -33,20 +33,18 @@
 										if (!db.objectStoreNames.contains('user')) {
 											let users = db.createObjectStore('user', {
 												keyPath: 'id'
-											});
-											
-											
+											});							
 										}
 									})
 									.then(function (db) {
 										const transaction = db.transaction('user','readwrite');
 										const store = db.objectStore('user');
 										const item = {
-											id : data.id,
+											id : '',
 											clientJwt : data.jwt,
 											apiJwt : data.apiJwt,
-											name : data.name, 
-											avatar : data.avatar
+											name : '', 
+											avatar : ''
 										};
 										store.add(item);
 										return transaction.complete;
